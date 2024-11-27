@@ -1,17 +1,72 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.NhanVienFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Nhân Viên"
-        android:textSize="40sp"
-        android:background="#E3DF87"
-        android:gravity="center"/>
+        android:orientation="vertical"
+        android:padding="16dp">
 
+        <!-- Input nhập tên nhân viên -->
+        <EditText
+            android:id="@+id/etEmployeeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nhập tên nhân viên"
+            android:padding="8dp"
+            android:background="#EEEEEE"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Vùng hiển thị thông tin nhân viên -->
+        <TextView
+            android:id="@+id/tvSelectedEmployee"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="#E3DF87"
+            android:text="Nhân Viên"
+            android:textSize="40sp"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Nút thêm nhân viên -->
+        <Button
+            android:id="@+id/btnAddEmployee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thêm nhân viên"
+            android:background="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Nút sửa nhân viên -->
+        <Button
+            android:id="@+id/btnEditEmployee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sửa nhân viên"
+            android:background="#FFC107"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Nút xóa nhân viên -->
+        <Button
+            android:id="@+id/btnDeleteEmployee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Xóa nhân viên"
+            android:background="#F44336"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Danh sách nhân viên -->
+        <ListView
+            android:id="@+id/lvEmployees"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="#BDBDBD"
+            android:dividerHeight="1dp" />
+    </LinearLayout>
 </FrameLayout>

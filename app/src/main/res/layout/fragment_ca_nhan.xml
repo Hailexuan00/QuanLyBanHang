@@ -1,17 +1,78 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.CaNhanFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Cá Nhân"
-        android:textSize="40sp"
-        android:background="#E3DF87"
-        android:gravity="center"/>
+        android:padding="16dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!-- Ảnh đại diện -->
+            <ImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="Avatar" />
+
+            <!-- Tên người dùng -->
+            <EditText
+                android:id="@+id/etUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên Người Dùng"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:enabled="false" /> <!-- Disable chỉnh sửa ở đây (sẽ bật khi nhấn nút sửa) -->
+
+            <!-- Email -->
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="example@gmail.com"
+                android:textSize="16sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="24dp"
+                android:gravity="center"
+                android:enabled="false" /> <!-- Disable chỉnh sửa ở đây (sẽ bật khi nhấn nút sửa) -->
+
+            <!-- Nút Chỉnh sửa thông tin -->
+            <Button
+                android:id="@+id/btnEditInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chỉnh sửa thông tin"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Nút Lưu thông tin -->
+            <Button
+                android:id="@+id/btnSaveInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lưu thông tin"
+                android:layout_marginBottom="16dp"
+                android:enabled="false" /> <!-- Disable lưu thông tin khi chưa chỉnh sửa -->
+
+            <!-- Nút Đăng xuất -->
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đăng xuất"
+                android:backgroundTint="#FF0000"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>
