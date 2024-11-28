@@ -85,27 +85,20 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_CHI_TIET_DON_HANG + " (" +
                 "id_ctdh INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "id_don_hang INTEGER, " +
-                "id_ctsp INTEGER, " +
+                "id_san_pham INTEGER, " +
                 "so_luong INTEGER, " +
                 "FOREIGN KEY(id_don_hang) REFERENCES " + TABLE_DON_HANG + "(id_don_hang), " +
-                "FOREIGN KEY(id_ctsp) REFERENCES " + TABLE_CHI_TIET_SAN_PHAM + "(id_ctsp))");
+                "FOREIGN KEY(id_san_pham) REFERENCES " + TABLE_SAN_PHAM + "(id_san_pham))");
 
         db.execSQL("CREATE TABLE " + TABLE_SAN_PHAM + " (" +
                 "id_san_pham INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "id_danh_muc INTEGER, " +
                 "ten_san_pham TEXT NOT NULL, " +
-                "nha_san_xuat TEXT, " +
+                "don_gia INTEGER, " +
                 "mo_ta TEXT, " +
                 "image TEXT, " +
                 "FOREIGN KEY(id_danh_muc) REFERENCES " + TABLE_DANH_MUC + "(id_danh_muc))");
 
-        db.execSQL("CREATE TABLE " + TABLE_CHI_TIET_SAN_PHAM + " (" +
-                "id_ctsp INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "id_san_pham INTEGER, " +
-                "don_gia INTEGER, " +
-                "ma_vach TEXT, " +
-                "phien_ban TEXT, " +
-                "FOREIGN KEY(id_san_pham) REFERENCES " + TABLE_SAN_PHAM + "(id_san_pham))");
 
         db.execSQL("CREATE TABLE " + TABLE_DANH_MUC + " (" +
                 "id_danh_muc INTEGER PRIMARY KEY AUTOINCREMENT, " +
