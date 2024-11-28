@@ -1,17 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.SanPhamFragment">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <EditText
+        android:id="@+id/searchEditText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Sản Phẩm"
-        android:textSize="40sp"
-        android:background="#E3DF87"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:hint="Nhập từ khóa tìm kiếm"
+        android:padding="10dp"
+        android:background="@android:drawable/editbox_background"/>
 
-</FrameLayout>
+    <Button
+        android:id="@+id/scanButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Quét mã vạch"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
