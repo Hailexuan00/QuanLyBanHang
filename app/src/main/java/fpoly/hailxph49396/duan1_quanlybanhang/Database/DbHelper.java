@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "SalesManagement.db";
+    private static final String DATABASE_NAME = "SalesManagement";
     private static final int DATABASE_VERSION = 1;
 
     public static final String TABLE_TAI_KHOAN = "TaiKhoan";
@@ -21,7 +21,6 @@ public class DbHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create tables
         db.execSQL("CREATE TABLE " + TABLE_TAI_KHOAN + " (" +
                 "username TEXT PRIMARY KEY, " +
                 "password TEXT NOT NULL, " +
@@ -74,12 +73,10 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_CHI_TIET_SAN_PHAM + " (" +
                 "id_ctsp INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "id_san_pham INTEGER, " +
-                "mau_sac TEXT, " +
-                "don_gia REAL, " +
+                "don_gia INTEGER, " +
                 "ma_vach TEXT, " +
                 "bao_hanh TEXT, " +
                 "phien_ban TEXT, " +
-                "ngay_san_xuat TEXT, " +
                 "FOREIGN KEY(id_san_pham) REFERENCES " + TABLE_SAN_PHAM + "(id_san_pham))");
 
         db.execSQL("CREATE TABLE " + TABLE_DANH_MUC + " (" +
@@ -95,7 +92,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older tables if exists
+
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TAI_KHOAN);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_THONG_TIN_CA_NHAN);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DON_HANG);
@@ -105,7 +102,6 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DANH_MUC);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HOA_DON);
 
-        // Recreate tables
         onCreate(db);
     }
 }
