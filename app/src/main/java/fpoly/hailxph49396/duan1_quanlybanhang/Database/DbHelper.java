@@ -46,7 +46,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "id_don_hang INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "username TEXT, " +
                 "so_dien_thoai_kh TEXT, " +
-                "thanh_tien REAL, " +
+                "thanh_tien INTEGER, " +
                 "ngay DATE, " +
                 "gio INTEGER, " +
                 "ghi_chu TEXT, " +
