@@ -54,7 +54,6 @@ public class DonHangDAO {
                             cursor.getInt(cursor.getColumnIndex("thanh_tien")),
                             ngay,
                             cursor.getInt(cursor.getColumnIndex("gio")),
-                            cursor.getString(cursor.getColumnIndex("ghi_chu")),
                             cursor.getInt(cursor.getColumnIndex("trang_thai"))
                     );
 
@@ -84,7 +83,6 @@ public class DonHangDAO {
             values.put("thanh_tien", donHang.getThanhTien());
             values.put("ngay", sdf.format(donHang.getNgay()));
             values.put("gio", donHang.getGio());
-            values.put("ghi_chu", donHang.getGhiChu());
             values.put("trang_thai", donHang.getTrangThai());
 
             result = db.insert("DonHang", null, values);
@@ -122,7 +120,6 @@ public class DonHangDAO {
                             cursor.getInt(cursor.getColumnIndex("thanh_tien")),
                             ngay,
                             cursor.getInt(cursor.getColumnIndex("gio")),
-                            cursor.getString(cursor.getColumnIndex("ghi_chu")),
                             cursor.getInt(cursor.getColumnIndex("trang_thai"))
                     );
 
@@ -154,7 +151,6 @@ public class DonHangDAO {
         } finally {
             if (db != null && db.isOpen()) db.close();
         }
-
         return result;
     }
 

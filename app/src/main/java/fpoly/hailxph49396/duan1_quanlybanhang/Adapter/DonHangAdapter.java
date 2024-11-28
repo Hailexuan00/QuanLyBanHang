@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.DonHangDAO;
@@ -21,6 +22,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
     ArrayList<DonHangDTO> list;
     DonHangDTO donHangDTO;
     DonHangDAO donHangDAO;
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public DonHangAdapter(Context context, ArrayList<DonHangDTO> list) {
         this.context = context;
@@ -37,12 +39,16 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
 
     @Override
     public void onBindViewHolder(@NonNull DonHangViewHolders holder, int position) {
-
+        donHangDTO = list.get(position);
+        holder.txtNgay.setText(simpleDateFormat.format(donHangDTO.getNgay()));
+        holder.txtGio.setText(String.valueOf(donHangDTO.getGio()));
+        holder.txtMaDH.setText(String.valueOf(donHangDTO.getMaDonHang()));
+        holder.txtUser.setText(donHangDTO.getUsername());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return list.size();
     }
 
     public class DonHangViewHolders extends RecyclerView.ViewHolder {
