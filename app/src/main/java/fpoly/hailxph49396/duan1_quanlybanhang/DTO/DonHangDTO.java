@@ -9,17 +9,15 @@ public class DonHangDTO {
     int thanhTien;
     Date ngay;
     int gio;
-    String ghiChu;
     int trangThai;
 
-    public DonHangDTO(int maDonHang, String username, String soDienThoaiKH, int thanhTien, Date ngay, int gio, String ghiChu, int trangThai) {
+    public DonHangDTO(int maDonHang, String username, String soDienThoaiKH, int thanhTien, Date ngay, int gio, int trangThai) {
         this.maDonHang = maDonHang;
         this.username = username;
         this.soDienThoaiKH = soDienThoaiKH;
         this.thanhTien = thanhTien;
         this.ngay = ngay;
         this.gio = gio;
-        this.ghiChu = ghiChu;
         this.trangThai = trangThai;
     }
     public DonHangDTO() {
@@ -71,14 +69,6 @@ public class DonHangDTO {
 
     public void setGio(int gio) {
         this.gio = gio;
-    }
-
-    public String getGhiChu() {
-        return ghiChu;
-    }
-
-    public void setGhiChu(String ghiChu) {
-        this.ghiChu = ghiChu;
     }
 
     public int getTrangThai() {
