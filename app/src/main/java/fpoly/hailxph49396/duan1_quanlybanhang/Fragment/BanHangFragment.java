@@ -6,14 +6,23 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
+import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.DonHangAdapter;
 import fpoly.hailxph49396.duan1_quanlybanhang.BanHang;
+import fpoly.hailxph49396.duan1_quanlybanhang.DAO.DonHangDAO;
+import fpoly.hailxph49396.duan1_quanlybanhang.DTO.DonHangDTO;
+import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
 
 /**
@@ -27,8 +36,11 @@ public class BanHangFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private RecyclerView rcvDonHang;
+    DonHangDAO donHangDAO;
+    ArrayList<DonHangDTO> listDH = new ArrayList<>();
+    DonHangAdapter donHangAdapter;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -74,6 +86,16 @@ public class BanHangFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FloatingActionButton fabAddDonHang = view.findViewById(R.id.fabAddDH);
+        rcvDonHang = view.findViewById(R.id.rcvDH);
+        donHangDAO = new DonHangDAO(getContext());
+        listDH = donHangDAO.getListDonHang();
+        donHangAdapter = new DonHangAdapter(getContext(), listDH);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rcvDonHang.setLayoutManager(layoutManager);
+        rcvDonHang.setAdapter(donHangAdapter);
+        Toast.makeText(getContext(), "" + listDH.size(), Toast.LENGTH_SHORT).show();
+        donHangAdapter.notifyDataSetChanged();
+
         fabAddDonHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,5 +103,6 @@ public class BanHangFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
     }
 }

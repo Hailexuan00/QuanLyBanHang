@@ -53,6 +53,29 @@ public class DbHelper extends SQLiteOpenHelper {
                 "trang_thai TEXT, " +
                 "FOREIGN KEY(username) REFERENCES " + TABLE_TAI_KHOAN + "(username))");
 
+        // Bảng TABLE_THONG_TIN_CA_NHAN
+        db.execSQL("INSERT INTO " + TABLE_THONG_TIN_CA_NHAN + " (ten, ho_va_ten_dem, gioi_tinh, so_dien_thoai, email, dia_chi) VALUES " +
+                "('Nam', 'Nguyen Van', 'Nam', '0901234567', 'nam.nguyen@example.com', 'Thanh Hoa')," +
+                "('Linh', 'Pham Thi', 'Nu', '0912345678', 'linh.pham@example.com', 'Ha Noi')," +
+                "('Hung', 'Tran Minh', 'Nam', '0923456789', 'hung.tran@example.com', 'Hai Phong')," +
+                "('Hoa', 'Le Thi', 'Nu', '0934567890', 'hoa.le@example.com', 'Da Nang')," +
+                "('Khanh', 'Do Van', 'Nam', '0945678901', 'khanh.do@example.com', 'Ho Chi Minh City')");
+
+// Bảng TABLE_TAI_KHOAN
+        db.execSQL("INSERT INTO " + TABLE_TAI_KHOAN + " (username, password, ma_nv) VALUES " +
+                "('user1', 'password1', 1)," +
+                "('user2', 'password2', 2)," +
+                "('user3', 'password3', 3)," +
+                "('user4', 'password4', 4)," +
+                "('user5', 'password5', 5)");
+
+        db.execSQL("INSERT INTO " + TABLE_DON_HANG + " (username, so_dien_thoai_kh, thanh_tien, ngay, gio, ghi_chu, trang_thai) VALUES " +
+                "('user1', '0987654321', 100000, '2024-11-01', 10, 'Khong co', 'Dang xu ly')," +
+                "('user2', '0976543210', 200000, '2024-11-02', 12, 'Giao gap', 'Hoan thanh')," +
+                "('user3', '0965432109', 150000, '2024-11-03', 15, 'Khong co', 'Dang xu ly')," +
+                "('user4', '0954321098', 250000, '2024-11-04', 18, 'Can lien he truoc', 'Dang xu ly')," +
+                "('user5', '0943210987', 300000, '2024-11-05', 20, 'Giao vao buoi toi', 'Da huy')");
+
         db.execSQL("CREATE TABLE " + TABLE_CHI_TIET_DON_HANG + " (" +
                 "id_ctdh INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "id_don_hang INTEGER, " +
