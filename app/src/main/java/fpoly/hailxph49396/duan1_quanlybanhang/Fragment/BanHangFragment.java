@@ -1,13 +1,19 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import fpoly.hailxph49396.duan1_quanlybanhang.BanHang;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
 
 /**
@@ -62,5 +68,18 @@ public class BanHangFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_ban_hang, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        FloatingActionButton fabAddDonHang = view.findViewById(R.id.fabAddDH);
+        fabAddDonHang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), BanHang.class);
+                startActivity(intent);
+            }
+        });
     }
 }
