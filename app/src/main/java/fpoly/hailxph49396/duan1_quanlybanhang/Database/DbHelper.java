@@ -73,6 +73,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY(id_don_hang) REFERENCES " + TABLE_DON_HANG + "(id_don_hang))");
 
         db.execSQL("INSERT INTO " + TABLE_TAI_KHOAN + " (username, password, ten, ho_va_ten_dem, gioi_tinh, so_dien_thoai, email, dia_chi) VALUES " +
+                "('admin', 'admin', 'Admin', 'Hai','Nam', '0987654321', 'admin@example.com', 'Hà Nội'), " +
                 "('user1', 'password123', 'Nguyen', 'Van A', 'Nam', '0987654321', 'user1@example.com', 'Hà Nội'), " +
                 "('user2', 'password456', 'Tran', 'Thi B', 'Nữ', '0987654322', 'user2@example.com', 'TP. Hồ Chí Minh'), " +
                 "('user3', 'password789', 'Le', 'Minh C', 'Nam', '0987654323', 'user3@example.com', 'Đà Nẵng'), " +
