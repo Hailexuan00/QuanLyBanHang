@@ -1,72 +1,117 @@
 package fpoly.hailxph49396.duan1_quanlybanhang;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class LoginActivity extends AppCompatActivity {
-    Button btn_dangnhap, btn_dangKy;
-    TextInputLayout txt_pass, txt_user;
-    TextInputEditText ed_user, ed_pass;
-    CheckBox cb_ghinho;
+import fpoly.hailxph49396.duan1_quanlybanhang.DAO.TaiKhoanDao;
+import fpoly.hailxph49396.duan1_quanlybanhang.DTO.TaiKhoanDTO;
 
-    String UserDangKy = " ", PassDangky  = " ", UserDangNhap, PassDangNhap;
+public class LoginActivity extends AppCompatActivity {
+    private Button btnDangNhap, btnHuy;
+    private TextInputLayout layoutUser, layoutPass;
+    private TextInputEditText edUser, edPass;
+    private CheckBox cbGhiNho;
+    private TaiKhoanDao taiKhoanDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        txt_user = findViewById(R.id.txt_user);
-        ed_user = findViewById(R.id.ed_user);
-        txt_pass = findViewById(R.id.txt_pass);
-        ed_pass =findViewById(R.id.ed_pass);
-        btn_dangnhap = findViewById(R.id.btn_dangnhap);
-        btn_dangKy = findViewById(R.id.btn_huy);
-        cb_ghinho = findViewById(R.id.cb_ghinho);
 
-        btn_dangnhap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(LoginActivity.this, MenuActivity.class);
-                launcher.launch(i);
+        initViews();
+        loadSavedCredentials();
 
-            }
-        });
+        btnHuy.setOnClickListener(v -> clearInputs());
+
+        btnDangNhap.setOnClickListener(v -> checkLogin());
     }
-    ActivityResultLauncher<Intent> launcher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult o) {
-                    // nơi xữ lí dũ liệu
-                    if (o.getResultCode() == 1){
-                        Intent i = o.getData();
-                        UserDangKy = i.getStringExtra("User");
-                        PassDangky = i.getStringExtra("Pass");
-                    }
 
-                }
+    private void initViews() {
+        taiKhoanDao = new TaiKhoanDao(this);
+
+        layoutUser = findViewById(R.id.txt_user);
+        edUser = findViewById(R.id.ed_user);
+        layoutPass = findViewById(R.id.txt_pass);
+        edPass = findViewById(R.id.ed_pass);
+        btnDangNhap = findViewById(R.id.btn_dangnhap);
+        btnHuy = findViewById(R.id.btn_huy);
+        cbGhiNho = findViewById(R.id.cb_ghinho);
+    }
+
+    private void loadSavedCredentials() {
+        SharedPreferences pref = getSharedPreferences("USER_FILE", MODE_PRIVATE);
+        String user = pref.getString("USERNAME", "");
+        String pass = pref.getString("PASSWORD", "");
+        boolean rem = pref.getBoolean("REMEMBER", false);
+
+        edUser.setText(user);
+        edPass.setText(pass);
+        cbGhiNho.setChecked(rem);
+    }
+
+    private void clearInputs() {
+        edUser.setText("");
+        edPass.setText("");
+        layoutUser.setError(null);
+        layoutPass.setError(null);
+    }
+
+    private void rememberUser(String user, String pass, boolean isRemember) {
+        SharedPreferences pref = getSharedPreferences("USER_FILE", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        if (!isRemember) {
+            editor.clear();
+        } else {
+            editor.putString("USERNAME", user);
+            editor.putString("PASSWORD", pass);
+            editor.putBoolean("REMEMBER", true);
+        }
+        editor.apply();
+    }
+
+    private void checkLogin() {
+        String strUser = edUser.getText().toString().trim();
+        String strPass = edPass.getText().toString().trim();
+
+        boolean isValid = true;
+
+        if (strUser.isEmpty()) {
+            layoutUser.setError("Tên đăng nhập không được để trống");
+            isValid = false;
+        } else {
+            layoutUser.setError(null);
+        }
+
+        if (strPass.isEmpty()) {
+            layoutPass.setError("Mật khẩu không được để trống");
+            isValid = false;
+        } else {
+            layoutPass.setError(null);
+        }
+
+        if (isValid) {
+            if (TaiKhoanDao.checkLogin(strUser, strPass)) {
+                Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                rememberUser(strUser, strPass, cbGhiNho.isChecked());
+
+                Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+                intent.putExtra("user", strUser);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(this, "Tên đăng nhập hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
             }
-    );
+        }
+    }
 }
