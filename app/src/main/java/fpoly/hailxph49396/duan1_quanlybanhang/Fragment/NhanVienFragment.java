@@ -1,120 +1,111 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.Fragment;
 
+import static java.security.AccessController.getContext;
+
+import android.app.Dialog;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
+import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.NhanVienAdapter;
+import fpoly.hailxph49396.duan1_quanlybanhang.DTO.NhanVienDTO;
+import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
 
-public class NhanVienFragment extends Fragment {
+public class NhanVienFragment<db, View> extends Fragment {
 
-    private TextView tvSelectedEmployee;
-    private EditText etEmployeeName;
-    private Button btnAdd, btnEdit, btnDelete;
-    private ListView lvEmployees;
+    private RecyclerView recyclerView;
+    private NhanVienAdapter NhanVienAdapter;
+    private List<NhanVienDTO> NhanVienList;
 
-    private ArrayList<String> employeeList;
-    private ArrayAdapter<String> adapter;
-    private int selectedPosition = -1;
+    public NhanVienFragment() {
+        // Required empty public constructor
+    }
 
-    public NhanVienFragment() {}
+    public static NhanVienFragment newInstance(String param1, String param2) {
+        NhanVienFragment fragment = new NhanVienFragment();
+        Bundle args = new Bundle();
+        args.putString("param1", param1);
+        args.putString("param2", param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout
         View view = inflater.inflate(R.layout.fragment_nhan_vien, container, false);
-        initializeViews(view);
-        setupEmployeeList();
-        setupEventListeners();
+
+        // Find views by ID
+        recyclerView = view.findViewById(R.id.recyclerView);
+        Button addButton = view.findViewById(R.id.);
+
+        // Setup RecyclerView
+        setupRecyclerView();
+
+        // Add Button Click Listener
+        addButton.setOnClickListener(v -> showAddEmployeeDialog());
+
         return view;
     }
 
-    private void initializeViews(View view) {
-        tvSelectedEmployee = view.findViewById(R.id.tvSelectedEmployee);
-        etEmployeeName = view.findViewById(R.id.etEmployeeName);
-        btnAdd = view.findViewById(R.id.btnAddEmployee);
-        btnEdit = view.findViewById(R.id.btnEditEmployee);
-        btnDelete = view.findViewById(R.id.btnDeleteEmployee);
-        lvEmployees = view.findViewById(R.id.lvEmployees);
+    private void setupRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()))
+
+        // Fetch employee list from database
+        db dbHelper = new DbHelper(getContext());
+        SQLiteDatabase db = dbHelper.GetWritableDatabase();
+        NhanVienList = dbHelper.getAllEmployees(db);
+
+        // Setup adapter
+        NhanVienAdapter = new NhanVienAdapter(NhanVienList);
+        recyclerView.setAdapter(NhanVienAdapter);
     }
 
-    private void setupEmployeeList() {
-        employeeList = new ArrayList<>();
-        adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, employeeList);
-        lvEmployees.setAdapter(adapter);
-    }
+    private void showAddEmployeeDialog() {
+        // Create and show the dialog to add a new employee
+        Dialog dialog = new Dialog(recyclerView.getContext());
+        dialog.setContentView(R.layout.dialog_nhan_vien);
 
-    private void setupEventListeners() {
-        btnAdd.setOnClickListener(v -> addEmployee());
-        btnEdit.setOnClickListener(v -> editEmployee());
-        btnDelete.setOnClickListener(v -> deleteEmployee());
-        lvEmployees.setOnItemClickListener((parent, view, position, id) -> selectEmployee(position));
-    }
+        EditText nameEditText = dialog.findViewById(R.id.nameEditText);
+        EditText middleNameEditText = dialog.findViewById(R.id.middleNameEditText);
+        EditText genderEditText = dialog.findViewById(R.id.genderEditText);
+        EditText phoneEditText = dialog.findViewById(R.id.phoneEditText);
+        EditText emailEditText = dialog.findViewById(R.id.emailEditText);
+        EditText addressEditText = dialog.findViewById(R.id.addressEditText);
+        Button saveButton = dialog.findViewById(R.id.saveButton);
 
-    private void addEmployee() {
-        String name = etEmployeeName.getText().toString().trim();
-        if (name.isEmpty()) {
-            showToast("Vui lòng nhập tên nhân viên");
-        } else {
-            employeeList.add(name);
-            adapter.notifyDataSetChanged();
-            clearInput();
-            showToast("Đã thêm nhân viên");
-        }
-    }
+        saveButton.setOnClickListener(v -> {
+            // Get input values
+            String name = nameEditText.getText().toString();
+            String middleName = middleNameEditText.getText().toString();
+            String gender = genderEditText.getText().toString();
+            String phone = phoneEditText.getText().toString();
+            String email = emailEditText.getText().toString();
+            String address = addressEditText.getText().toString();
 
-    private void editEmployee() {
-        String name = etEmployeeName.getText().toString().trim();
-        if (selectedPosition == -1) {
-            showToast("Vui lòng chọn nhân viên để sửa");
-        } else if (name.isEmpty()) {
-            showToast("Vui lòng nhập tên mới");
-        } else {
-            employeeList.set(selectedPosition, name);
-            adapter.notifyDataSetChanged();
-            clearSelection();
-            showToast("Đã sửa nhân viên");
-        }
-    }
+            // Insert employee into database
+            DbHelper dbHelper = new DbHelper(getContext());
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            NhanVienDTO newEmployee = new NhanVienDTO(0, name, middleName, gender, phone, email, address);
+            dbHelper.addNhanVien(db, newEmployee);
 
-    private void deleteEmployee() {
-        if (selectedPosition == -1) {
-            showToast("Vui lòng chọn nhân viên để xóa");
-        } else {
-            employeeList.remove(selectedPosition);
-            adapter.notifyDataSetChanged();
-            clearSelection();
-            showToast("Đã xóa nhân viên");
-        }
-    }
+            // Update RecyclerView
+            NhanVienList.add(newEmployee);
+            NhanVienAdapter.notifyDataSetChanged();
 
-    private void selectEmployee(int position) {
-        selectedPosition = position;
-        String selectedName = employeeList.get(position);
-        tvSelectedEmployee.setText(selectedName);
-        etEmployeeName.setText(selectedName);
-    }
+            dialog.dismiss();
+        });
 
-    private void clearInput() {
-        etEmployeeName.setText("");
-    }
-
-    private void clearSelection() {
-        selectedPosition = -1;
-        tvSelectedEmployee.setText("Nhân Viên");
-        clearInput();
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        dialog.show();
     }
 }

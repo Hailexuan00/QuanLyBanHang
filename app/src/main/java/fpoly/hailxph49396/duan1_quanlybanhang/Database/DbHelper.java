@@ -1,13 +1,18 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.Database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "SalesManagement.db";
     private static final int DATABASE_VERSION = 1;
 
+    // Table names
     public static final String TABLE_TAI_KHOAN = "TaiKhoan";
     public static final String TABLE_THONG_TIN_CA_NHAN = "ThongTinCaNhan";
     public static final String TABLE_DON_HANG = "DonHang";
@@ -16,9 +21,11 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TABLE_CHI_TIET_SAN_PHAM = "ChiTietSanPham";
     public static final String TABLE_DANH_MUC = "DanhMuc";
     public static final String TABLE_HOA_DON = "HoaDon";
+
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create tables
@@ -108,4 +115,6 @@ public class DbHelper extends SQLiteOpenHelper {
         // Recreate tables
         onCreate(db);
     }
-}
+
+
+

@@ -107,7 +107,7 @@ public class MenuActivity extends AppCompatActivity {
                             .replace(R.id.flContent, matKhauFragment)
                             .commit();
                 } else if (item.getItemId() == R.id.sub_ThongTin) {
-                    setTitle("Quản lý Nhân Viên");
+                    setTitle("Thông Tin Cá Nhân");
                     CaNhanFragment caNhanFragment = new CaNhanFragment();
                     manager.beginTransaction()
                             .replace(R.id.flContent, caNhanFragment)

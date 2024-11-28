@@ -1,8 +1,5 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.Adapter;
 
-<<<<<<< HEAD
-public class DonHangAdapter {
-=======
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,5 +61,4 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
         }
 
     }
->>>>>>> origin/master
 }
