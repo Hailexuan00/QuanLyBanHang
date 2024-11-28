@@ -75,7 +75,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 "id_san_pham INTEGER, " +
                 "don_gia INTEGER, " +
                 "ma_vach TEXT, " +
-                "bao_hanh TEXT, " +
                 "phien_ban TEXT, " +
                 "FOREIGN KEY(id_san_pham) REFERENCES " + TABLE_SAN_PHAM + "(id_san_pham))");
 
