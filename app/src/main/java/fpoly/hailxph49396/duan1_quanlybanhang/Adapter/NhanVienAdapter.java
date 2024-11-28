@@ -3,6 +3,7 @@ package fpoly.hailxph49396.duan1_quanlybanhang.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.NhanVienDTO;
+import fpoly.hailxph49396.duan1_quanlybanhang.R;
 
 public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.EmployeeViewHolder> {
 

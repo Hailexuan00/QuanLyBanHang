@@ -62,7 +62,7 @@ public class NhanVienFragment<db, View> extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()))
 
         // Fetch employee list from database
-        db dbHelper = new DbHelper(getContext());
+        DbHelper dbHelper = new DbHelper(getContext());
         SQLiteDatabase db = dbHelper.GetWritableDatabase();
         NhanVienList = dbHelper.getAllEmployees(db);
 
