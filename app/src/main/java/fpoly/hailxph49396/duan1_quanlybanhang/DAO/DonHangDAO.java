@@ -154,7 +154,6 @@ public class DonHangDAO {
         } finally {
             if (db != null && db.isOpen()) db.close();
         }
-
         return result;
     }
 

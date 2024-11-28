@@ -49,8 +49,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "thanh_tien INTEGER, " +
                 "ngay DATE, " +
                 "gio INTEGER, " +
-                "ghi_chu TEXT, " +
-                "trang_thai TEXT, " +
+                "trang_thai INTEGER, " +
                 "FOREIGN KEY(username) REFERENCES " + TABLE_TAI_KHOAN + "(username))");
 
         // Bảng TABLE_THONG_TIN_CA_NHAN
@@ -69,12 +68,12 @@ public class DbHelper extends SQLiteOpenHelper {
                 "('user4', 'password4', 4)," +
                 "('user5', 'password5', 5)");
 
-        db.execSQL("INSERT INTO " + TABLE_DON_HANG + " (username, so_dien_thoai_kh, thanh_tien, ngay, gio, ghi_chu, trang_thai) VALUES " +
-                "('user1', '0987654321', 100000, '2024-11-01', 10, 'Khong co', 'Dang xu ly')," +
-                "('user2', '0976543210', 200000, '2024-11-02', 12, 'Giao gap', 'Hoan thanh')," +
-                "('user3', '0965432109', 150000, '2024-11-03', 15, 'Khong co', 'Dang xu ly')," +
-                "('user4', '0954321098', 250000, '2024-11-04', 18, 'Can lien he truoc', 'Dang xu ly')," +
-                "('user5', '0943210987', 300000, '2024-11-05', 20, 'Giao vao buoi toi', 'Da huy')");
+        db.execSQL("INSERT INTO " + TABLE_DON_HANG + " (username, so_dien_thoai_kh, thanh_tien, ngay, gio, trang_thai) VALUES " +
+                "('user1', '0987654321', 100000, '2024-11-01', 10, 1)," +
+                "('user2', '0976543210', 200000, '2024-11-02', 12, 1)," +
+                "('user3', '0965432109', 150000, '2024-11-03', 15, 1)," +
+                "('user4', '0954321098', 250000, '2024-11-04', 18, 1)," +
+                "('user5', '0943210987', 300000, '2024-11-05', 20, 1)");
 
         db.execSQL("CREATE TABLE " + TABLE_CHI_TIET_DON_HANG + " (" +
                 "id_ctdh INTEGER PRIMARY KEY AUTOINCREMENT, " +
