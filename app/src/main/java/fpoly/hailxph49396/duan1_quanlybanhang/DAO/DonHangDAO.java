@@ -17,7 +17,7 @@ import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
 public class DonHangDAO {
     private final DbHelper dbHelper;
     DonHangDTO donHangDTO;
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public DonHangDAO(Context context) {
         dbHelper = new DbHelper(context);
@@ -28,7 +28,7 @@ public class DonHangDAO {
         ArrayList<DonHangDTO> list = new ArrayList<>();
         SQLiteDatabase db = null;
         Cursor cursor = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
 
         try {
             db = dbHelper.getReadableDatabase();
@@ -153,35 +153,4 @@ public class DonHangDAO {
         }
         return result;
     }
-
-//    public ArrayList<DonHangDTO> getListDonHang() {
-//        ArrayList<DonHangDTO> list = new ArrayList<>();
-//        SQLiteDatabase db = null;
-//        Cursor cursor = null;
-//        try {
-//            db = dbHelper.getReadableDatabase();
-//            cursor = db.rawQuery("SELECT * FROM DonHang", null);
-//            if (cursor != null && cursor.getCount() > 0) {
-//                cursor.moveToFirst();
-//                do {
-//                    list.add(new DonHangDTO(cursor.getInt(0),
-//                            cursor.getString(1),
-//                            cursor.getString(2),
-//                            cursor.getString(3),
-//                            cursor.getString(4),
-//                            cursor.getString(5)));
-//                } while (cursor.moveToNext());
-//            }
-//        } catch (Exception e) {
-//            Log.e("DonHang", e.toString());
-//        } finally {
-//        if (cursor != null) {
-//            cursor.close();
-//        }
-//        if (db != null && db.isOpen()) {
-//            db.close();
-//        }
-//    }
-//        return list;
-//    }
 }

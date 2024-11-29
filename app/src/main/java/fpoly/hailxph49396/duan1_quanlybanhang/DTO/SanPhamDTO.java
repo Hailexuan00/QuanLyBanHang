@@ -1,0 +1,69 @@
+package fpoly.hailxph49396.duan1_quanlybanhang.DTO;
+
+public class SanPhamDTO {
+    private int maSanPham;
+    private int maDanhMuc;
+    private String tenSanPham;
+    private int giaBan;
+    private String maVach;
+    private String moTa;
+
+    public SanPhamDTO(){
+
+    }
+    public SanPhamDTO(int maSanPham, int maDanhMuc, String tenSanPham, int giaBan, String maVach, String moTa){
+        this.maSanPham = maSanPham;
+        this.maDanhMuc = maDanhMuc;
+        this.tenSanPham = tenSanPham;
+        this.giaBan = giaBan;
+        this.maVach = maVach;
+    }
+
+    public int getMaSanPham() {
+        return maSanPham;
+    }
+
+    public void setMaSanPham(int maSanPham) {
+        this.maSanPham = maSanPham;
+    }
+
+    public int getMaDanhMuc() {
+        return maDanhMuc;
+    }
+
+    public void setMaDanhMuc(int maDanhMuc) {
+        this.maDanhMuc = maDanhMuc;
+    }
+
+    public String getTenSanPham() {
+        return tenSanPham;
+    }
+
+    public void setTenSanPham(String tenSanPham) {
+        this.tenSanPham = tenSanPham;
+    }
+
+    public int getGiaBan() {
+        return giaBan;
+    }
+
+    public void setGiaBan(int giaBan) {
+        this.giaBan = giaBan;
+    }
+
+    public String getMaVach() {
+        return maVach;
+    }
+
+    public void setMaVach(String maVach) {
+        this.maVach = maVach;
+    }
+
+    public String getMoTa() {
+        return moTa;
+    }
+
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
+    }
+}

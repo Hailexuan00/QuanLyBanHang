@@ -58,6 +58,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "id_danh_muc INTEGER, " +
                 "ten_san_pham TEXT NOT NULL, " +
                 "don_gia INTEGER, " +
+                "ma_vach TEXT," +
                 "mo_ta TEXT, " +
                 "FOREIGN KEY(id_danh_muc) REFERENCES " + TABLE_DANH_MUC + "(id_danh_muc))");
 
@@ -86,10 +87,10 @@ public class DbHelper extends SQLiteOpenHelper {
                 "                (1, 'Điện tử'), " +
                 "                (2, 'Gia dụng'), " +
                 "        (3, 'Thời trang')");
-        db.execSQL("INSERT INTO " + TABLE_SAN_PHAM + " (id_san_pham, id_danh_muc, ten_san_pham, don_gia, mo_ta) VALUES\n" +
-                "                (1, 1, 'Điện thoại iPhone 14', 25000000, 'Điện thoại cao cấp Apple'), " +
-                "                (2, 2, 'Nồi cơm điện', 500000, 'Nồi cơm đa năng'), " +
-                "        (3, 3, 'Áo thun nam', 200000, 'Chất liệu cotton')");
+        db.execSQL("INSERT INTO " + TABLE_SAN_PHAM + " (id_san_pham, id_danh_muc, ten_san_pham, don_gia, ma_vach, mo_ta) VALUES\n" +
+                "                (1, 1, 'Điện thoại iPhone 14', 25000000,'000000000', 'Điện thoại cao cấp Apple'), " +
+                "                (2, 2, 'Nồi cơm điện', 500000, '111111111', 'Nồi cơm đa năng'), " +
+                "        (3, 3, 'Áo thun nam', 200000, '222222222', 'Chất liệu cotton')");
         db.execSQL("INSERT INTO "+TABLE_DON_HANG+" (id_don_hang, username, so_dien_thoai_kh, thanh_tien, ngay, gio, trang_thai) VALUES\n" +
                 "                (1, 'user1', '0987654321', 25500000, '2024-11-01', 10, 1)," +
                 "        (2, 'user2', '0987654322', 200000, '2024-11-02', 15, 0)");
@@ -105,11 +106,9 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TAI_KHOAN);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_THONG_TIN_CA_NHAN);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DON_HANG);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHI_TIET_DON_HANG);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SAN_PHAM);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHI_TIET_SAN_PHAM);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DANH_MUC);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HOA_DON);
         onCreate(db);
