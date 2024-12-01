@@ -20,20 +20,31 @@ import android.media.AudioManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.zxing.Result;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
+import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.SPofDHAdapter;
+import fpoly.hailxph49396.duan1_quanlybanhang.DAO.SanPhamDAo;
+import fpoly.hailxph49396.duan1_quanlybanhang.DTO.SanPhamDTO;
 
 public class BanHang extends AppCompatActivity {
     private DecoratedBarcodeView barcodeView;
     private Set<String> scannedCodes = new HashSet<>();
     private Handler handler = new Handler(Looper.getMainLooper());
     TextView txtResults;
+    RecyclerView rcvSPofDH;
+    ArrayList<SanPhamDTO>list;
+    SPofDHAdapter sPofDHAdapter;
+    SanPhamDAo sanPhamDAo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +58,13 @@ public class BanHang extends AppCompatActivity {
         barcodeView = findViewById(R.id.barcode_scanner);
         txtResults = findViewById(R.id.txtResults);
         barcodeView.decodeContinuous(callback);
+        rcvSPofDH = findViewById(R.id.rcvSPofDH);
+        list = new ArrayList<>();
+        sPofDHAdapter = new SPofDHAdapter(this, list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rcvSPofDH.setLayoutManager(layoutManager);
+        rcvSPofDH.setAdapter(sPofDHAdapter);
+        sanPhamDAo = new SanPhamDAo(this);
     }
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -65,6 +83,10 @@ public class BanHang extends AppCompatActivity {
                     }
                 }
                 txtResults.setText(code);
+                SanPhamDTO sanPhamDTO = new SanPhamDTO();
+                sanPhamDTO = sanPhamDAo.findProductByBarcode(code);
+                list.add(sanPhamDTO);
+                sPofDHAdapter.notifyDataSetChanged();
                 Toast.makeText(BanHang.this, "Scanned: " + code, Toast.LENGTH_SHORT).show();
                 handler.postDelayed(() -> scannedCodes.remove(code), 1000);
             }

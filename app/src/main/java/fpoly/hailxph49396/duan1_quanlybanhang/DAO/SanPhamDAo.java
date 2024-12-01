@@ -19,7 +19,6 @@ public class SanPhamDAo {
         dbHelper = new DbHelper(context);
     }
 
-    //danh sách sản phẩm
     @SuppressLint("Range")
     public ArrayList<SanPhamDTO> getAllProducts() {
         ArrayList<SanPhamDTO> list = new ArrayList<>();
@@ -38,6 +37,7 @@ public class SanPhamDAo {
                             cursor.getInt(cursor.getColumnIndex("id_danh_muc")),
                             cursor.getString(cursor.getColumnIndex("ten_san_pham")),
                             cursor.getInt(cursor.getColumnIndex("don_gia")),
+                            cursor.getInt(cursor.getColumnIndex("ton_kho")),
                             cursor.getString(cursor.getColumnIndex("ma_vach")),
                             cursor.getString(cursor.getColumnIndex("mo_ta"))
                     );
@@ -71,6 +71,7 @@ public class SanPhamDAo {
                         cursor.getInt(cursor.getColumnIndex("id_danh_muc")),
                         cursor.getString(cursor.getColumnIndex("ten_san_pham")),
                         cursor.getInt(cursor.getColumnIndex("don_gia")),
+                        cursor.getInt(cursor.getColumnIndex("ton_kho")),
                         cursor.getString(cursor.getColumnIndex("ma_vach")),
                         cursor.getString(cursor.getColumnIndex("mo_ta"))
                 );
@@ -117,6 +118,7 @@ public class SanPhamDAo {
             values.put("id_danh_muc", product.getMaDanhMuc());
             values.put("ten_san_pham", product.getTenSanPham());
             values.put("don_gia", product.getGiaBan());
+            values.put("ton_kho", product.getTonKho());
             values.put("ma_vach", product.getMaVach());
             values.put("mo_ta", product.getMoTa());
 
@@ -168,4 +170,5 @@ public class SanPhamDAo {
 
         return result;
     }
+
 }

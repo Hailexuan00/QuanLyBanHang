@@ -29,14 +29,12 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
         this.list = list;
         donHangDAO = new DonHangDAO(context);
     }
-
     @NonNull
     @Override
     public DonHangViewHolders onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_don_hang, parent, false);
         return new DonHangViewHolders(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull DonHangViewHolders holder, int position) {
         donHangDTO = list.get(position);
@@ -45,7 +43,6 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
         holder.txtMaDH.setText(String.valueOf(donHangDTO.getMaDonHang()));
         holder.txtUser.setText(donHangDTO.getUsername());
     }
-
     @Override
     public int getItemCount() {
         return list.size();
@@ -65,6 +62,5 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
             txtMaDH = itemView.findViewById(R.id.txtMaDH);
             txtUser = itemView.findViewById(R.id.txtUser);
         }
-
     }
 }

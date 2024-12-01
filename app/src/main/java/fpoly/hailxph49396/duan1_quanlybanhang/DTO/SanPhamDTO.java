@@ -5,18 +5,22 @@ public class SanPhamDTO {
     private int maDanhMuc;
     private String tenSanPham;
     private int giaBan;
+    private int tonKho;
     private String maVach;
     private String moTa;
 
     public SanPhamDTO(){
 
     }
-    public SanPhamDTO(int maSanPham, int maDanhMuc, String tenSanPham, int giaBan, String maVach, String moTa){
+
+    public SanPhamDTO(int maSanPham, int maDanhMuc, String tenSanPham, int giaBan, int tonKho, String maVach, String moTa) {
         this.maSanPham = maSanPham;
         this.maDanhMuc = maDanhMuc;
         this.tenSanPham = tenSanPham;
         this.giaBan = giaBan;
+        this.tonKho = tonKho;
         this.maVach = maVach;
+        this.moTa = moTa;
     }
 
     public int getMaSanPham() {
@@ -49,6 +53,14 @@ public class SanPhamDTO {
 
     public void setGiaBan(int giaBan) {
         this.giaBan = giaBan;
+    }
+
+    public int getTonKho() {
+        return tonKho;
+    }
+
+    public void setTonKho(int tonKho) {
+        this.tonKho = tonKho;
     }
 
     public String getMaVach() {
