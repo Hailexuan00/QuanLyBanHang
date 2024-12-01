@@ -39,7 +39,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "so_dien_thoai_kh TEXT, " +
                 "thanh_tien INTEGER, " +
                 "ngay DATE, " +
-                "gio INTEGER, " +
+                "gio TEXT, " +
                 "trang_thai INTEGER, " +
                 "FOREIGN KEY(username) REFERENCES " + TABLE_TAI_KHOAN + "(username))");
 
@@ -90,8 +90,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 "(2, 2, 'Nồi cơm điện', 500000, 50, '111111111', 'Nồi cơm đa năng'), " +
                 "(3, 3, 'Áo thun nam', 200000, 100, '8936050360974', 'Chất liệu cotton')");
         db.execSQL("INSERT INTO " + TABLE_DON_HANG + " (id_don_hang, username, so_dien_thoai_kh, thanh_tien, ngay, gio, trang_thai) VALUES\n" +
-                "(1, 'user1', '0987654321', 25500000, '2024-11-01', 10, 1)," +
-                "(2, 'user2', '0987654322', 200000, '2024-11-02', 15, 0)");
+                "(1, 'user1', '0987654321', 25500000, '2024-11-01', '10:00', 1)," +
+                "(2, 'user2', '0987654322', 200000, '2024-11-02', '15:00', 0)");
         db.execSQL("INSERT INTO " + TABLE_CHI_TIET_DON_HANG + " (id_ctdh, id_don_hang, id_san_pham, so_luong) VALUES " +
                 "(1, 1, 1, 1), " +
                 "(2, 1, 2, 1), " +

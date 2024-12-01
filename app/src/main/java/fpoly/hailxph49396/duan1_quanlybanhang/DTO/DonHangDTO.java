@@ -8,10 +8,10 @@ public class DonHangDTO {
     String soDienThoaiKH;
     int thanhTien;
     Date ngay;
-    int gio;
+    String gio;
     int trangThai;
 
-    public DonHangDTO(int maDonHang, String username, String soDienThoaiKH, int thanhTien, Date ngay, int gio, int trangThai) {
+    public DonHangDTO(int maDonHang, String username, String soDienThoaiKH, int thanhTien, Date ngay, String gio, int trangThai) {
         this.maDonHang = maDonHang;
         this.username = username;
         this.soDienThoaiKH = soDienThoaiKH;
@@ -63,11 +63,11 @@ public class DonHangDTO {
         this.ngay = ngay;
     }
 
-    public int getGio() {
+    public String getGio() {
         return gio;
     }
 
-    public void setGio(int gio) {
+    public void setGio(String gio) {
         this.gio = gio;
     }
 

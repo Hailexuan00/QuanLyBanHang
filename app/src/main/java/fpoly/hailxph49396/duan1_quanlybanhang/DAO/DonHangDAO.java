@@ -53,7 +53,7 @@ public class DonHangDAO {
                             cursor.getString(cursor.getColumnIndex("so_dien_thoai_kh")),
                             cursor.getInt(cursor.getColumnIndex("thanh_tien")),
                             ngay,
-                            cursor.getInt(cursor.getColumnIndex("gio")),
+                            cursor.getString(cursor.getColumnIndex("gio")),
                             cursor.getInt(cursor.getColumnIndex("trang_thai"))
                     );
 
@@ -119,7 +119,7 @@ public class DonHangDAO {
                             cursor.getString(cursor.getColumnIndex("so_dien_thoai_kh")),
                             cursor.getInt(cursor.getColumnIndex("thanh_tien")),
                             ngay,
-                            cursor.getInt(cursor.getColumnIndex("gio")),
+                            cursor.getString(cursor.getColumnIndex("gio")),
                             cursor.getInt(cursor.getColumnIndex("trang_thai"))
                     );
 
@@ -153,4 +153,49 @@ public class DonHangDAO {
         }
         return result;
     }
+
+    @SuppressLint("Range")
+    public DonHangDTO getLatestDonHang() {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        DonHangDTO donHang = null;
+
+        try {
+            db = dbHelper.getReadableDatabase();
+
+            // Sử dụng câu truy vấn SQL để lấy đơn hàng gần nhất theo ngày và giờ
+            String sql = "SELECT * FROM DonHang ORDER BY ngay DESC, gio DESC LIMIT 1";
+            cursor = db.rawQuery(sql, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                Date ngay = null;
+                try {
+                    String ngayString = cursor.getString(cursor.getColumnIndex("ngay"));
+                    if (ngayString != null) {
+                        ngay = sdf.parse(ngayString);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                donHang = new DonHangDTO(
+                        cursor.getInt(cursor.getColumnIndex("id_don_hang")),
+                        cursor.getString(cursor.getColumnIndex("username")),
+                        cursor.getString(cursor.getColumnIndex("so_dien_thoai_kh")),
+                        cursor.getInt(cursor.getColumnIndex("thanh_tien")),
+                        ngay,
+                        cursor.getString(cursor.getColumnIndex("gio")),
+                        cursor.getInt(cursor.getColumnIndex("trang_thai"))
+                );
+            }
+        } catch (Exception e) {
+            Log.e("DonHang", "Error: " + e);
+        } finally {
+            if (cursor != null) cursor.close();
+            if (db != null && db.isOpen()) db.close();
+        }
+
+        return donHang;
+    }
+
 }

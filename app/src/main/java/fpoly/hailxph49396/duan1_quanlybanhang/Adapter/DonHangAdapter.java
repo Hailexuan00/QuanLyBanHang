@@ -39,7 +39,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
     public void onBindViewHolder(@NonNull DonHangViewHolders holder, int position) {
         donHangDTO = list.get(position);
         holder.txtNgay.setText(simpleDateFormat.format(donHangDTO.getNgay()));
-        holder.txtGio.setText(String.valueOf(donHangDTO.getGio()));
+        holder.txtGio.setText(donHangDTO.getGio());
         holder.txtMaDH.setText(String.valueOf(donHangDTO.getMaDonHang()));
         holder.txtUser.setText(donHangDTO.getUsername());
     }
