@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:padding="10dp">
+    android:layout_height="50dp"
+    android:padding="5dp"
+    android:background="@drawable/item_sp"
+    android:layout_margin="3dp">
 
     <LinearLayout
         android:layout_width="300dp"
@@ -17,7 +19,7 @@
             android:layout_height="wrap_content"
             android:text="Ten san pham"
             android:textStyle="bold"
-            android:textSize="20dp"/>
+            android:textSize="15dp"/>
         
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +43,7 @@
     
     <NumberPicker
         android:id="@+id/nbpSoLuong"
-        android:layout_width="50dp"
+        android:layout_width="40dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"/>
 

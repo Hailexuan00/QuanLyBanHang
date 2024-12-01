@@ -40,11 +40,12 @@ public class BanHang extends AppCompatActivity {
     private DecoratedBarcodeView barcodeView;
     private Set<String> scannedCodes = new HashSet<>();
     private Handler handler = new Handler(Looper.getMainLooper());
-    TextView txtResults;
+    TextView txtTongTien;
     RecyclerView rcvSPofDH;
     ArrayList<SanPhamDTO>list;
     SPofDHAdapter sPofDHAdapter;
     SanPhamDAo sanPhamDAo;
+    int tongTien = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +57,18 @@ public class BanHang extends AppCompatActivity {
             return insets;
         });
         barcodeView = findViewById(R.id.barcode_scanner);
-        txtResults = findViewById(R.id.txtResults);
         barcodeView.decodeContinuous(callback);
         rcvSPofDH = findViewById(R.id.rcvSPofDH);
+        txtTongTien = findViewById(R.id.txtTongTien);
         list = new ArrayList<>();
-        sPofDHAdapter = new SPofDHAdapter(this, list);
+        list.add(new SanPhamDTO(1,1,"Haha",1,1,"Hehe", "Hihi"));
+        sPofDHAdapter = new SPofDHAdapter(this, list, new SPofDHAdapter.OnNumberPickerValueChangedListener() {
+            @Override
+            public void onNumberPickerValueChanged(int newProductValue) {
+                tongTien = newProductValue;
+                txtTongTien.setText("" + tongTien);
+            }
+        });
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rcvSPofDH.setLayoutManager(layoutManager);
         rcvSPofDH.setAdapter(sPofDHAdapter);
@@ -82,12 +90,16 @@ public class BanHang extends AppCompatActivity {
                         vibrator.vibrate(200);
                     }
                 }
-                txtResults.setText(code);
-                SanPhamDTO sanPhamDTO = new SanPhamDTO();
-                sanPhamDTO = sanPhamDAo.findProductByBarcode(code);
-                list.add(sanPhamDTO);
-                sPofDHAdapter.notifyDataSetChanged();
-                Toast.makeText(BanHang.this, "Scanned: " + code, Toast.LENGTH_SHORT).show();
+                SanPhamDTO sanPhamDTO = sanPhamDAo.findProductByBarcode(code);
+                if (sanPhamDTO != null){
+                    list.add(sanPhamDTO);
+                    tongTien = tongTien + sanPhamDTO.getGiaBan();
+                    txtTongTien.setText("" + tongTien);
+                    sPofDHAdapter.notifyDataSetChanged();
+                    Toast.makeText(BanHang.this, "Đã thấy " + sanPhamDTO.getTenSanPham(), Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(BanHang.this, "Không tìm thấy sản phẩm với mã vạch " + code, Toast.LENGTH_SHORT).show();
+                }
                 handler.postDelayed(() -> scannedCodes.remove(code), 1000);
             }
         }
