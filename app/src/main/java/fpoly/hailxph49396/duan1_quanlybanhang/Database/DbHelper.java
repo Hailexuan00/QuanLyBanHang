@@ -4,6 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.List;
+
+import fpoly.hailxph49396.duan1_quanlybanhang.DTO.NhanVienDTO;
+
 
 public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "SalesManagement";
@@ -111,6 +115,9 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HOA_DON);
         onCreate(db);
     }
+
+
+
 }
 
 

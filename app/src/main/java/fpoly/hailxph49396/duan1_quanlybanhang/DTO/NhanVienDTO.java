@@ -1,5 +1,9 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.DTO;
 
+import android.database.sqlite.SQLiteDatabase;
+
+import java.util.List;
+
 public class NhanVienDTO {
     private int id;
     private String name;
@@ -17,6 +21,9 @@ public class NhanVienDTO {
         this.phone = phone;
         this.email = email;
         this.address = address;
+    }
+
+    public static void addEmployee(SQLiteDatabase writableDatabase, NhanVienDTO newNhanVien) {
     }
 
     public int getId() {
@@ -73,5 +80,8 @@ public class NhanVienDTO {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+    public static List<NhanVienDTO> getAllEmployees(SQLiteDatabase readableDatabase) {
+        return null;
     }
 }

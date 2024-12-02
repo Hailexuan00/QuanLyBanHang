@@ -42,7 +42,7 @@ public class NhanVienFragment extends Fragment {
         btnAddEmployee = view.findViewById(R.id.btnAddNhanVien);
 
         dbHelper = new DbHelper(getContext());
-        NhanVienList = dbHelper.getAllEmployees(dbHelper.getReadableDatabase());
+        NhanVienList = NhanVienDTO.getAllEmployees(dbHelper.getReadableDatabase());
 
         nhanVienAdapter = new NhanVienAdapter(NhanVienList, getContext(), dbHelper);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -79,7 +79,7 @@ public class NhanVienFragment extends Fragment {
                 Toast.makeText(getContext(), "Vui lòng nhập tên và số điện thoại", Toast.LENGTH_SHORT).show();
             } else {
                 NhanVienDTO newNhanVien = new NhanVienDTO(0, name, middleName, gender, phone, email, address);
-                dbHelper.addEmployee(dbHelper.getWritableDatabase(), newNhanVien);
+                NhanVienDTO.addEmployee(dbHelper.getWritableDatabase(), newNhanVien);
                 NhanVienList.add(newNhanVien);
                 nhanVienAdapter.notifyItemInserted(NhanVienList.size() - 1);
                 Toast.makeText(getContext(), "Thêm nhân viên thành công!", Toast.LENGTH_SHORT).show();

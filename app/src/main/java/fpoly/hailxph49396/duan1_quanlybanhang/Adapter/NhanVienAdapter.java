@@ -48,7 +48,7 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.ViewHo
                     .setTitle("Xóa nhân viên")
                     .setMessage("Bạn có chắc chắn muốn xóa nhân viên này?")
                     .setPositiveButton("Xóa", (dialog, which) -> {
-                        dbHelper.getWritableDatabase().delete(DbHelper.TABLE_THONG_TIN_CA_NHAN,
+                        dbHelper.getWritableDatabase().delete(DbHelper.TABLE_TAI_KHOAN,
                                 "ma_nv = ?", new String[]{String.valueOf(NhanVien.getId())});
                         NhanVienList.remove(position);
                         notifyItemRemoved(position);
