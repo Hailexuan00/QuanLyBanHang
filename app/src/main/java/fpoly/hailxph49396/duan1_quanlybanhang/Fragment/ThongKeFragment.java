@@ -1,5 +1,6 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.Fragment;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,43 +8,37 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import fpoly.hailxph49396.duan1_quanlybanhang.DAO.ThongKeDao;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ThongKeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ThongKeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private Button btnTuNgay, btnDenNgay, btnDoanhThu;
+    private EditText edTuNgay, edDenNgay;
+    private TextView tvDoanhThu;
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private int mYear, mMonth, mDay;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public ThongKeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ThongKeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static ThongKeFragment newInstance(String param1, String param2) {
         ThongKeFragment fragment = new ThongKeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,16 +46,77 @@ public class ThongKeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_thong_ke, container, false);
+        View v = inflater.inflate(R.layout.fragment_thong_ke, container, false);
+        btnTuNgay = v.findViewById(R.id.btnTuNgay);
+        btnDenNgay = v.findViewById(R.id.btnDenNgay);
+        btnDoanhThu = v.findViewById(R.id.btnDoanhThu);
+        tvDoanhThu = v.findViewById(R.id.tvDoanhThu);
+        edDenNgay = v.findViewById(R.id.edDenNgay);
+        edTuNgay = v.findViewById(R.id.edTuNgay);
+
+        btnTuNgay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog d = new DatePickerDialog(getActivity(), 0, mDateTuNgay, mYear, mMonth, mDay);
+                d.show();
+            }
+        });
+
+        btnDenNgay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog d = new DatePickerDialog(getActivity(), 0, mDateDenNgay, mYear, mMonth, mDay);
+                d.show();
+            }
+        });
+
+        btnDoanhThu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tuNgay = edTuNgay.getText().toString();
+                String denNgay = edDenNgay.getText().toString();
+                ThongKeDao thongKeDao = new ThongKeDao(getActivity());
+                tvDoanhThu.setText("Doanh Thu: " + thongKeDao.getDoanhThu(tuNgay, denNgay) + "VND");
+            }
+        });
+        return v;
     }
+    DatePickerDialog.OnDateSetListener mDateTuNgay = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            mYear = year;
+            mMonth = month;
+            mDay = dayOfMonth;
+            GregorianCalendar c = new GregorianCalendar(mYear, mMonth, mDay);
+            edTuNgay.setText(sdf.format(c.getTime()));
+        }
+    };
+
+    DatePickerDialog.OnDateSetListener mDateDenNgay = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            mYear = year;
+            mMonth = month;
+            mDay = dayOfMonth;
+            GregorianCalendar c = new GregorianCalendar(mYear, mMonth, mDay);
+            edDenNgay.setText(sdf.format(c.getTime()));
+        }
+    };
 }

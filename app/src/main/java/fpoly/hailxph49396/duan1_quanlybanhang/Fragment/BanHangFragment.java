@@ -1,5 +1,9 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.Fragment;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,16 +16,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.DonHangAdapter;
+import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.SPofDHAdapter;
 import fpoly.hailxph49396.duan1_quanlybanhang.BanHang;
+import fpoly.hailxph49396.duan1_quanlybanhang.DAO.ChiTietDonHangDAO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.DonHangDAO;
+import fpoly.hailxph49396.duan1_quanlybanhang.DTO.ChiTietDonHangDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.DonHangDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
@@ -36,6 +46,11 @@ public class BanHangFragment extends Fragment {
     DonHangDAO donHangDAO;
     ArrayList<DonHangDTO> listDH = new ArrayList<>();
     DonHangAdapter donHangAdapter;
+    SPofDHAdapter spofDHAdapter;
+    ChiTietDonHangDAO chiTietDonHangDAO;
+    ChiTietDonHangDTO chiTietDonHangDTO;
+    ArrayList<ChiTietDonHangDTO> listCTDH = new ArrayList<>();
+
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     private String mParam1;
@@ -75,7 +90,14 @@ public class BanHangFragment extends Fragment {
         rcvDonHang = view.findViewById(R.id.rcvDH);
         donHangDAO = new DonHangDAO(getContext());
         listDH = donHangDAO.getListDonHang();
-        donHangAdapter = new DonHangAdapter(getContext(), listDH);
+        chiTietDonHangDAO = new ChiTietDonHangDAO(getContext());
+        donHangAdapter = new DonHangAdapter(getContext(), listDH, new DonHangAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                DonHangDTO itemDonHang = listDH.get(position);
+                showCustomDialog(itemDonHang);
+            }
+        });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rcvDonHang.setLayoutManager(layoutManager);
         rcvDonHang.setAdapter(donHangAdapter);
@@ -102,5 +124,60 @@ public class BanHangFragment extends Fragment {
             }
         });
 
+    }
+    private void showCustomDialog(DonHangDTO donHangDTO) {
+        // Lấy LayoutInflater để nạp layout của Dialog
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_don_hang, null);
+
+        // Tìm các thành phần trong dialog
+        TextView txtMaDH = dialogView.findViewById(R.id.txt_maDH);
+        TextView txtNgayGio = dialogView.findViewById(R.id.txt_ngay_gio);
+        TextView txtUser = dialogView.findViewById(R.id.txt_user);
+        TextView txtTongTien = dialogView.findViewById(R.id.txtTongTien);
+        RecyclerView rcvSP = dialogView.findViewById(R.id.rcvSP);
+        listCTDH = chiTietDonHangDAO.getCTDHByIdDonHang(donHangDTO.getMaDonHang());
+        spofDHAdapter = new SPofDHAdapter(getContext(), listCTDH, new SPofDHAdapter.OnNumberPickerValueChangedListener() {
+            @Override
+            public void onNumberPickerValueChanged(int newProductValue) {
+
+            }
+        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rcvSP.setLayoutManager(layoutManager);
+        rcvSP.setAdapter(spofDHAdapter);
+
+        // Thiết lập các giá trị cho TextView (ví dụ: từ dữ liệu của bạn)
+        txtMaDH.setText("Mã đơn hàng: " + donHangDTO.getMaDonHang());
+        txtNgayGio.setText("Ngày: " + sdf.format(donHangDTO.getNgay()) + " - Giờ: " + donHangDTO.getGio());
+        txtUser.setText("Người dùng: " + donHangDTO.getUsername());
+        txtTongTien.setText("Tổng tiền: " + donHangDTO.getThanhTien());
+
+        // Thiết lập RecyclerView (Ví dụ: thiết lập adapter cho RecyclerView)
+        // Bạn cần tạo một Adapter để hiển thị dữ liệu trong RecyclerView
+
+        // Tạo dialog và thiết lập các thành phần
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(dialogView)
+                .setCancelable(false);  // Bạn có thể thay đổi nếu muốn cho phép đóng Dialog khi click ra ngoài
+
+        // Hiển thị dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Thiết lập sự kiện cho các nút trong Dialog
+        Button btnTraHang = dialogView.findViewById(R.id.btnTraHang);
+        Button btnHuy = dialogView.findViewById(R.id.btn_huy);
+
+        btnTraHang.setOnClickListener(v -> {
+            // Thực hiện hành động khi nhấn nút "Trả hàng"
+            // Ví dụ: Xử lý trả hàng
+            dialog.dismiss();  // Đóng Dialog
+        });
+
+        btnHuy.setOnClickListener(v -> {
+            // Thực hiện hành động khi nhấn nút "Hủy"
+            dialog.dismiss();  // Đóng Dialog
+        });
     }
 }

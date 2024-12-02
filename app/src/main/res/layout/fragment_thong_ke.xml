@@ -1,17 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
     tools:context=".Fragment.ThongKeFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/btnTuNgay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Từ ngày" />
+
+        <EditText
+            android:id="@+id/edTuNgay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="YYYY-MM-DD"
+            android:textSize="18dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/btnDenNgay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Đến ngày" />
+
+        <EditText
+            android:id="@+id/edDenNgay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="YYYY-MM-DD"
+            android:textSize="18dp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnDoanhThu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:drawableStart="@drawable/ic_money_24"
+        android:text="Doanh Thu" />
 
     <TextView
+        android:id="@+id/tvDoanhThu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Thống Kê"
-        android:textSize="40sp"
-        android:background="#E3DF87"
-        android:gravity="center"/>
-
-</FrameLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Doanh Thu"
+        android:textSize="30dp" />
+</LinearLayout>
