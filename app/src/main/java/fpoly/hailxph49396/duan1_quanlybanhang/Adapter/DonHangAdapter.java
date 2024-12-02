@@ -22,18 +22,23 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
     ArrayList<DonHangDTO> list;
     DonHangDTO donHangDTO;
     DonHangDAO donHangDAO;
+    OnItemClickListener onItemClickListner;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
 
-    public DonHangAdapter(Context context, ArrayList<DonHangDTO> list) {
+    public DonHangAdapter(Context context, ArrayList<DonHangDTO> list, OnItemClickListener onItemClickListner) {
         this.context = context;
         this.list = list;
+        this.onItemClickListner = onItemClickListner;
         donHangDAO = new DonHangDAO(context);
     }
     @NonNull
     @Override
     public DonHangViewHolders onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_don_hang, parent, false);
-        return new DonHangViewHolders(view);
+        return new DonHangViewHolders(view, onItemClickListner);
     }
     @Override
     public void onBindViewHolder(@NonNull DonHangViewHolders holder, int position) {
@@ -46,6 +51,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
         holder.txtGio.setText(donHangDTO.getGio());
         holder.txtMaDH.setText(String.valueOf(donHangDTO.getMaDonHang()));
         holder.txtUser.setText(donHangDTO.getUsername());
+        holder.txtTongTien.setText(donHangDTO.getThanhTien()+"");
     }
     @Override
     public int getItemCount() {
@@ -58,13 +64,23 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
         TextView txtGio;
         TextView txtMaDH;
         TextView txtUser;
+        TextView txtTongTien;
 
-        public DonHangViewHolders(@NonNull View itemView) {
+        public DonHangViewHolders(@NonNull View itemView, OnItemClickListener onItemClickListner) {
             super(itemView);
             txtNgay = itemView.findViewById(R.id.txtNgay);
             txtGio = itemView.findViewById(R.id.txtGio);
             txtMaDH = itemView.findViewById(R.id.txtMaDH);
             txtUser = itemView.findViewById(R.id.txtUser);
+            txtTongTien = itemView.findViewById(R.id.txtTongTien);
+            itemView.setOnClickListener(v -> {
+                if (onItemClickListner != null) {
+                    onItemClickListner.onItemClick(getAdapterPosition());
+                }
+            });
         }
+
     }
+
+
 }

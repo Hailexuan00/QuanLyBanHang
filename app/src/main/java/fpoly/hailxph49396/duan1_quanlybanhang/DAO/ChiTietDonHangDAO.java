@@ -23,8 +23,8 @@ public class ChiTietDonHangDAO {
 
     // Lấy danh sách chi tiết đơn hàng theo id đơn hàng
     @SuppressLint("Range")
-    public List<ChiTietDonHangDTO> getAllChiTietDonHang(int idDonHang) {
-        List<ChiTietDonHangDTO> chiTietDonHangList = new ArrayList<>();
+    public ArrayList<ChiTietDonHangDTO> getCTDHByIdDonHang(int idDonHang) {
+        ArrayList<ChiTietDonHangDTO> chiTietDonHangList = new ArrayList<>();
         String query = "SELECT * FROM " + DbHelper.TABLE_CHI_TIET_DON_HANG + " WHERE id_don_hang = ?";
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(idDonHang)});
 
