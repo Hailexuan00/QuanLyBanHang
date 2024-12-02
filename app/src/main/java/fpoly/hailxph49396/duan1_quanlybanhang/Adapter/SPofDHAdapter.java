@@ -15,18 +15,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import fpoly.hailxph49396.duan1_quanlybanhang.DAO.ChiTietDonHangDAO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.DonHangDAO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.SanPhamDAo;
+import fpoly.hailxph49396.duan1_quanlybanhang.DTO.ChiTietDonHangDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.SanPhamDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
 
 public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamViewHolder>{
     private Context context;
-    private ArrayList<SanPhamDTO> list;
+    private ArrayList<ChiTietDonHangDTO> list;
     SanPhamDAo sanPhamDAo;
+    ChiTietDonHangDAO chiTietDonHangDAO;
 
     private final OnNumberPickerValueChangedListener listener;
-    // Biến lưu tổng và mảng để lưu giá trị tích của từng item
     private int total = 0;
     private HashMap<Integer, Integer> itemValues = new HashMap<>();
 
@@ -35,10 +37,11 @@ public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamVie
         void onNumberPickerValueChanged(int newProductValue);
     }
 
-    public SPofDHAdapter(Context context, ArrayList<SanPhamDTO> list, OnNumberPickerValueChangedListener listener) {
+    public SPofDHAdapter(Context context, ArrayList<ChiTietDonHangDTO> list, OnNumberPickerValueChangedListener listener) {
         this.context = context;
         this.list = list;
         sanPhamDAo = new SanPhamDAo(context);
+        chiTietDonHangDAO = new ChiTietDonHangDAO(context);
         this.listener = listener;
     }
 
@@ -51,18 +54,22 @@ public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamVie
 
     @Override
     public void onBindViewHolder(@NonNull SanPhamViewHolder holder, int position) {
-        SanPhamDTO sanPham = list.get(position);
-        holder.txtTenSP.setText(sanPham.getTenSanPham() + "");
-        holder.txtDonGiaSP.setText(sanPham.getGiaBan() + "VNĐ");
+        ChiTietDonHangDTO chiTietDonHangDTO = list.get(position);
+        SanPhamDTO sanPhamDTO = sanPhamDAo.findProductById(chiTietDonHangDTO.getIdSanPham());
+        holder.txtTenSP.setText(sanPhamDTO.getTenSanPham() + "");
+        holder.txtDonGiaSP.setText(sanPhamDTO.getGiaBan() + "VNĐ");
+        chiTietDonHangDTO.setSoLuong(1);
+        holder.nbpSoLuong.setWrapSelectorWheel(false);
         holder.nbpSoLuong.setMinValue(1);
-        holder.nbpSoLuong.setMaxValue(sanPham.getTonKho());
+        holder.nbpSoLuong.setMaxValue(50);
         holder.nbpSoLuong.setValue(1);
-        holder.txtGiaSP.setText(sanPham.getGiaBan() + "VNĐ");
+        holder.txtGiaSP.setText(sanPhamDTO.getGiaBan() + "VNĐ");
         holder.nbpSoLuong.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                holder.txtGiaSP.setText(sanPham.getGiaBan()*newVal + "VNĐ");
-                int currentProductValue = sanPham.getGiaBan() * newVal;
+                holder.txtGiaSP.setText(sanPhamDTO.getGiaBan()*newVal + "VNĐ");
+                int currentProductValue = sanPhamDTO.getGiaBan() * newVal;
+                chiTietDonHangDTO.setSoLuong(newVal);
 
                 // Lấy giá trị tích cũ của item từ HashMap (nếu có)
                 Integer oldProductValue = itemValues.get(holder.getAdapterPosition());
@@ -85,10 +92,11 @@ public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamVie
         });
 
         holder.btnDelete.setOnClickListener(v -> {
-            int itemValue = sanPham.getGiaBan() * holder.nbpSoLuong.getValue();
+            int itemValue = sanPhamDTO.getGiaBan() * holder.nbpSoLuong.getValue();
             total -= itemValue;
             list.remove(position);
-            notifyItemRemoved(position);
+            long check = chiTietDonHangDAO.deleteChiTietDonHang(chiTietDonHangDTO.getIdChiTietDonHang());
+            notifyDataSetChanged();
             if (listener != null) {
                 listener.onNumberPickerValueChanged(total);
             }

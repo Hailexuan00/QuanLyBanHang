@@ -1,5 +1,8 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.DAO;
 
+import static fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper.TABLE_CHI_TIET_DON_HANG;
+import static fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper.TABLE_DON_HANG;
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,7 +20,7 @@ import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
 public class DonHangDAO {
     private final DbHelper dbHelper;
     DonHangDTO donHangDTO;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public DonHangDAO(Context context) {
         dbHelper = new DbHelper(context);
@@ -73,7 +76,7 @@ public class DonHangDAO {
     public long addDonHang(DonHangDTO donHang) {
         SQLiteDatabase db = null;
         long result = -1;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         try {
             db = dbHelper.getWritableDatabase();
@@ -100,7 +103,7 @@ public class DonHangDAO {
         ArrayList<DonHangDTO> list = new ArrayList<>();
         SQLiteDatabase db = null;
         Cursor cursor = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String today = sdf.format(new Date());
 
         try {
@@ -196,6 +199,55 @@ public class DonHangDAO {
         }
 
         return donHang;
+    }
+
+    public int updateOrder(DonHangDTO order) {
+        SQLiteDatabase db = null;
+        int result = -1;
+
+        try {
+            db = dbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            // Gán giá trị từ đối tượng DonHangDTO
+            values.put("username", order.getUsername());
+            values.put("so_dien_thoai_kh", order.getSoDienThoaiKH());
+            values.put("thanh_tien", order.getThanhTien());
+            values.put("ngay", sdf.format(order.getNgay()));
+            values.put("gio", order.getGio());
+            values.put("trang_thai", order.getTrangThai());
+
+            // Thực hiện cập nhật dựa trên id_don_hang
+            result = db.update(TABLE_DON_HANG, values, "id_don_hang = ?", new String[]{String.valueOf(order.getMaDonHang())});
+        } catch (Exception e) {
+            Log.e("OrderDAO", "Error updating order: " + e.getMessage());
+        } finally {
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+
+        return result; // Trả về số dòng bị ảnh hưởng (1 nếu thành công, 0 nếu không có gì cập nhật)
+    }
+
+    public int deleteDonHang(int maDonHang) {
+        SQLiteDatabase db = null;
+        int result = -1;
+
+        try {
+            db = dbHelper.getWritableDatabase();
+            db.delete(TABLE_CHI_TIET_DON_HANG, "id_don_hang = ?", new String[]{String.valueOf(maDonHang)});
+            // Xóa đơn hàng dựa trên id_don_hang
+            result = db.delete(TABLE_DON_HANG, "id_don_hang = ?", new String[]{String.valueOf(maDonHang)});
+        } catch (Exception e) {
+            Log.e("DonHang", "Error deleting order: " + e.getMessage());
+        } finally {
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+
+        return result; // Trả về số dòng bị ảnh hưởng (1 nếu xóa thành công, 0 nếu thất bại)
     }
 
 }

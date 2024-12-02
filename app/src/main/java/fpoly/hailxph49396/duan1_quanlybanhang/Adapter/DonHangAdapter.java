@@ -22,7 +22,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
     ArrayList<DonHangDTO> list;
     DonHangDTO donHangDTO;
     DonHangDAO donHangDAO;
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public DonHangAdapter(Context context, ArrayList<DonHangDTO> list) {
         this.context = context;
@@ -38,7 +38,11 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
     @Override
     public void onBindViewHolder(@NonNull DonHangViewHolders holder, int position) {
         donHangDTO = list.get(position);
-        holder.txtNgay.setText(simpleDateFormat.format(donHangDTO.getNgay()));
+        if (donHangDTO.getNgay() != null){
+            holder.txtNgay.setText(sdf.format(donHangDTO.getNgay()));
+        }else {
+            holder.txtNgay.setText("Lỗi ngày");
+        }
         holder.txtGio.setText(donHangDTO.getGio());
         holder.txtMaDH.setText(String.valueOf(donHangDTO.getMaDonHang()));
         holder.txtUser.setText(donHangDTO.getUsername());

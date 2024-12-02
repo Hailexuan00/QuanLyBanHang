@@ -171,4 +171,36 @@ public class SanPhamDAo {
         return result;
     }
 
+    @SuppressLint("Range")
+    public SanPhamDTO findProductById(int productId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = dbHelper.getReadableDatabase();
+            String sql = "SELECT * FROM SanPham WHERE id_san_pham = ?";
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(productId)});
+
+            if (cursor != null && cursor.moveToFirst()) {
+                return new SanPhamDTO(
+                        cursor.getInt(cursor.getColumnIndex("id_san_pham")),
+                        cursor.getInt(cursor.getColumnIndex("id_danh_muc")),
+                        cursor.getString(cursor.getColumnIndex("ten_san_pham")),
+                        cursor.getInt(cursor.getColumnIndex("don_gia")),
+                        cursor.getInt(cursor.getColumnIndex("ton_kho")),
+                        cursor.getString(cursor.getColumnIndex("ma_vach")),
+                        cursor.getString(cursor.getColumnIndex("mo_ta"))
+                );
+            }
+        } catch (Exception e) {
+            Log.e("ProductDAO", "Error: " + e);
+        } finally {
+            if (cursor != null) cursor.close();
+            if (db != null && db.isOpen()) db.close();
+        }
+
+        return null; // Nếu không tìm thấy
+    }
+
+
 }

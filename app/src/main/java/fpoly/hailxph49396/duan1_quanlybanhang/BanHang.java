@@ -3,13 +3,11 @@ package fpoly.hailxph49396.duan1_quanlybanhang;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.os.VibrationEffect;
@@ -20,23 +18,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.media.ToneGenerator;
 import android.media.AudioManager;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.zxing.Result;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
-
 import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.SPofDHAdapter;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.ChiTietDonHangDAO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.DonHangDAO;
@@ -49,9 +40,12 @@ public class BanHang extends AppCompatActivity {
     private DecoratedBarcodeView barcodeView;
     private Set<String> scannedCodes = new HashSet<>();
     private Handler handler = new Handler(Looper.getMainLooper());
+    private Handler scanHandler = new Handler();  // Handler mới để trì hoãn quét
+    private Runnable scanRunnable;  // Lưu trữ Runnable để quản lý việc quét
+
     TextView txtTongTien;
     RecyclerView rcvSPofDH;
-    ArrayList<SanPhamDTO>list;
+    ArrayList<ChiTietDonHangDTO> list;
     SPofDHAdapter sPofDHAdapter;
     SanPhamDAo sanPhamDAo;
     ChiTietDonHangDAO chiTietDonHangDAO;
@@ -62,6 +56,8 @@ public class BanHang extends AppCompatActivity {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     int tongTien = 0;
     Button btnThanhToan;
+    private final Object scanningLock = new Object();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,85 +69,88 @@ public class BanHang extends AppCompatActivity {
             return insets;
         });
 
-
+        donHangDAO = new DonHangDAO(BanHang.this);
         barcodeView = findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
         rcvSPofDH = findViewById(R.id.rcvSPofDH);
         txtTongTien = findViewById(R.id.txtTongTien);
         btnThanhToan = findViewById(R.id.btnThanhToan);
         list = new ArrayList<>();
+        donHangDTO = donHangDAO.getLatestDonHang();
+        chiTietDonHangDAO = new ChiTietDonHangDAO(this);
         sPofDHAdapter = new SPofDHAdapter(this, list, new SPofDHAdapter.OnNumberPickerValueChangedListener() {
             @Override
             public void onNumberPickerValueChanged(int newProductValue) {
                 tongTien = newProductValue;
-                txtTongTien.setText("" + tongTien);
+                txtTongTien.setText(String.valueOf(tongTien));
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rcvSPofDH.setLayoutManager(layoutManager);
         rcvSPofDH.setAdapter(sPofDHAdapter);
         sanPhamDAo = new SanPhamDAo(this);
-        btnThanhToan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH) + 1;
-                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                int minute = calendar.get(Calendar.MINUTE);
-                int second = calendar.get(Calendar.SECOND);
-                sharedPreferences = getSharedPreferences("USER_FILE", MODE_PRIVATE);
-                String user = sharedPreferences.getString("USERNAME", "");
-                donHangDTO = new DonHangDTO();
-                donHangDTO.setThanhTien(Integer.parseInt(String.valueOf(txtTongTien.getText())));
-                donHangDTO.setUsername(user);
-                try {
-                    donHangDTO.setNgay(sdf.parse(dayOfMonth + "/" + month + "/" + year));
-                }catch (Exception e){
-                    Toast.makeText(BanHang.this, "Sai r", Toast.LENGTH_SHORT).show();
-                }
-                donHangDTO.setGio(hour + ":" + minute + ":" + second);
-                donHangDTO.setTrangThai(1);
-                donHangDAO = new DonHangDAO(BanHang.this);
-                long check = donHangDAO.addDonHang(donHangDTO);
-                if (check != -1){
-                    Toast.makeText(BanHang.this, "Thanh cong", Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(BanHang.this, "That bai", Toast.LENGTH_SHORT).show();
-
-                }
+        btnThanhToan.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            sharedPreferences = getSharedPreferences("USER_FILE", MODE_PRIVATE);
+            String user = sharedPreferences.getString("USERNAME", "");
+            donHangDTO.setThanhTien(Integer.parseInt(String.valueOf(txtTongTien.getText())));
+            donHangDTO.setUsername(user);
+            try {
+                donHangDTO.setNgay(sdf.parse(calendar.get(Calendar.DAY_OF_MONTH) + "/" +
+                        (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR)));
+            } catch (Exception e) {
+                Toast.makeText(BanHang.this, "Sai ngày", Toast.LENGTH_SHORT).show();
             }
+            donHangDTO.setGio(calendar.get(Calendar.HOUR_OF_DAY) + ":" +
+                    calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
+            donHangDTO.setTrangThai(1);
+            int check = donHangDAO.updateOrder(donHangDTO);
+            Toast.makeText(this, donHangDTO.getUsername(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(BanHang.this, check > 0 ? "Xác nhận đơn hàng thành công" : "Xác nhận đơn hàng thất bại", Toast.LENGTH_SHORT).show();
         });
     }
+
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
             String code = result.getText();
-            if (!scannedCodes.contains(code)) {
-                scannedCodes.add(code);
-                ToneGenerator toneGen = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-                toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 200);
-                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                if (vibrator != null) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
-                    } else {
-                        vibrator.vibrate(200);
+            synchronized (scanningLock) {
+                if (!scannedCodes.contains(code)) {
+                    scannedCodes.add(code);
+                    // Lập lịch quét sau 1 giây
+                    if (scanRunnable != null) {
+                        scanHandler.removeCallbacks(scanRunnable); // Hủy bỏ nhiệm vụ cũ nếu có
                     }
+                    scanRunnable = () -> processBarcode(code);
+                    scanHandler.postDelayed(scanRunnable, 1000); // Delay 1,5 giây
                 }
-                SanPhamDTO sanPhamDTO = sanPhamDAo.findProductByBarcode(code);
-                if (sanPhamDTO != null){
-                    list.add(sanPhamDTO);
-                    tongTien = tongTien + sanPhamDTO.getGiaBan();
-                    txtTongTien.setText("" + tongTien);
-                    sPofDHAdapter.notifyDataSetChanged();
-                    Toast.makeText(BanHang.this, "Đã thấy " + sanPhamDTO.getTenSanPham(), Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(BanHang.this, "Không tìm thấy sản phẩm với mã vạch " + code, Toast.LENGTH_SHORT).show();
-                }
-                handler.postDelayed(() -> scannedCodes.remove(code), 1000);
             }
+        }
+
+        private void processBarcode(final String code) {
+            // Chạy truy vấn cơ sở dữ liệu trên background thread
+            new Thread(() -> {
+                SanPhamDTO sanPhamDTO = sanPhamDAo.findProductByBarcode(code);
+                runOnUiThread(() -> {
+                    if (sanPhamDTO != null) {
+                        chiTietDonHangDTO = new ChiTietDonHangDTO();
+                        chiTietDonHangDTO.setIdSanPham(sanPhamDTO.getMaSanPham());
+                        chiTietDonHangDTO.setIdDonHang(donHangDTO.getMaDonHang());
+                        list.add(chiTietDonHangDTO);
+                        long check = chiTietDonHangDAO.insertChiTietDonHang(chiTietDonHangDTO);
+                        String message = check != -1 ? "Thêm chi tiết đơn hàng thành công" : "Thêm chi tiết đơn hàng thất bại";
+                        Toast.makeText(BanHang.this, message, Toast.LENGTH_SHORT).show();
+
+                        tongTien += sanPhamDTO.getGiaBan();
+                        txtTongTien.setText(String.valueOf(tongTien));
+                        sPofDHAdapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(BanHang.this, "Không tìm thấy sản phẩm với mã vạch " + code, Toast.LENGTH_SHORT).show();
+                    }
+
+                    handler.postDelayed(() -> scannedCodes.remove(code), 1000);
+                });
+            }).start();
         }
     };
 
@@ -166,4 +165,12 @@ public class BanHang extends AppCompatActivity {
         super.onPause();
         barcodeView.pause();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        int check = donHangDAO.deleteDonHang(donHangDTO.getMaDonHang());
+//        Toast.makeText(this, check > 0 ? "Hủy đơn hàng thành công" : "Lỗi hủy đơn hàng", Toast.LENGTH_SHORT).show();
+    }
 }
+
