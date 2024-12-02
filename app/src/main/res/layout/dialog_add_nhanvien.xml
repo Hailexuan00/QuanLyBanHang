@@ -2,47 +2,54 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <EditText
-        android:id="@+id/nameEditText"
+        android:id="@+id/edtTenNhanVien"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Full Name"/>
+        android:hint="Tên nhân viên" />
 
     <EditText
-        android:id="@+id/middleNameEditText"
+        android:id="@+id/edtHoVaTenDem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Middle Name"/>
+        android:hint="Họ và tên đệm" />
 
     <EditText
-        android:id="@+id/genderEditText"
+        android:id="@+id/edtGioiTinh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Gender"/>
+        android:hint="Giới tính" />
 
     <EditText
-        android:id="@+id/phoneEditText"
+        android:id="@+id/edtSoDienThoai"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Phone"/>
+        android:hint="Số điện thoại" />
 
     <EditText
-        android:id="@+id/emailEditText"
+        android:id="@+id/edtEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"/>
+        android:hint="Email" />
 
     <EditText
-        android:id="@+id/addressEditText"
+        android:id="@+id/edtDiaChi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Address"/>
+        android:hint="Địa chỉ" />
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/btnAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save"/>
+        android:text="Thêm" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hủy" />
 </LinearLayout>

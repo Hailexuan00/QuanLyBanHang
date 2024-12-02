@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.DonHangAdapter;
@@ -35,12 +36,12 @@ public class BanHangFragment extends Fragment {
     DonHangDAO donHangDAO;
     ArrayList<DonHangDTO> listDH = new ArrayList<>();
     DonHangAdapter donHangAdapter;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     private String mParam1;
     private String mParam2;
 
     public BanHangFragment() {
-        // Required empty public constructor
     }
 
     public static BanHangFragment newInstance(String param1, String param2) {
@@ -64,7 +65,6 @@ public class BanHangFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_ban_hang, container, false);
     }
 
@@ -86,6 +86,18 @@ public class BanHangFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), BanHang.class);
+                DonHangDTO donHangDTO = new DonHangDTO();
+                try {
+                    donHangDTO.setNgay(sdf.parse("12/12/2012"));
+                }catch (Exception e){
+
+                }
+                long check = donHangDAO.addDonHang(donHangDTO);
+                if (check != -1){
+                    Toast.makeText(getContext(), "Đơn hàng mới", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getContext(), "Lỗi tạo đơn hàng", Toast.LENGTH_SHORT).show();
+                }
                 startActivity(intent);
             }
         });

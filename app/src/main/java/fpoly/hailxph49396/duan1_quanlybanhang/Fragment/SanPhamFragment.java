@@ -62,9 +62,9 @@ public class SanPhamFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         // Assuming a custom adapter named "ProductAdapter"
         List<String> dummyData = new ArrayList<>();
-        dummyData.add("Product 1");
-        dummyData.add("Product 2");
-        dummyData.add("Product 3");
+        dummyData.add("Sản Phẩm 1");
+        dummyData.add("Sản Phẩm 2");
+        dummyData.add("Sản Phẩm 3");
         recyclerView.setAdapter(new SanPhamAdapter(dummyData));
     }
 

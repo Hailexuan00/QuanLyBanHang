@@ -33,7 +33,6 @@ public class ChiTietDonHangDAO {
                 int idChiTietDonHang = cursor.getInt(cursor.getColumnIndex("id_ctdh"));
                 int idSanPham = cursor.getInt(cursor.getColumnIndex("id_san_pham"));
                 int soLuong = cursor.getInt(cursor.getColumnIndex("so_luong"));
-
                 ChiTietDonHangDTO chiTietDonHang = new ChiTietDonHangDTO(idChiTietDonHang, idDonHang, idSanPham, soLuong);
                 chiTietDonHangList.add(chiTietDonHang);
             } while (cursor.moveToNext());

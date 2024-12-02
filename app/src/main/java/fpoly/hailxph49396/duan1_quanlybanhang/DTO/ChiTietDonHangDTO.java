@@ -14,6 +14,10 @@ public class ChiTietDonHangDTO {
         this.soLuong = soLuong;
     }
 
+    public ChiTietDonHangDTO() {
+
+    }
+
     // Getter and Setter
     public int getIdChiTietDonHang() {
         return idChiTietDonHang;
