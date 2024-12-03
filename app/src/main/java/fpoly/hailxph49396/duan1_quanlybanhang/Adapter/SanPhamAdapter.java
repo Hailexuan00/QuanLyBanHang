@@ -1,5 +1,6 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.Adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,41 +9,47 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ProductViewHolder> {
+import fpoly.hailxph49396.duan1_quanlybanhang.DTO.SanPhamDTO;
+import fpoly.hailxph49396.duan1_quanlybanhang.R;
 
-    private final List<String> SanPhamList;
+public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHolder> {
 
-    public SanPhamAdapter(List<String> productList) {
-        this.SanPhamList = productList;
+    private final Context context;
+    private final ArrayList<SanPhamDTO> sanPhamList;
+
+    public SanPhamAdapter(Context context, ArrayList<SanPhamDTO> sanPhamList) {
+        this.context = context;
+        this.sanPhamList = sanPhamList;
     }
 
     @NonNull
     @Override
-    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(android.R.layout.simple_list_item_1, parent, false);
-        return new ProductViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_san_pham, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        String product = SanPhamList.get(position);
-        holder.textView.setText(product);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        SanPhamDTO sanPham = sanPhamList.get(position);
+        holder.tvTenSanPham.setText(sanPham.getTenSanPham());
+        holder.tvGiaBan.setText("Giá: " + sanPham.getGiaBan() + " VNĐ");
     }
 
     @Override
     public int getItemCount() {
-        return SanPhamList.size();
+        return sanPhamList.size();
     }
 
-    static class ProductViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvTenSanPham, tvGiaBan;
 
-        public ProductViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(android.R.id.text1);
+            tvTenSanPham = itemView.findViewById(R.id.tvTenSanPham);
+            tvGiaBan = itemView.findViewById(R.id.tvGiaBan);
         }
     }
 }

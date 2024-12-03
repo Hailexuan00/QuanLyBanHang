@@ -94,8 +94,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 "(2, 2, 'Tea+', 500000, 50, '8934588870118', 'Nuoc uong'), " +
                 "(3, 3, 'Áo thun nam', 200000, 100, '8936050360974', 'Chất liệu cotton')");
         db.execSQL("INSERT INTO " + TABLE_DON_HANG + " (id_don_hang, username, so_dien_thoai_kh, thanh_tien, ngay, gio, trang_thai) VALUES\n" +
-                "(1, 'user1', '0987654321', 25500000, '01//11/2024', '10:00', 1)," +
-                "(2, 'user2', '0987654322', 200000, '02/11/2024', '15:00', 0)");
+                "(1, 'user1', '0987654321', 25500000, '01/11/2024', '10:00:00', 1)," +
+                "(2, 'user2', '0987654322', 200000, '02/11/2024', '15:00:00', 0)");
         db.execSQL("INSERT INTO " + TABLE_CHI_TIET_DON_HANG + " (id_ctdh, id_don_hang, id_san_pham, so_luong) VALUES " +
                 "(1, 1, 1, 1), " +
                 "(2, 1, 2, 1), " +
