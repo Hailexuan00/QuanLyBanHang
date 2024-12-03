@@ -250,6 +250,7 @@ public class DonHangDAO {
         return result; // Trả về số dòng bị ảnh hưởng (1 nếu xóa thành công, 0 nếu thất bại)
     }
 
+    @SuppressLint("Range")
     public int getTongThanhTien(String startDate, String endDate) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -260,12 +261,10 @@ public class DonHangDAO {
             String query;
             String[] args;
 
-            // Nếu chỉ có ngày bắt đầu (tính tổng trong một ngày)
             if (endDate == null) {
                 query = "SELECT SUM(thanh_tien) as total FROM DonHang WHERE ngay = ?";
                 args = new String[]{startDate};
             }
-            // Nếu có cả ngày bắt đầu và ngày kết thúc (tính tổng trong khoảng ngày)
             else {
                 query = "SELECT SUM(thanh_tien) as total FROM DonHang WHERE ngay BETWEEN ? AND ?";
                 args = new String[]{startDate, endDate};

@@ -30,6 +30,7 @@ import fpoly.hailxph49396.duan1_quanlybanhang.Fragment.ThongKeFragment;
 public class MenuActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private DrawerLayout drawer;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,13 @@ public class MenuActivity extends AppCompatActivity {
         });
         toolbar = findViewById(R.id.toolbar1);
         drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nvView);
+        navigationView.getMenu().findItem(R.id.nav_nhanVien).setVisible(true);
+        Intent intent = getIntent();
+        String username = intent.getStringExtra("USERNAME");
+        if (username.equals("admin")){
+            navigationView.getMenu().findItem(R.id.nav_nhanVien).setVisible(false);
+        }
 
 
         setSupportActionBar(toolbar);
