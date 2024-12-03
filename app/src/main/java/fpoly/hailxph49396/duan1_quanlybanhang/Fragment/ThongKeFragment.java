@@ -32,7 +32,7 @@ public class ThongKeFragment extends Fragment {
 
 
     public ThongKeFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -53,7 +53,7 @@ public class ThongKeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_thong_ke, container, false);
 
         tvTuNgay = v.findViewById(R.id.tvTuNgay);

@@ -47,8 +47,8 @@ public class MenuActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nvView);
         navigationView.getMenu().findItem(R.id.nav_nhanVien).setVisible(true);
         Intent intent = getIntent();
-        String username = intent.getStringExtra("USERNAME");
-        if (username.equals("admin")){
+        String username = intent.getStringExtra("user");
+        if (!username.equalsIgnoreCase("admin")){
             navigationView.getMenu().findItem(R.id.nav_nhanVien).setVisible(false);
         }
 
