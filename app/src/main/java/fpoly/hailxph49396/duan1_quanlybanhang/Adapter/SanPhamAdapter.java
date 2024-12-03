@@ -4,7 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +38,19 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHold
         SanPhamDTO sanPham = sanPhamList.get(position);
         holder.tvTenSanPham.setText(sanPham.getTenSanPham());
         holder.tvGiaBan.setText("Giá: " + sanPham.getGiaBan() + " VNĐ");
+
+        holder.btnSua.setOnClickListener(v -> {
+            // Xử lý sự kiện sửa
+            Toast.makeText(context, "Sửa sản phẩm: " + sanPham.getTenSanPham(), Toast.LENGTH_SHORT).show();
+            // Mở màn hình sửa hoặc dialog
+        });
+
+        holder.btnXoa.setOnClickListener(v -> {
+            // Xử lý sự kiện xóa
+            sanPhamList.remove(position);  // Xóa sản phẩm khỏi danh sách
+            notifyItemRemoved(position);  // Cập nhật RecyclerView
+            Toast.makeText(context, "Xóa sản phẩm: " + sanPham.getTenSanPham(), Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
@@ -45,11 +60,14 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTenSanPham, tvGiaBan;
+        Button btnSua, btnXoa;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTenSanPham = itemView.findViewById(R.id.tvTenSanPham);
             tvGiaBan = itemView.findViewById(R.id.tvGiaBan);
+            btnSua = itemView.findViewById(R.id.btnSuaSanPham);
+            btnXoa = itemView.findViewById(R.id.btnXoaSanPham);
         }
     }
 }
