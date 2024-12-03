@@ -3,33 +3,60 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="12dp"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
 
+    <!-- Tên sản phẩm -->
     <TextView
         android:id="@+id/tvTenSanPham"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:text="Tên sản phẩm" />
+        android:text="Tên sản phẩm"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
 
+    <!-- Giá bán -->
     <TextView
         android:id="@+id/tvGiaBan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Giá bán" />
+        android:text="Giá bán"
+        android:textSize="16sp"
+        android:layout_marginTop="4dp" />
 
-    <!-- Nút Sửa -->
-    <Button
-        android:id="@+id/btnSuaSanPham"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sửa" />
+    <!-- Dòng phân cách -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp" />
 
-    <!-- Nút Xóa -->
-    <Button
-        android:id="@+id/btnXoaSanPham"
-        android:layout_width="wrap_content"
+    <!-- Nút chức năng -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Xóa" />
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginTop="8dp">
+
+        <ImageButton
+            android:id="@+id/btnSuaSanPham"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_create_24"
+            android:background="@color/black"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btnXoaSanPham"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/baseline_delete_24"
+            android:textColor="@color/black"
+            android:background="@color/white"
+            />
+
+    </LinearLayout>
 </LinearLayout>
