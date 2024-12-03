@@ -20,7 +20,7 @@
             android:text="Ten san pham"
             android:textStyle="bold"
             android:textSize="15dp"/>
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
         </LinearLayout>
 
     </LinearLayout>
-    
+
     <NumberPicker
         android:id="@+id/nbpSoLuong"
         android:layout_width="40dp"
