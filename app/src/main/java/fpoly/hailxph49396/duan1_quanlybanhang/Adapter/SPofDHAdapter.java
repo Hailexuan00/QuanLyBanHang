@@ -62,7 +62,7 @@ public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamVie
         holder.nbpSoLuong.setWrapSelectorWheel(false);
         holder.nbpSoLuong.setMinValue(1);
         holder.nbpSoLuong.setMaxValue(50);
-        holder.nbpSoLuong.setValue(1);
+        holder.nbpSoLuong.setValue(chiTietDonHangDTO.getSoLuong());
         holder.txtGiaSP.setText(sanPhamDTO.getGiaBan() + "VNĐ");
         holder.nbpSoLuong.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override

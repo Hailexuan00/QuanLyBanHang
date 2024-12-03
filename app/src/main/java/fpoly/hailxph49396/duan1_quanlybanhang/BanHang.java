@@ -123,7 +123,7 @@ public class BanHang extends AppCompatActivity {
                         scanHandler.removeCallbacks(scanRunnable); // Hủy bỏ nhiệm vụ cũ nếu có
                     }
                     scanRunnable = () -> processBarcode(code);
-                    scanHandler.postDelayed(scanRunnable, 1000); // Delay 1,5 giây
+                    scanHandler.postDelayed(scanRunnable, 1000); // Delay 1 giây
                 }
             }
         }
@@ -134,24 +134,32 @@ public class BanHang extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (sanPhamDTO != null) {
                         boolean chk = false;
-//                        for (ChiTietDonHangDTO item : list) {
-//                            if (item.getMaVach().equals(sanPhamDTO.getMaVach())) {
-//                                item.setSoLuong(item.getSoLuong() + 1);
-//                                chk = true;
-//                                break;
-//                            }
-//                        }
-                        chiTietDonHangDTO = new ChiTietDonHangDTO();
-                        chiTietDonHangDTO.setIdSanPham(sanPhamDTO.getMaSanPham());
-                        chiTietDonHangDTO.setIdDonHang(donHangDTO.getMaDonHang());
-                        list.add(chiTietDonHangDTO);
-                        long check = chiTietDonHangDAO.insertChiTietDonHang(chiTietDonHangDTO);
-                        String message = check != -1 ? "Thêm chi tiết đơn hàng thành công" : "Thêm chi tiết đơn hàng thất bại";
-                        Toast.makeText(BanHang.this, message, Toast.LENGTH_SHORT).show();
+                        for (ChiTietDonHangDTO item : list) {
+                            if (item.getIdSanPham() == sanPhamDTO.getMaSanPham()) {
+                                item.setSoLuong(item.getSoLuong() + 1);
+                                int check2 = chiTietDonHangDAO.updateChiTietDonHang(item);
+                                chk = true;
+                                break;
+                            }
+                        }
+                        if (chk){
+                            sPofDHAdapter.notifyDataSetChanged();
+                            return;
+                        }else {
+                            chiTietDonHangDTO = new ChiTietDonHangDTO();
+                            chiTietDonHangDTO.setIdSanPham(sanPhamDTO.getMaSanPham());
+                            chiTietDonHangDTO.setIdDonHang(donHangDTO.getMaDonHang());
+                            chiTietDonHangDTO.setSoLuong(1);
+                            list.add(chiTietDonHangDTO);
+                            long check = chiTietDonHangDAO.insertChiTietDonHang(chiTietDonHangDTO);
+                            String message = check != -1 ? "Thêm chi tiết đơn hàng thành công" : "Thêm chi tiết đơn hàng thất bại";
+                            Toast.makeText(BanHang.this, message, Toast.LENGTH_SHORT).show();
 
-                        tongTien += sanPhamDTO.getGiaBan();
-                        txtTongTien.setText(String.valueOf(tongTien));
-                        sPofDHAdapter.notifyDataSetChanged();
+                            tongTien += sanPhamDTO.getGiaBan();
+                            txtTongTien.setText(String.valueOf(tongTien));
+                            sPofDHAdapter.notifyDataSetChanged();
+                        }
+
                     } else {
                         Toast.makeText(BanHang.this, "Không tìm thấy sản phẩm với mã vạch " + code, Toast.LENGTH_SHORT).show();
                     }
