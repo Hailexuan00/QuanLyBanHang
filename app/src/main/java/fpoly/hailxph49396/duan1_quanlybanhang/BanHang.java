@@ -107,6 +107,7 @@ public class BanHang extends AppCompatActivity {
             int check = donHangDAO.updateOrder(donHangDTO);
             Toast.makeText(this, donHangDTO.getUsername(), Toast.LENGTH_SHORT).show();
             Toast.makeText(BanHang.this, check > 0 ? "Xác nhận đơn hàng thành công" : "Xác nhận đơn hàng thất bại", Toast.LENGTH_SHORT).show();
+            finish();
         });
     }
 

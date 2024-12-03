@@ -91,11 +91,11 @@ public class DbHelper extends SQLiteOpenHelper {
                 "(3, 'Thời trang')");
         db.execSQL("INSERT INTO " + TABLE_SAN_PHAM + " (id_san_pham, id_danh_muc, ten_san_pham, don_gia, ton_kho, ma_vach, mo_ta) VALUES " +
                 "(1, 1, 'Điện thoại iPhone 14', 25000000, 10, '000000000', 'Điện thoại cao cấp Apple'), " +
-                "(2, 2, 'Nồi cơm điện', 500000, 50, '111111111', 'Nồi cơm đa năng'), " +
+                "(2, 2, 'Tea+', 500000, 50, '8934588870118', 'Nuoc uong'), " +
                 "(3, 3, 'Áo thun nam', 200000, 100, '8936050360974', 'Chất liệu cotton')");
         db.execSQL("INSERT INTO " + TABLE_DON_HANG + " (id_don_hang, username, so_dien_thoai_kh, thanh_tien, ngay, gio, trang_thai) VALUES\n" +
-                "(1, 'user1', '0987654321', 25500000, '2024-11-01', '10:00', 1)," +
-                "(2, 'user2', '0987654322', 200000, '2024-11-02', '15:00', 0)");
+                "(1, 'user1', '0987654321', 25500000, '01//11/2024', '10:00', 1)," +
+                "(2, 'user2', '0987654322', 200000, '02/11/2024', '15:00', 0)");
         db.execSQL("INSERT INTO " + TABLE_CHI_TIET_DON_HANG + " (id_ctdh, id_don_hang, id_san_pham, so_luong) VALUES " +
                 "(1, 1, 1, 1), " +
                 "(2, 1, 2, 1), " +

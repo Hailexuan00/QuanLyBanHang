@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,7 +127,6 @@ public class BanHangFragment extends Fragment {
 
     }
     private void showCustomDialog(DonHangDTO donHangDTO) {
-        // Lấy LayoutInflater để nạp layout của Dialog
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_don_hang, null);
 
@@ -147,21 +147,24 @@ public class BanHangFragment extends Fragment {
         rcvSP.setLayoutManager(layoutManager);
         rcvSP.setAdapter(spofDHAdapter);
 
-        // Thiết lập các giá trị cho TextView (ví dụ: từ dữ liệu của bạn)
         txtMaDH.setText("Mã đơn hàng: " + donHangDTO.getMaDonHang());
-        txtNgayGio.setText("Ngày: " + sdf.format(donHangDTO.getNgay()) + " - Giờ: " + donHangDTO.getGio());
+        try {
+            if (donHangDTO.getNgay() != null){
+                txtNgayGio.setText("Ngày: " + sdf.format(donHangDTO.getNgay()) + " - Giờ: " + donHangDTO.getGio());
+            }else {
+                txtNgayGio.setText("Ngày: " + "" + " - Giờ: " + "");
+            }
+        }catch (Exception e){
+            Log.e("Error", e.getMessage());
+        }
+
         txtUser.setText("Người dùng: " + donHangDTO.getUsername());
         txtTongTien.setText("Tổng tiền: " + donHangDTO.getThanhTien());
 
-        // Thiết lập RecyclerView (Ví dụ: thiết lập adapter cho RecyclerView)
-        // Bạn cần tạo một Adapter để hiển thị dữ liệu trong RecyclerView
-
-        // Tạo dialog và thiết lập các thành phần
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setView(dialogView)
-                .setCancelable(false);  // Bạn có thể thay đổi nếu muốn cho phép đóng Dialog khi click ra ngoài
+                .setCancelable(false);
 
-        // Hiển thị dialog
         AlertDialog dialog = builder.create();
         dialog.show();
 
@@ -170,14 +173,13 @@ public class BanHangFragment extends Fragment {
         Button btnHuy = dialogView.findViewById(R.id.btn_huy);
 
         btnTraHang.setOnClickListener(v -> {
-            // Thực hiện hành động khi nhấn nút "Trả hàng"
-            // Ví dụ: Xử lý trả hàng
-            dialog.dismiss();  // Đóng Dialog
+
+            dialog.dismiss();
         });
 
         btnHuy.setOnClickListener(v -> {
-            // Thực hiện hành động khi nhấn nút "Hủy"
-            dialog.dismiss();  // Đóng Dialog
+
+            dialog.dismiss();
         });
     }
 }

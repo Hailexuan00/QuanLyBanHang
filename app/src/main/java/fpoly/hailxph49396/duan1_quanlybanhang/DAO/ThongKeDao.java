@@ -15,7 +15,7 @@ import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
 public class ThongKeDao {
     private SQLiteDatabase db;
     private Context context;
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     public ThongKeDao(Context context) {
         this.context = context;
