@@ -129,11 +129,18 @@ public class BanHang extends AppCompatActivity {
         }
 
         private void processBarcode(final String code) {
-            // Chạy truy vấn cơ sở dữ liệu trên background thread
             new Thread(() -> {
                 SanPhamDTO sanPhamDTO = sanPhamDAo.findProductByBarcode(code);
                 runOnUiThread(() -> {
                     if (sanPhamDTO != null) {
+                        boolean chk = false;
+//                        for (ChiTietDonHangDTO item : list) {
+//                            if (item.getMaVach().equals(sanPhamDTO.getMaVach())) {
+//                                item.setSoLuong(item.getSoLuong() + 1);
+//                                chk = true;
+//                                break;
+//                            }
+//                        }
                         chiTietDonHangDTO = new ChiTietDonHangDTO();
                         chiTietDonHangDTO.setIdSanPham(sanPhamDTO.getMaSanPham());
                         chiTietDonHangDTO.setIdDonHang(donHangDTO.getMaDonHang());
