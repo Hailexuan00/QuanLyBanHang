@@ -90,7 +90,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "(2, 'Gia dụng'), " +
                 "(3, 'Thời trang')");
         db.execSQL("INSERT INTO " + TABLE_SAN_PHAM + " (id_san_pham, id_danh_muc, ten_san_pham, don_gia, ton_kho, ma_vach, mo_ta) VALUES " +
-                "(1, 1, 'Điện thoại iPhone 14', 25000000, 10, '000000000', 'Điện thoại cao cấp Apple'), " +
+                "(1, 1, 'Điện thoại iPhone 14', 25000000, 10, '9780486996844', 'Điện thoại cao cấp Apple'), " +
                 "(2, 2, 'Tea+', 500000, 50, '8934588870118', 'Nuoc uong'), " +
                 "(3, 3, 'Áo thun nam', 200000, 100, '8936050360974', 'Chất liệu cotton')");
         db.execSQL("INSERT INTO " + TABLE_DON_HANG + " (id_don_hang, username, so_dien_thoai_kh, thanh_tien, ngay, gio, trang_thai) VALUES\n" +

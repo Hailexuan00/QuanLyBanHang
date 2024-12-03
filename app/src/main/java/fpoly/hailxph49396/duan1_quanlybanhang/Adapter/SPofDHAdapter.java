@@ -58,11 +58,11 @@ public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamVie
         SanPhamDTO sanPhamDTO = sanPhamDAo.findProductById(chiTietDonHangDTO.getIdSanPham());
         holder.txtTenSP.setText(sanPhamDTO.getTenSanPham() + "");
         holder.txtDonGiaSP.setText(sanPhamDTO.getGiaBan() + "VNĐ");
-        chiTietDonHangDTO.setSoLuong(1);
         holder.nbpSoLuong.setWrapSelectorWheel(false);
         holder.nbpSoLuong.setMinValue(1);
         holder.nbpSoLuong.setMaxValue(50);
         holder.nbpSoLuong.setValue(chiTietDonHangDTO.getSoLuong());
+        holder.txtSoLuong.setText(chiTietDonHangDTO.getSoLuong() + "");
         holder.txtGiaSP.setText(sanPhamDTO.getGiaBan() + "VNĐ");
         holder.nbpSoLuong.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -108,18 +108,18 @@ public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamVie
         return list.size();
     }
     public static class SanPhamViewHolder extends RecyclerView.ViewHolder {
-        TextView txtTenSP, txtDonGiaSP, txtGiaSP;
+        TextView txtTenSP, txtDonGiaSP, txtGiaSP, txtSoLuong;
         NumberPicker nbpSoLuong;
         ImageButton btnDelete;
 
         public SanPhamViewHolder(@NonNull View itemView) {
             super(itemView);
-
             txtTenSP = itemView.findViewById(R.id.txtTenSP);
             txtDonGiaSP = itemView.findViewById(R.id.txtDonGiaSP);
             txtGiaSP = itemView.findViewById(R.id.txtGiaSP);
             nbpSoLuong = itemView.findViewById(R.id.nbpSoLuong);
             btnDelete = itemView.findViewById(R.id.btnDelete);
+            txtSoLuong = itemView.findViewById(R.id.txtSoLuong);
         }
     }
 
