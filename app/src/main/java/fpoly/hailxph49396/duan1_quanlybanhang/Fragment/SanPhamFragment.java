@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,62 +14,65 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.SanPhamAdapter;
+import fpoly.hailxph49396.duan1_quanlybanhang.DAO.SanPhamDAo;
+import fpoly.hailxph49396.duan1_quanlybanhang.DTO.SanPhamDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
 
 public class SanPhamFragment extends Fragment {
 
-    private EditText searchEditText;
-    private Button scanButton;
-    private RecyclerView recyclerView;
+    private RecyclerView rvSanPham;
+    private Button btnThem, btnSua, btnXoa, btnQuetMaVach;
+    private SanPhamDAo sanPhamDao;
+    private ArrayList<SanPhamDTO> sanPhamList;
+    private SanPhamAdapter sanPhamAdapter;
 
-    public SanPhamFragment() {
-        // Required empty public constructor
-    }
-
-    public static SanPhamFragment newInstance(String param1, String param2) {
-        SanPhamFragment fragment = new SanPhamFragment();
-        Bundle args = new Bundle();
-        args.putString("param1", param1);
-        args.putString("param2", param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_san_pham, container, false);
 
-        // Find views by ID
-        searchEditText = view.findViewById(R.id.searchEditText);
-        scanButton = view.findViewById(R.id.scanButton);
-        recyclerView = view.findViewById(R.id.recyclerView);
+        // Ánh xạ view
+        rvSanPham = view.findViewById(R.id.rvSanPham);
+        btnThem = view.findViewById(R.id.btnThemSanPham);
+        btnSua = view.findViewById(R.id.btnSuaSanPham);
+        btnXoa = view.findViewById(R.id.btnXoaSanPham);
+        btnQuetMaVach = view.findViewById(R.id.btnQuetMaVach);
 
-        // Setup RecyclerView
-        setupRecyclerView();
+        // Khởi tạo DAO và dữ liệu
+        sanPhamDao = new SanPhamDAo(getContext());
+        sanPhamList = sanPhamDao.getAllProducts();
 
-        // Set button click listener
-        scanButton.setOnClickListener(v -> onScanButtonClicked());
+        // Thiết lập RecyclerView
+        sanPhamAdapter = new SanPhamAdapter(getContext(), sanPhamList);
+        rvSanPham.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvSanPham.setAdapter(sanPhamAdapter);
+
+        // Sự kiện nút Thêm
+        btnThem.setOnClickListener(v -> {
+            // Mở dialog thêm sản phẩm
+            Toast.makeText(getContext(), "Chức năng Thêm", Toast.LENGTH_SHORT).show();
+        });
+
+        // Sự kiện nút Sửa
+        btnSua.setOnClickListener(v -> {
+            // Lấy sản phẩm đã chọn để sửa
+            Toast.makeText(getContext(), "Chức năng Sửa", Toast.LENGTH_SHORT).show();
+        });
+
+        // Sự kiện nút Xóa
+        btnXoa.setOnClickListener(v -> {
+            // Xóa sản phẩm đã chọn
+            Toast.makeText(getContext(), "Chức năng Xóa", Toast.LENGTH_SHORT).show();
+        });
+
+        // Sự kiện nút Quét mã vạch
+        btnQuetMaVach.setOnClickListener(v -> {
+            // Sử dụng Barcode scanner API hoặc thư viện Zxing
+            Toast.makeText(getContext(), "Chức năng Quét mã vạch", Toast.LENGTH_SHORT).show();
+        });
 
         return view;
-    }
-
-    private void setupRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // Assuming a custom adapter named "ProductAdapter"
-        List<String> dummyData = new ArrayList<>();
-        dummyData.add("Sản Phẩm 1");
-        dummyData.add("Sản Phẩm 2");
-        dummyData.add("Sản Phẩm 3");
-        recyclerView.setAdapter(new SanPhamAdapter(dummyData));
-    }
-
-    private void onScanButtonClicked() {
-        // Handle barcode scan logic here
-        // Example: Show a toast (replace this with your actual logic)
-        Toast.makeText(getContext(), "Scan button Clicked", Toast.LENGTH_SHORT).show();
     }
 }

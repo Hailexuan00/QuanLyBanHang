@@ -2,63 +2,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp"
-    android:background="@android:color/white"
-    android:elevation="2dp">
+    android:orientation="vertical"
+    android:padding="8dp">
 
-    <!-- Hình ảnh sản phẩm -->
-    <ImageView
-        android:id="@+id/imgProduct"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/shop" />
-
-    <!-- Thông tin sản phẩm -->
-    <LinearLayout
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/tvTenSanPham"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="Tên sản phẩm" />
 
-        <!-- Tên sản phẩm -->
-        <TextView
-            android:id="@+id/txtProductName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tên sản phẩm"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <!-- Giá sản phẩm -->
-        <TextView
-            android:id="@+id/txtProductPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Giá: 100,000 VNĐ"
-            android:textColor="#FF5722"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp" />
-
-        <!-- Mô tả sản phẩm -->
-        <TextView
-            android:id="@+id/txtProductDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mô tả sản phẩm"
-            android:textColor="#757575"
-            android:textSize="12sp"
-            android:layout_marginTop="2dp" />
-    </LinearLayout>
-
-    <!-- Button thêm vào giỏ hàng -->
-    <Button
-        android:id="@+id/btnAddToCart"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/tvGiaBan"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Thêm"
-        android:backgroundTint="#FF4081"
-        android:textColor="#FFFFFF" />
+        android:text="Giá bán" />
 </LinearLayout>

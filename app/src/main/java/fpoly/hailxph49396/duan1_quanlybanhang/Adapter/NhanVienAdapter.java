@@ -60,7 +60,10 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return NhanVienList.size();
+        if (NhanVienList != null) {
+            return NhanVienList.size();
+        }
+        return 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
