@@ -16,11 +16,13 @@ import java.util.ArrayList;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.SanPhamDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
+import fpoly.hailxph49396.duan1_quanlybanhang.ShowMoney.ShowMoney;
 
 public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHolder> {
 
     private final Context context;
     private final ArrayList<SanPhamDTO> sanPhamList;
+    ShowMoney showMoney;
 
     public SanPhamAdapter(Context context, ArrayList<SanPhamDTO> sanPhamList) {
         this.context = context;
@@ -36,10 +38,11 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        showMoney = new ShowMoney();
         SanPhamDTO sanPham = sanPhamList.get(position);
         holder.tvTenSanPham.setText(sanPham.getTenSanPham());
-        holder.tvGiaBan.setText(sanPham.getGiaBan() + " VNĐ");
-        holder.tvTonKho.setText(sanPham.getTonKho() + "");
+        holder.tvGiaBan.setText(showMoney.formatCurrency(sanPham.getGiaBan()) + " VNĐ");
+        holder.tvTonKho.setText("x" + sanPham.getTonKho());
     }
 
     @Override

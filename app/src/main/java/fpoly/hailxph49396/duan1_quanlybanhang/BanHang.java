@@ -30,12 +30,13 @@ import fpoly.hailxph49396.duan1_quanlybanhang.DAO.SanPhamDAo;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.ChiTietDonHangDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.DonHangDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.SanPhamDTO;
+import fpoly.hailxph49396.duan1_quanlybanhang.ShowMoney.ShowMoney;
 
 public class BanHang extends AppCompatActivity {
     private DecoratedBarcodeView barcodeView;
     private Handler handler = new Handler(Looper.getMainLooper());
     private long lastScanTime = 0;  // Lưu thời gian quét lần cuối
-    private final long scanDelay = 700;  // Đặt khoảng thời gian giữa các lần quét (500ms)
+    private final long scanDelay = 1000;  // Đặt khoảng thời gian giữa các lần quét (500ms)
 
     TextView txtTongTien;
     RecyclerView rcvSPofDH;
@@ -47,6 +48,7 @@ public class BanHang extends AppCompatActivity {
     DonHangDAO donHangDAO;
     DonHangDTO donHangDTO;
     SharedPreferences sharedPreferences;
+    ShowMoney showMoney;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     int tongTien = 0;
     Button btnThanhToan;
@@ -89,7 +91,7 @@ public class BanHang extends AppCompatActivity {
                             long delete = chiTietDonHangDAO.deleteChiTietDonHang(list.get(position).getIdChiTietDonHang());
                             Toast.makeText(BanHang.this, delete > 0 ? "Xóa thành công" : "Xóa thất bại", Toast.LENGTH_SHORT).show();
                             tongTien = tongTien - sanPhamDAo.findProductById(list.get(position).getIdSanPham()).getGiaBan();
-                            txtTongTien.setText(String.valueOf(tongTien));
+                            txtTongTien.setText( showMoney.formatCurrency(tongTien) + "VNĐ");
                             list.clear();
                             list.addAll(chiTietDonHangDAO.getCTDHByIdDonHang(donHangDTO.getMaDonHang()));
 
@@ -115,7 +117,7 @@ public class BanHang extends AppCompatActivity {
             Calendar calendar = Calendar.getInstance();
             sharedPreferences = getSharedPreferences("USER_FILE", MODE_PRIVATE);
             String user = sharedPreferences.getString("USERNAME", "");
-            donHangDTO.setThanhTien(Integer.parseInt(String.valueOf(txtTongTien.getText())));
+            donHangDTO.setThanhTien(tongTien);
             donHangDTO.setUsername(user);
             try {
                 donHangDTO.setNgay(sdf.parse(calendar.get(Calendar.DAY_OF_MONTH) + "/" +
@@ -127,7 +129,12 @@ public class BanHang extends AppCompatActivity {
                     calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND));
             donHangDTO.setTrangThai(1);
             int check = donHangDAO.updateOrder(donHangDTO);
-            Toast.makeText(this, donHangDTO.getUsername(), Toast.LENGTH_SHORT).show();
+            for (ChiTietDonHangDTO item : list) {
+                SanPhamDTO sp = sanPhamDAo.findProductById(item.getIdSanPham());
+                sp.setTonKho(sp.getTonKho() - item.getSoLuong());
+                int update = sanPhamDAo.updateProduct(sp);
+                Toast.makeText(BanHang.this, update > 0 ? "Cập nhật ton kho thành công" + sp.getTonKho(): "Cập nhật ton kho thất bại", Toast.LENGTH_SHORT).show();
+            }
             Toast.makeText(BanHang.this, check > 0 ? "Xác nhận đơn hàng thành công" : "Xác nhận đơn hàng thất bại", Toast.LENGTH_SHORT).show();
             finish();
         });
@@ -199,7 +206,7 @@ public class BanHang extends AppCompatActivity {
             for (ChiTietDonHangDTO item : list) {
                 int giaSP = sanPhamDAo.findProductById(item.getIdSanPham()).getGiaBan() * item.getSoLuong();
                 tongTien += giaSP;
-                txtTongTien.setText(String.valueOf(tongTien));
+                txtTongTien.setText( showMoney.formatCurrency(tongTien) + "VNĐ");
             }
         }
         return tongTien;
@@ -207,7 +214,7 @@ public class BanHang extends AppCompatActivity {
 
     private void playBeepSound() {
         ToneGenerator toneGen = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-        toneGen.startTone(ToneGenerator.TONE_CDMA_PIP, 150); // Âm thanh pip
+        toneGen.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
     }
 
     @Override
@@ -225,5 +232,11 @@ public class BanHang extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+    @Override
+    public void onBackPressed() {
+        long delete = donHangDAO.deleteDonHang(donHangDTO.getMaDonHang());
+        Toast.makeText(this, delete > 0 ? "Xóa thành công" : "Xóa thất bại", Toast.LENGTH_SHORT).show();
+        super.onBackPressed();
     }
 }

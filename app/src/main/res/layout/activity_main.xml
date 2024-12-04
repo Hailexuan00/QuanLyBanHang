@@ -12,16 +12,24 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="150dp"
-        android:src="@drawable/shop"
+        android:src="@drawable/dinosaur"
         />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Mua bán hàng chưa bao giờ đơn giản đến thế"
-        android:textSize="17dp" />
+        android:text="Quản lý bán hàng"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textColor="@color/timHong"
+        android:textSize="30dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Made by Nhóm 9"/>
 
 
 

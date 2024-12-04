@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.DonHangDAO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.DonHangDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
+import fpoly.hailxph49396.duan1_quanlybanhang.ShowMoney.ShowMoney;
 
 public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangViewHolders> {
 
@@ -24,8 +25,14 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
     DonHangDAO donHangDAO;
     OnItemClickListener onItemClickListner;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    ShowMoney showMoney;
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+
+    public void updateList(ArrayList<DonHangDTO> newList) {
+        this.list = newList;
+        notifyDataSetChanged();
     }
 
     public DonHangAdapter(Context context, ArrayList<DonHangDTO> list, OnItemClickListener onItemClickListner) {
@@ -43,15 +50,21 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
     @Override
     public void onBindViewHolder(@NonNull DonHangViewHolders holder, int position) {
         donHangDTO = list.get(position);
+        showMoney = new ShowMoney();
         if (donHangDTO.getNgay() != null){
             holder.txtNgay.setText(sdf.format(donHangDTO.getNgay()));
         }else {
             holder.txtNgay.setText("Lỗi ngày");
         }
         holder.txtGio.setText(donHangDTO.getGio());
-        holder.txtMaDH.setText(String.valueOf(donHangDTO.getMaDonHang()));
-        holder.txtUser.setText(donHangDTO.getUsername());
-        holder.txtTongTien.setText(donHangDTO.getThanhTien()+"");
+        holder.txtMaDH.setText("MĐH: " + donHangDTO.getMaDonHang());
+        holder.txtUser.setText("User: " + donHangDTO.getUsername());
+        holder.txtTongTien.setText(showMoney.formatCurrency(donHangDTO.getThanhTien()) + "VNĐ");
+        if (donHangDTO.getTrangThai() == 0){
+            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.doNhat));
+        }else {
+
+        }
     }
     @Override
     public int getItemCount() {
@@ -79,8 +92,5 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
                 }
             });
         }
-
     }
-
-
 }

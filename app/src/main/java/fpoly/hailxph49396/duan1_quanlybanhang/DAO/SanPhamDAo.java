@@ -140,8 +140,11 @@ public class SanPhamDAo {
         try {
             db = dbHelper.getWritableDatabase();
             ContentValues values = new ContentValues();
+            values.put("id_danh_muc", product.getMaDanhMuc());
             values.put("ten_san_pham", product.getTenSanPham());
             values.put("don_gia", product.getGiaBan());
+            values.put("ton_kho", product.getTonKho());
+            values.put("ma_vach", product.getMaVach());
             values.put("mo_ta", product.getMoTa());
 
             result = db.update("SanPham", values, "ma_vach = ?", new String[]{product.getMaVach()});

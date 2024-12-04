@@ -28,20 +28,34 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="San pham"/>
+        android:text="Chi tiết đơn hàng:"
+        android:textStyle="bold"
+        android:layout_margin="5dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvSP"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"/>
+    <TextView
+        android:id="@+id/txtTrangThai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="trang thai"
+        android:layout_margin="5dp"
+        />
 
     <TextView
         android:id="@+id/txtTongTien"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Tien"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/red"/>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,11 +67,11 @@
             android:id="@+id/btnTraHang"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tra hang"/>
+            android:text="Trả hàng"/>
         <Button
             android:id="@+id/btn_huy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Huy"/>
+            android:text="Hủy"/>
     </LinearLayout>
 </LinearLayout>

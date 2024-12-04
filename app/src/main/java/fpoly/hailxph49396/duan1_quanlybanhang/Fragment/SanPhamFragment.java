@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,7 +48,7 @@ public class SanPhamFragment extends Fragment {
         sanPhamList = sanPhamDao.getAllProducts();
 
         sanPhamAdapter = new SanPhamAdapter(getContext(), sanPhamList);
-        rvSanPham.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvSanPham.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvSanPham.setAdapter(sanPhamAdapter);
     }
 }

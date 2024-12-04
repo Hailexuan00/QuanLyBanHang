@@ -21,6 +21,7 @@ import fpoly.hailxph49396.duan1_quanlybanhang.DAO.SanPhamDAo;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.ChiTietDonHangDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.SanPhamDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
+import fpoly.hailxph49396.duan1_quanlybanhang.ShowMoney.ShowMoney;
 
 public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamViewHolder>{
     private Context context;
@@ -31,6 +32,7 @@ public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamVie
     private final OnItemActionListener listener;
     private int total = 0;
     private HashMap<Integer, Integer> itemValues = new HashMap<>();
+    ShowMoney showMoney;
 
 
     public interface OnItemActionListener {
@@ -56,17 +58,15 @@ public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamVie
     public void onBindViewHolder(@NonNull SanPhamViewHolder holder, int position) {
         ChiTietDonHangDTO chiTietDonHangDTO = list.get(position);
         SanPhamDTO sanPhamDTO = sanPhamDAo.findProductById(chiTietDonHangDTO.getIdSanPham());
+        showMoney = new ShowMoney();
         holder.txtTenSP.setText(sanPhamDTO.getTenSanPham() + "");
-        holder.txtDonGiaSP.setText(sanPhamDTO.getGiaBan() + "VNĐ");
+        holder.txtDonGiaSP.setText(showMoney.formatCurrency(sanPhamDTO.getGiaBan()) + "VNĐ");
 
-        holder.txtSoLuong.setText(chiTietDonHangDTO.getSoLuong() + "");
-        holder.txtGiaSP.setText(sanPhamDTO.getGiaBan() * chiTietDonHangDTO.getSoLuong() + "VNĐ");
+        holder.txtSoLuong.setText("x" + chiTietDonHangDTO.getSoLuong());
+        holder.txtGiaSP.setText( showMoney.formatCurrency(sanPhamDTO.getGiaBan() * chiTietDonHangDTO.getSoLuong())  + "VNĐ");
         holder.btnCong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                chiTietDonHangDTO.setSoLuong(chiTietDonHangDTO.getSoLuong() + 1);
-//                int update = chiTietDonHangDAO.updateChiTietDonHang(chiTietDonHangDTO);
-//                notifyDataSetChanged();
                 if (listener != null) {
                     listener.onAction(position, "cong");
                 }
@@ -75,15 +75,6 @@ public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamVie
         holder.btnTru.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (chiTietDonHangDTO.getSoLuong() == 1) {
-//                    long detele = chiTietDonHangDAO.deleteChiTietDonHang(chiTietDonHangDTO.getIdChiTietDonHang());
-//                    list.remove(position);
-//                    Toast.makeText(context, "" + detele + " " + chiTietDonHangDTO.getIdChiTietDonHang(), Toast.LENGTH_SHORT).show();
-//                }else if (chiTietDonHangDTO.getSoLuong() > 1){
-//                    chiTietDonHangDTO.setSoLuong(chiTietDonHangDTO.getSoLuong() - 1);
-//                    int update = chiTietDonHangDAO.updateChiTietDonHang(chiTietDonHangDTO);
-//                }
-//                notifyDataSetChanged();
                 if (listener != null) {
                     listener.onAction(position, "tru");
                 }
@@ -91,51 +82,6 @@ public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamVie
         });
 
 
-
-
-
-        //        holder.nbpSoLuong.setWrapSelectorWheel(false);
-//        holder.nbpSoLuong.setMinValue(1);
-//        holder.nbpSoLuong.setMaxValue(50);
-//        holder.nbpSoLuong.setValue(chiTietDonHangDTO.getSoLuong());
-//        holder.nbpSoLuong.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-//            @Override
-//            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-//                holder.txtGiaSP.setText(sanPhamDTO.getGiaBan()*newVal + "VNĐ");
-//                int currentProductValue = sanPhamDTO.getGiaBan() * newVal;
-//                chiTietDonHangDTO.setSoLuong(newVal);
-//
-//                // Lấy giá trị tích cũ của item từ HashMap (nếu có)
-//                Integer oldProductValue = itemValues.get(holder.getAdapterPosition());
-//
-//                if (oldProductValue != null) {
-//                    // Nếu có giá trị cũ, trừ đi giá trị cũ khỏi tổng trước khi cộng giá trị mới
-//                    total -= oldProductValue;
-//                }
-//                // Cập nhật lại giá trị mới của item trong HashMap
-//                itemValues.put(holder.getAdapterPosition(), currentProductValue);
-//                // Cộng giá trị mới vào tổng
-//                total += currentProductValue;
-//                // Cập nhật TextView của item này
-//                holder.txtGiaSP.setText(currentProductValue + " VNĐ");
-//                // Cập nhật TextView tổng
-//                if (listener != null) {
-//                    listener.onNumberPickerValueChanged(total);
-//                }
-//            }
-//        });
-
-//        holder.btnDelete.setOnClickListener(v -> {
-//            int itemValue = sanPhamDTO.getGiaBan() * holder.nbpSoLuong.getValue();
-//            total -= itemValue;
-//            list.remove(position);
-//            long check = chiTietDonHangDAO.deleteChiTietDonHang(chiTietDonHangDTO.getIdChiTietDonHang());
-//            notifyDataSetChanged();
-//            if (listener != null) {
-//                listener.onNumberPickerValueChanged(total);
-//            }
-//            Toast.makeText(context, "Xóa", Toast.LENGTH_SHORT).show();
-//        });
     }
     @Override
     public int getItemCount() {

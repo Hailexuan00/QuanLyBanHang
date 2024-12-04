@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF0000</color>
+    <color name="timXanh">#5b4aa8</color>
+    <color name="xanhDuongNhat">#a1daf3</color>
+    <color name="timHong">#ad44af</color>
+    <color name="tim">#7e48ab</color>
+    <color name="xam">#888888</color>
+    <color name="doNhat">#FFC3C3</color>
 </resources>

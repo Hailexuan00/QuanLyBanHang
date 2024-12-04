@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ import fpoly.hailxph49396.duan1_quanlybanhang.DTO.ChiTietDonHangDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.DonHangDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
+import fpoly.hailxph49396.duan1_quanlybanhang.ShowMoney.ShowMoney;
 
 
 public class BanHangFragment extends Fragment {
@@ -53,6 +56,8 @@ public class BanHangFragment extends Fragment {
     ArrayList<ChiTietDonHangDTO> listCTDH = new ArrayList<>();
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    ShowMoney showMoney;
+    SearchView searchView;
 
     private String mParam1;
     private String mParam2;
@@ -87,6 +92,8 @@ public class BanHangFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        showMoney = new ShowMoney();
+        searchView = view.findViewById(R.id.search_view);
         FloatingActionButton fabAddDonHang = view.findViewById(R.id.fabAddDH);
         rcvDonHang = view.findViewById(R.id.rcvDH);
         donHangDAO = new DonHangDAO(getContext());
@@ -102,7 +109,6 @@ public class BanHangFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rcvDonHang.setLayoutManager(layoutManager);
         rcvDonHang.setAdapter(donHangAdapter);
-        Toast.makeText(getContext(), "" + listDH.size(), Toast.LENGTH_SHORT).show();
         donHangAdapter.notifyDataSetChanged();
 
         fabAddDonHang.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +141,10 @@ public class BanHangFragment extends Fragment {
         TextView txtNgayGio = dialogView.findViewById(R.id.txt_ngay_gio);
         TextView txtUser = dialogView.findViewById(R.id.txt_user);
         TextView txtTongTien = dialogView.findViewById(R.id.txtTongTien);
+        TextView txtTrangThai = dialogView.findViewById(R.id.txtTrangThai);
         RecyclerView rcvSP = dialogView.findViewById(R.id.rcvSP);
+        Button btnTraHang = dialogView.findViewById(R.id.btnTraHang);
+        Button btnHuy = dialogView.findViewById(R.id.btn_huy);
         listCTDH = chiTietDonHangDAO.getCTDHByIdDonHang(donHangDTO.getMaDonHang());
         spofDHAdapter = new SPofDHAdapter(getContext(), listCTDH, new SPofDHAdapter.OnItemActionListener() {
             @Override
@@ -159,7 +168,16 @@ public class BanHangFragment extends Fragment {
         }
 
         txtUser.setText("Người dùng: " + donHangDTO.getUsername());
-        txtTongTien.setText("Tổng tiền: " + donHangDTO.getThanhTien());
+        String trangThai = "";
+        if (donHangDTO.getTrangThai() == 0){
+            trangThai = "Hoàn hàng";
+            txtTrangThai.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+            btnTraHang.setVisibility(View.GONE);
+        }else if (donHangDTO.getTrangThai() == 1){
+            trangThai = "Hoàn thành";
+        }
+        txtTrangThai.setText("Trạng thái: " + trangThai);
+        txtTongTien.setText("Tổng tiền: " + showMoney.formatCurrency(donHangDTO.getThanhTien()) + "VNĐ");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setView(dialogView)
@@ -169,11 +187,14 @@ public class BanHangFragment extends Fragment {
         dialog.show();
 
         // Thiết lập sự kiện cho các nút trong Dialog
-        Button btnTraHang = dialogView.findViewById(R.id.btnTraHang);
-        Button btnHuy = dialogView.findViewById(R.id.btn_huy);
+
 
         btnTraHang.setOnClickListener(v -> {
-
+            donHangDTO.setTrangThai(0);
+            donHangDAO.updateOrder(donHangDTO);
+            listDH.clear();
+            listDH.addAll(donHangDAO.getListDonHang());
+            donHangAdapter.notifyDataSetChanged();
             dialog.dismiss();
         });
 
@@ -181,5 +202,13 @@ public class BanHangFragment extends Fragment {
 
             dialog.dismiss();
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        listDH.clear();
+        listDH.addAll(donHangDAO.getListDonHang());
+        donHangAdapter.notifyDataSetChanged();
     }
 }

@@ -27,11 +27,10 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(MainActivity.this, "Hết 3s đợi rồi, stop ", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);
                 finish();
             }
-        },3000);
+        },1500);
     }
 }
