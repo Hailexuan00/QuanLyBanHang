@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
@@ -61,9 +63,9 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
         holder.txtUser.setText("User: " + donHangDTO.getUsername());
         holder.txtTongTien.setText(showMoney.formatCurrency(donHangDTO.getThanhTien()) + "VNĐ");
         if (donHangDTO.getTrangThai() == 0){
-            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.doNhat));
-        }else {
-
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.doNhat));
+        }else if (donHangDTO.getTrangThai() == 1){
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
         }
     }
     @Override
@@ -78,6 +80,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
         TextView txtMaDH;
         TextView txtUser;
         TextView txtTongTien;
+        CardView cardView;
 
         public DonHangViewHolders(@NonNull View itemView, OnItemClickListener onItemClickListner) {
             super(itemView);
@@ -86,6 +89,8 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
             txtMaDH = itemView.findViewById(R.id.txtMaDH);
             txtUser = itemView.findViewById(R.id.txtUser);
             txtTongTien = itemView.findViewById(R.id.txtTongTien);
+            cardView = itemView.findViewById(R.id.card_view);
+
             itemView.setOnClickListener(v -> {
                 if (onItemClickListner != null) {
                     onItemClickListner.onItemClick(getAdapterPosition());

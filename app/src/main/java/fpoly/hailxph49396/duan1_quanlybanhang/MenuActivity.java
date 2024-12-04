@@ -121,7 +121,7 @@ public class MenuActivity extends AppCompatActivity {
                             .replace(R.id.flContent, caNhanFragment)
                             .commit();
                 } else if (item.getItemId() == R.id.sub_Logout) {
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                     finish();
                 }
 

@@ -22,18 +22,24 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHold
 
     private final Context context;
     private final ArrayList<SanPhamDTO> sanPhamList;
+    OnItemClickListener listener;
     ShowMoney showMoney;
 
-    public SanPhamAdapter(Context context, ArrayList<SanPhamDTO> sanPhamList) {
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public SanPhamAdapter(Context context, ArrayList<SanPhamDTO> sanPhamList, OnItemClickListener listener) {
         this.context = context;
         this.sanPhamList = sanPhamList;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_san_pham, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, listener);
     }
 
     @Override
@@ -53,11 +59,16 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTenSanPham, tvGiaBan, tvTonKho;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListner) {
             super(itemView);
             tvTenSanPham = itemView.findViewById(R.id.tvTenSanPham);
             tvGiaBan = itemView.findViewById(R.id.tvGiaBan);
             tvTonKho = itemView.findViewById(R.id.tvTonKho);
+            itemView.setOnClickListener(v -> {
+                if (onItemClickListner != null) {
+                    onItemClickListner.onItemClick(getAdapterPosition());
+                }
+            });
         }
     }
 }

@@ -188,6 +188,7 @@ public class BanHangFragment extends Fragment {
                 .setCancelable(false);
 
         AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_shape);
         dialog.show();
 
         btnTraHang.setOnClickListener(v -> {
