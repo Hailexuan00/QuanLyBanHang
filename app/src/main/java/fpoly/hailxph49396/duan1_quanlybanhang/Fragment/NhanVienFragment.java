@@ -1,6 +1,6 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.Fragment;
 
-import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.NhanVienAdapter;
+import fpoly.hailxph49396.duan1_quanlybanhang.DAO.nhanvienDao;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.NhanVienDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
@@ -28,84 +31,122 @@ import fpoly.hailxph49396.duan1_quanlybanhang.R;
 public class NhanVienFragment extends Fragment {
     private RecyclerView recyclerView;
     private NhanVienAdapter nhanVienAdapter;
-    private List<NhanVienDTO> NhanVienList;
-    private DbHelper dbHelper;
-    private Button btnAddEmployee;
+    private List<NhanVienDTO> nhanVienList;
+    private nhanvienDao nhanVienDAO;
+    private ImageView btnAddEmployee;
 
-    @SuppressLint("MissingInflatedId")
+    private EditText edtName, edtMiddleName, edtGender, edtPhone, edtEmail, edtAddress;
+    private Button btnAdd, btnCancel;
+
+    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nhan_vien, container, false);
 
-        // Ánh xạ view
+        // Khởi tạo view
         recyclerView = view.findViewById(R.id.recyclerViewNhanVien);
-        btnAddEmployee = view.findViewById(R.id.btnAddNhanVien);
+        btnAddEmployee = view.findViewById(R.id.fabAddEmployee);
 
-        // Khởi tạo database và danh sách nhân viên
-        dbHelper = new DbHelper(getContext());
-        NhanVienList = NhanVienDTO.getAllEmployees(dbHelper.getReadableDatabase());
-        if (NhanVienList == null) {
-            NhanVienList = new ArrayList<>();
+        // Khởi tạo DAO và danh sách nhân viên
+        DbHelper dbHelper = new DbHelper(getContext()); // Correctly initialize DbHelper with context
+        nhanVienDAO = new nhanvienDao(getContext()); // Pass context to DAO
+        nhanVienList = nhanVienDAO.getAllEmployees(); // Fetch employees from DAO
+
+        if (nhanVienList == null) {
+            nhanVienList = new ArrayList<>();
         }
 
-        // Cài đặt adapter và layout cho RecyclerView
-        nhanVienAdapter = new NhanVienAdapter(NhanVienList, getContext(), dbHelper);
+        // Cài đặt Adapter
+        nhanVienAdapter = new NhanVienAdapter(nhanVienList, getContext(), nhanVienDAO, this::showEditEmployeeDialog);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(nhanVienAdapter);
 
-        // Xử lý sự kiện nút thêm nhân viên
-        btnAddEmployee.setOnClickListener(v -> showAddEmployeeDialog());
+        // Thêm nhân viên
+        btnAddEmployee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddEmployeeDialog();
+            }
+        });
 
         return view;
     }
 
     private void showAddEmployeeDialog() {
-        // Tạo dialog thêm nhân viên
         Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_add_nhanvien);
         dialog.setCancelable(true);
 
-        // Ánh xạ view trong dialog
-        EditText edtName = dialog.findViewById(R.id.edtTenNhanVien);
-        EditText edtMiddleName = dialog.findViewById(R.id.edtHoVaTenDem);
-        EditText edtGender = dialog.findViewById(R.id.edtGioiTinh);
-        EditText edtPhone = dialog.findViewById(R.id.edtSoDienThoai);
-        EditText edtEmail = dialog.findViewById(R.id.edtEmail);
-        EditText edtAddress = dialog.findViewById(R.id.edtDiaChi);
-        Button btnAdd = dialog.findViewById(R.id.btnAdd);
-        Button btnCancel = dialog.findViewById(R.id.btnCancel);
+         edtName = dialog.findViewById(R.id.edtName);
+         edtMiddleName = dialog.findViewById(R.id.edtMiddleName);
+         edtGender = dialog.findViewById(R.id.edtGender);
+         edtPhone = dialog.findViewById(R.id.edtPhone);
+         edtEmail = dialog.findViewById(R.id.edtEmail);
+         edtAddress = dialog.findViewById(R.id.edtAddress);
+         btnAdd = dialog.findViewById(R.id.btnAdd);
+         btnCancel = dialog.findViewById(R.id.btnCancel);
 
+
+    }
+
+    private void showEditEmployeeDialog(@Nullable NhanVienDTO nhanVien) {
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_add_nhanvien);
+        dialog.setCancelable(true);
+
+         edtName = dialog.findViewById(R.id.edtName);
+         edtMiddleName = dialog.findViewById(R.id.edtMiddleName);
+         edtGender = dialog.findViewById(R.id.edtGender);
+         edtPhone = dialog.findViewById(R.id.edtPhone);
+         edtEmail = dialog.findViewById(R.id.edtEmail);
+         edtAddress = dialog.findViewById(R.id.edtAddress);
+         btnAdd = dialog.findViewById(R.id.btnAdd);
+         btnCancel = dialog.findViewById(R.id.btnCancel);
+
+        // If editing an existing employee, pre-fill the fields
+        if (nhanVien != null) {
+            edtName.setText(nhanVien.getName());
+            edtMiddleName.setText(nhanVien.getMiddleName());
+            edtGender.setText(nhanVien.getGender());
+            edtPhone.setText(nhanVien.getPhone());
+            edtEmail.setText(nhanVien.getEmail());
+            edtAddress.setText(nhanVien.getAddress());
+            btnAdd.setText("Sửa");
+        }
+
+        // Handle the 'Add' or 'Edit' button
         btnAdd.setOnClickListener(v -> {
-            // Lấy dữ liệu từ người dùng
             String name = edtName.getText().toString().trim();
-            String middleName = edtMiddleName.getText().toString().trim();
-            String gender = edtGender.getText().toString().trim();
             String phone = edtPhone.getText().toString().trim();
-            String email = edtEmail.getText().toString().trim();
-            String address = edtAddress.getText().toString().trim();
 
-            // Kiểm tra dữ liệu hợp lệ
-            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(phone)) {
-                Toast.makeText(getContext(), "Vui lòng nhập tên và số điện thoại", Toast.LENGTH_SHORT).show();
-            } else {
-                // Tạo đối tượng nhân viên mới
-                if (NhanVienList == null) {
-                    NhanVienList = new ArrayList<>();
+            // Validate input
+            if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(phone)) {
+                NhanVienDTO newNhanVien = new NhanVienDTO(
+                        nhanVien == null ? 0 : nhanVien.getId(),
+                        name,
+                        edtMiddleName.getText().toString().trim(),
+                        edtGender.getText().toString().trim(),
+                        phone,
+                        edtEmail.getText().toString().trim(),
+                        edtAddress.getText().toString().trim()
+                );
+
+                // Add or update the employee
+                if (nhanVien == null) {
+                    nhanVienDAO.addEmployee(newNhanVien);
+                    nhanVienList.add(newNhanVien);
+                    nhanVienAdapter.notifyItemInserted(nhanVienList.size() - 1);
+                    Toast.makeText(getContext(), "Thêm thành công!", Toast.LENGTH_SHORT).show();
                 }
-
-                NhanVienDTO newNhanVien = new NhanVienDTO(0, name, middleName, gender, phone, email, address);
-                // Thêm nhân viên vào cơ sở dữ liệu
-                NhanVienDTO.addEmployee(dbHelper.getWritableDatabase(), newNhanVien);
-                // Cập nhật danh sách và thông báo cho adapter
-                NhanVienList.add(newNhanVien);
-                nhanVienAdapter.notifyItemInserted(NhanVienList.size() - 1);
-
-                Toast.makeText(getContext(), "Thêm nhân viên thành công!", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
+            } else {
+                Toast.makeText(getContext(), "Vui lòng nhập tên và số điện thoại!", Toast.LENGTH_SHORT).show();
             }
         });
 
+        // Cancel button closes the dialog
         btnCancel.setOnClickListener(v -> dialog.dismiss());
+
         dialog.show();
     }
 }

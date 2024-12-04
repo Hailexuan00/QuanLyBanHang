@@ -1,55 +1,94 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="20dp">
 
-    <EditText
-        android:id="@+id/edtTenNhanVien"
+    <!-- Tiêu đề -->
+    <TextView
+        android:id="@+id/tvDialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tên nhân viên" />
+        android:text="Thêm/Sửa Nhân Viên"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingBottom="10dp" />
 
+    <!-- Họ và tên -->
     <EditText
-        android:id="@+id/edtHoVaTenDem"
+        android:id="@+id/edtName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Họ và tên đệm" />
+        android:hint="Tên nhân viên"
+        android:inputType="textPersonName"
+        android:padding="10dp" />
 
+    <!-- Họ và tên đệm -->
     <EditText
-        android:id="@+id/edtGioiTinh"
+        android:id="@+id/edtMiddleName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Giới tính" />
+        android:hint="Họ và tên đệm"
+        android:inputType="textPersonName"
+        android:padding="10dp" />
 
+    <!-- Giới tính -->
     <EditText
-        android:id="@+id/edtSoDienThoai"
+        android:id="@+id/edtGender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Số điện thoại" />
+        android:hint="Giới tính"
+        android:inputType="text"
+        android:padding="10dp" />
 
+    <!-- Số điện thoại -->
+    <EditText
+        android:id="@+id/edtPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Số điện thoại"
+        android:inputType="phone"
+        android:padding="10dp" />
+
+    <!-- Email -->
     <EditText
         android:id="@+id/edtEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email" />
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:padding="10dp" />
 
+    <!-- Địa chỉ -->
     <EditText
-        android:id="@+id/edtDiaChi"
+        android:id="@+id/edtAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Địa chỉ" />
+        android:hint="Địa chỉ"
+        android:inputType="textPostalAddress"
+        android:padding="10dp" />
 
-    <Button
-        android:id="@+id/btnAdd"
+    <!-- Button Group -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Thêm" />
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:paddingTop="10dp">
 
-    <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hủy" />
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hủy" />
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thêm/Sửa"
+            android:layout_marginStart="10dp" />
+    </LinearLayout>
 </LinearLayout>
