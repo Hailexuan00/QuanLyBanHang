@@ -68,15 +68,43 @@
             android:layout_marginBottom="16dp" />
 
         <!-- Nút Đóng -->
-        <Button
-            android:id="@+id/btnClose"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Đóng"
-            android:backgroundTint="#FF5722"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:padding="12dp" />
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/btnNhap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nhập"
+                android:backgroundTint="#FF5722"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_margin="5dp"/>
+            <Button
+                android:id="@+id/btnSua"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sửa"
+                android:backgroundTint="#FF5722"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_margin="5dp"/>
+            <Button
+                android:id="@+id/btnXoa"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Xóa"
+                android:backgroundTint="#FF5722"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_margin="5dp"/>
+
+        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -9,4 +9,7 @@
     <color name="tim">#7e48ab</color>
     <color name="xam">#888888</color>
     <color name="doNhat">#FFC3C3</color>
+    <color name="primaryColor">#FF5722</color>
+    <color name="primaryTextColor">#212121</color>
+    <color name="dangerColor">#F44336</color>
 </resources>
