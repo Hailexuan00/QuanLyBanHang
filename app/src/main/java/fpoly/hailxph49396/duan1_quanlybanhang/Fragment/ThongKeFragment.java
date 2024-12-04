@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.ThongKeDao;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
+import fpoly.hailxph49396.duan1_quanlybanhang.ShowMoney.ShowMoney;
 
 
 public class ThongKeFragment extends Fragment {
@@ -29,6 +30,7 @@ public class ThongKeFragment extends Fragment {
     private TextView tvDoanhThu, tvTuNgay, tvDenNgay;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private int mYear, mMonth, mDay;
+    ShowMoney showMoney;
 
 
     public ThongKeFragment() {
@@ -62,6 +64,7 @@ public class ThongKeFragment extends Fragment {
         tvDoanhThu = v.findViewById(R.id.tvDoanhThu);
         edDenNgay = v.findViewById(R.id.edDenNgay);
         edTuNgay = v.findViewById(R.id.edTuNgay);
+        showMoney = new ShowMoney();
         tvTuNgay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +93,7 @@ public class ThongKeFragment extends Fragment {
                 String tuNgay = edTuNgay.getText().toString();
                 String denNgay = edDenNgay.getText().toString();
                 ThongKeDao thongKeDao = new ThongKeDao(getActivity());
-                tvDoanhThu.setText("Doanh Thu: " + thongKeDao.getDoanhThu(tuNgay, denNgay) + "VND");
+                tvDoanhThu.setText("Doanh Thu: " + showMoney.formatCurrency(thongKeDao.getDoanhThu(tuNgay, denNgay)) + "VND");
             }
         });
         return v;

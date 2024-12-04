@@ -34,8 +34,10 @@ import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.SPofDHAdapter;
 import fpoly.hailxph49396.duan1_quanlybanhang.BanHang;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.ChiTietDonHangDAO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.DonHangDAO;
+import fpoly.hailxph49396.duan1_quanlybanhang.DAO.SanPhamDAo;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.ChiTietDonHangDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.DonHangDTO;
+import fpoly.hailxph49396.duan1_quanlybanhang.DTO.SanPhamDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
 import fpoly.hailxph49396.duan1_quanlybanhang.ShowMoney.ShowMoney;
@@ -48,6 +50,7 @@ public class BanHangFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView rcvDonHang;
     DonHangDAO donHangDAO;
+    SanPhamDAo sanPhamDAo;
     ArrayList<DonHangDTO> listDH = new ArrayList<>();
     DonHangAdapter donHangAdapter;
     SPofDHAdapter spofDHAdapter;
@@ -97,6 +100,7 @@ public class BanHangFragment extends Fragment {
         FloatingActionButton fabAddDonHang = view.findViewById(R.id.fabAddDH);
         rcvDonHang = view.findViewById(R.id.rcvDH);
         donHangDAO = new DonHangDAO(getContext());
+        sanPhamDAo = new SanPhamDAo(getContext());
         listDH = donHangDAO.getListDonHang();
         chiTietDonHangDAO = new ChiTietDonHangDAO(getContext());
         donHangAdapter = new DonHangAdapter(getContext(), listDH, new DonHangAdapter.OnItemClickListener() {
@@ -186,24 +190,24 @@ public class BanHangFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        // Thiết lập sự kiện cho các nút trong Dialog
-
-
         btnTraHang.setOnClickListener(v -> {
             donHangDTO.setTrangThai(0);
             donHangDAO.updateOrder(donHangDTO);
+            for (ChiTietDonHangDTO item : listCTDH) {
+                SanPhamDTO sp = sanPhamDAo.findProductById(item.getIdSanPham());
+                sp.setTonKho(sp.getTonKho() + item.getSoLuong());
+                int update = sanPhamDAo.updateProduct(sp);
+                Toast.makeText(getContext(), update > 0 ? "Cập nhật ton kho thành công" + sp.getTonKho(): "Cập nhật ton kho thất bại", Toast.LENGTH_SHORT).show();
+            }
             listDH.clear();
             listDH.addAll(donHangDAO.getListDonHang());
             donHangAdapter.notifyDataSetChanged();
             dialog.dismiss();
         });
-
         btnHuy.setOnClickListener(v -> {
-
             dialog.dismiss();
         });
     }
-
     @Override
     public void onResume() {
         super.onResume();

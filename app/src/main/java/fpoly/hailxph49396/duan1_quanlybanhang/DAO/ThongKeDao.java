@@ -29,7 +29,7 @@ public class ThongKeDao {
         Log.d("DoanhThuQuery", "Executing SQL: SELECT SUM(thanh_tien) as doanhThu FROM TABLE_DON_HANG WHERE ngay BETWEEN ? AND ? with dates: " + tuNgay + " to " + denNgay);
 
 
-        String sqlDoanhThu = "SELECT SUM(thanh_tien) as doanhThu FROM DonHang WHERE ngay BETWEEN ? AND ?";
+        String sqlDoanhThu = "SELECT SUM(thanh_tien) as doanhThu FROM DonHang WHERE ngay BETWEEN ? AND ? AND trang_thai = 1";
         Cursor c = db.rawQuery(sqlDoanhThu, new String[]{tuNgay, denNgay});
         int doanhThu = 0;
 
