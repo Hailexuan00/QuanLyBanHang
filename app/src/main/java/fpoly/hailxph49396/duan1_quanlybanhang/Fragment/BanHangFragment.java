@@ -137,9 +137,9 @@ public class BanHangFragment extends Fragment {
         TextView txtTongTien = dialogView.findViewById(R.id.txtTongTien);
         RecyclerView rcvSP = dialogView.findViewById(R.id.rcvSP);
         listCTDH = chiTietDonHangDAO.getCTDHByIdDonHang(donHangDTO.getMaDonHang());
-        spofDHAdapter = new SPofDHAdapter(getContext(), listCTDH, new SPofDHAdapter.OnNumberPickerValueChangedListener() {
+        spofDHAdapter = new SPofDHAdapter(getContext(), listCTDH, new SPofDHAdapter.OnItemActionListener() {
             @Override
-            public void onNumberPickerValueChanged(int newProductValue) {
+            public void onAction(int position, String actionType) {
 
             }
         });

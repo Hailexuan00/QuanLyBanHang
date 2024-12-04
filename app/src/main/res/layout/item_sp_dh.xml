@@ -35,7 +35,9 @@
             <TextView
                 android:id="@+id/txtSoLuong"
                 android:layout_width="60dp"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="x1"
+                android:gravity="right"/>
             <TextView
                 android:id="@+id/txtGiaSP"
                 android:layout_width="100dp"
@@ -46,18 +48,19 @@
 
     </LinearLayout>
 
-    <NumberPicker
-        android:id="@+id/nbpSoLuong"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"/>
 
     <ImageButton
-        android:id="@+id/btnDelete"
+        android:id="@+id/btnTru"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|end"
-        android:src="@drawable/ic_input_24"
-        android:layout_marginLeft="5dp"/>
+        android:src="@drawable/minus"/>
+
+    <ImageButton
+        android:id="@+id/btnCong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:src="@drawable/plus" />
 
 </LinearLayout>

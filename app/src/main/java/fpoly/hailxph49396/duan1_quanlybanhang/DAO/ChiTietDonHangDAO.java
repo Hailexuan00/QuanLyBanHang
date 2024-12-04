@@ -47,7 +47,6 @@ public class ChiTietDonHangDAO {
         values.put("id_don_hang", chiTietDonHang.getIdDonHang());
         values.put("id_san_pham", chiTietDonHang.getIdSanPham());
         values.put("so_luong", chiTietDonHang.getSoLuong());
-
         return db.insert(DbHelper.TABLE_CHI_TIET_DON_HANG, null, values);
     }
 

@@ -2,22 +2,19 @@ package fpoly.hailxph49396.duan1_quanlybanhang;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.media.ToneGenerator;
-import android.media.AudioManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -26,8 +23,6 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
 import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.SPofDHAdapter;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.ChiTietDonHangDAO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.DonHangDAO;
@@ -38,10 +33,9 @@ import fpoly.hailxph49396.duan1_quanlybanhang.DTO.SanPhamDTO;
 
 public class BanHang extends AppCompatActivity {
     private DecoratedBarcodeView barcodeView;
-    private Set<String> scannedCodes = new HashSet<>();
     private Handler handler = new Handler(Looper.getMainLooper());
-    private Handler scanHandler = new Handler();  // Handler mới để trì hoãn quét
-    private Runnable scanRunnable;  // Lưu trữ Runnable để quản lý việc quét
+    private long lastScanTime = 0;  // Lưu thời gian quét lần cuối
+    private final long scanDelay = 700;  // Đặt khoảng thời gian giữa các lần quét (500ms)
 
     TextView txtTongTien;
     RecyclerView rcvSPofDH;
@@ -56,7 +50,6 @@ public class BanHang extends AppCompatActivity {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     int tongTien = 0;
     Button btnThanhToan;
-    private final Object scanningLock = new Object();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +71,42 @@ public class BanHang extends AppCompatActivity {
         list = new ArrayList<>();
         donHangDTO = donHangDAO.getLatestDonHang();
         chiTietDonHangDAO = new ChiTietDonHangDAO(this);
-        sPofDHAdapter = new SPofDHAdapter(this, list, new SPofDHAdapter.OnNumberPickerValueChangedListener() {
+        sPofDHAdapter = new SPofDHAdapter(this, list, new SPofDHAdapter.OnItemActionListener() {
             @Override
-            public void onNumberPickerValueChanged(int newProductValue) {
-                tongTien = newProductValue;
-                txtTongTien.setText(String.valueOf(tongTien));
+            public void onAction(int position, String actionType) {
+                switch (actionType) {
+                    case "cong":
+                        list.get(position).setSoLuong(list.get(position).getSoLuong() + 1);
+                        long updateCong = chiTietDonHangDAO.updateChiTietDonHang(list.get(position));
+                        Toast.makeText(BanHang.this, updateCong > 0 ? "Cập nhật thành công" : "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
+                        list.clear();
+                        list.addAll(chiTietDonHangDAO.getCTDHByIdDonHang(donHangDTO.getMaDonHang()));
+                        sPofDHAdapter.notifyDataSetChanged();
+                        getTongTien();
+                        break;
+                    case "tru":
+                        if (list.get(position).getSoLuong() == 1) {
+                            long delete = chiTietDonHangDAO.deleteChiTietDonHang(list.get(position).getIdChiTietDonHang());
+                            Toast.makeText(BanHang.this, delete > 0 ? "Xóa thành công" : "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                            tongTien = tongTien - sanPhamDAo.findProductById(list.get(position).getIdSanPham()).getGiaBan();
+                            txtTongTien.setText(String.valueOf(tongTien));
+                            list.clear();
+                            list.addAll(chiTietDonHangDAO.getCTDHByIdDonHang(donHangDTO.getMaDonHang()));
+
+                        }else {
+                            list.get(position).setSoLuong(list.get(position).getSoLuong() - 1);
+                            long updateTru = chiTietDonHangDAO.updateChiTietDonHang(list.get(position));
+                            Toast.makeText(BanHang.this, updateTru > 0 ? "Cập nhật thành công" : "Cập nhật thất bại", Toast.LENGTH_SHORT).show();
+                            list.clear();
+                            list.addAll(chiTietDonHangDAO.getCTDHByIdDonHang(donHangDTO.getMaDonHang()));
+                        }
+                        sPofDHAdapter.notifyDataSetChanged();
+                        getTongTien();
+                        break;
+                }
             }
         });
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rcvSPofDH.setLayoutManager(layoutManager);
         rcvSPofDH.setAdapter(sPofDHAdapter);
@@ -114,17 +136,11 @@ public class BanHang extends AppCompatActivity {
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
-            String code = result.getText();
-            synchronized (scanningLock) {
-                if (!scannedCodes.contains(code)) {
-                    scannedCodes.add(code);
-                    // Lập lịch quét sau 1 giây
-                    if (scanRunnable != null) {
-                        scanHandler.removeCallbacks(scanRunnable); // Hủy bỏ nhiệm vụ cũ nếu có
-                    }
-                    scanRunnable = () -> processBarcode(code);
-                    scanHandler.postDelayed(scanRunnable, 1000); // Delay 1 giây
-                }
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastScanTime > scanDelay) {
+                lastScanTime = currentTime;
+                String code = result.getText();
+                processBarcode(code);
             }
         }
 
@@ -132,43 +148,67 @@ public class BanHang extends AppCompatActivity {
             new Thread(() -> {
                 SanPhamDTO sanPhamDTO = sanPhamDAo.findProductByBarcode(code);
                 runOnUiThread(() -> {
+                    playBeepSound(); // Phát âm thanh thông báo mỗi lần quét
                     if (sanPhamDTO != null) {
                         boolean chk = false;
                         for (ChiTietDonHangDTO item : list) {
                             if (item.getIdSanPham() == sanPhamDTO.getMaSanPham()) {
                                 item.setSoLuong(item.getSoLuong() + 1);
-                                int check2 = chiTietDonHangDAO.updateChiTietDonHang(item);
+                                int update = chiTietDonHangDAO.updateChiTietDonHang(item);
+                                if (update > 0) {
+                                    Toast.makeText(BanHang.this, "Cập nhật thành công" + update, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(BanHang.this, "Cập nhật thất bại" + update, Toast.LENGTH_SHORT).show();
+                                }
                                 chk = true;
                                 break;
                             }
                         }
-                        if (chk){
+                        if (chk) {
                             sPofDHAdapter.notifyDataSetChanged();
-                            return;
-                        }else {
+                            getTongTien();
+                        } else {
                             chiTietDonHangDTO = new ChiTietDonHangDTO();
                             chiTietDonHangDTO.setIdSanPham(sanPhamDTO.getMaSanPham());
                             chiTietDonHangDTO.setIdDonHang(donHangDTO.getMaDonHang());
                             chiTietDonHangDTO.setSoLuong(1);
-                            list.add(chiTietDonHangDTO);
-                            long check = chiTietDonHangDAO.insertChiTietDonHang(chiTietDonHangDTO);
-                            String message = check != -1 ? "Thêm chi tiết đơn hàng thành công" : "Thêm chi tiết đơn hàng thất bại";
-                            Toast.makeText(BanHang.this, message, Toast.LENGTH_SHORT).show();
-
-                            tongTien += sanPhamDTO.getGiaBan();
-                            txtTongTien.setText(String.valueOf(tongTien));
+                            long add = chiTietDonHangDAO.insertChiTietDonHang(chiTietDonHangDTO);
+                            list.clear();
+                            list.addAll(chiTietDonHangDAO.getCTDHByIdDonHang(donHangDTO.getMaDonHang()));
+                            if (add > 0) {
+                                Toast.makeText(BanHang.this, "Thêm sản phẩm thành công" + add, Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(BanHang.this, "Thêm sản phẩm thất bại" + add, Toast.LENGTH_SHORT).show();
+                            }
                             sPofDHAdapter.notifyDataSetChanged();
+                            getTongTien();
                         }
-
                     } else {
                         Toast.makeText(BanHang.this, "Không tìm thấy sản phẩm với mã vạch " + code, Toast.LENGTH_SHORT).show();
                     }
-
-                    handler.postDelayed(() -> scannedCodes.remove(code), 1000);
                 });
             }).start();
         }
     };
+
+    public int getTongTien() {
+        tongTien = 0;
+        if (list.isEmpty()) {
+            tongTien = 0;
+        }else {
+            for (ChiTietDonHangDTO item : list) {
+                int giaSP = sanPhamDAo.findProductById(item.getIdSanPham()).getGiaBan() * item.getSoLuong();
+                tongTien += giaSP;
+                txtTongTien.setText(String.valueOf(tongTien));
+            }
+        }
+        return tongTien;
+    }
+
+    private void playBeepSound() {
+        ToneGenerator toneGen = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
+        toneGen.startTone(ToneGenerator.TONE_CDMA_PIP, 150); // Âm thanh pip
+    }
 
     @Override
     protected void onResume() {
@@ -185,8 +225,5 @@ public class BanHang extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        int check = donHangDAO.deleteDonHang(donHangDTO.getMaDonHang());
-//        Toast.makeText(this, check > 0 ? "Hủy đơn hàng thành công" : "Lỗi hủy đơn hàng", Toast.LENGTH_SHORT).show();
     }
 }
-
