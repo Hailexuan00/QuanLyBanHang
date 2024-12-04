@@ -1,17 +1,30 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- res/layout/fragment_nhan_vien.xml -->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    tools:context=".Fragment.NhanVienFragment">
 
-    <Button
-        android:id="@+id/btnAddNhanVien"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Thêm nhân viên" />
+    <!-- Floating Action Button for adding a new employee -->
+    <ImageView
+        android:id="@+id/fabAddEmployee"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@android:drawable/ic_input_add"
+        android:contentDescription="Add Employee"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/colorAccent"/>
 
+    <!-- RecyclerView to display the list of employees -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewNhanVien"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        android:scrollbars="vertical" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

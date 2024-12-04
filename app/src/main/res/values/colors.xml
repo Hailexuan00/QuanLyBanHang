@@ -9,4 +9,7 @@
     <color name="tim">#7e48ab</color>
     <color name="xam">#888888</color>
     <color name="doNhat">#FFC3C3</color>
+    <color name="light_gray">#D3D3D3</color>
+    <color name="gray">#808080</color>
+    <color name="colorAccent">#03DAC5</color>
 </resources>
