@@ -60,6 +60,56 @@ public class SanPhamFragment extends Fragment {
 
         sanPhamDao = new SanPhamDAo(getContext());
         sanPhamList = sanPhamDao.getAllProducts();
+        btnThem = view.findViewById(R.id.btnThemSanPham);
+
+        btnThem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = LayoutInflater.from(getContext());
+                View dialogView = inflater.inflate(R.layout.dialog_them_sp, null);
+
+                // Initialize views
+                EditText etTenSanPham = dialogView.findViewById(R.id.etTenSanPham);
+                EditText etGiaBan = dialogView.findViewById(R.id.etGiaBan);
+                EditText etTonKho = dialogView.findViewById(R.id.etTonKho);
+                EditText etMaVach = dialogView.findViewById(R.id.etMaVach);
+                EditText etMoTa = dialogView.findViewById(R.id.etMoTa);
+
+                Button btnSaveProduct = dialogView.findViewById(R.id.btnSaveProduct);
+
+                // Build dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                // Handle save button click
+                btnSaveProduct.setOnClickListener(view -> {
+                    // Get data from EditText
+                    String tenSanPham = etTenSanPham.getText().toString();
+                    int giaBan = Integer.parseInt(etGiaBan.getText().toString());
+                    int tonKho = Integer.parseInt(etTonKho.getText().toString());
+                    String maVach = etMaVach.getText().toString();
+                    String moTa = etMoTa.getText().toString();
+
+                    // Create product object
+                    SanPhamDTO sanPham = new SanPhamDTO();
+                    sanPham.setTenSanPham(tenSanPham);
+                    sanPham.setGiaBan(giaBan);
+                    sanPham.setTonKho(tonKho);
+                    sanPham.setMaVach(maVach);
+                    sanPham.setMoTa(moTa);
+                    long them = sanPhamDao.addProduct(sanPham);
+
+
+                    // Dismiss dialog
+                    dialog.dismiss();
+
+                    // Optional: Notify user
+                    Toast.makeText(getContext(), "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
 
         sanPhamAdapter = new SanPhamAdapter(getContext(), sanPhamList, new SanPhamAdapter.OnItemClickListener() {
             @Override
