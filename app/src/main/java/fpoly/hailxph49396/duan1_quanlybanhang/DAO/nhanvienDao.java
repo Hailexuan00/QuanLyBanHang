@@ -22,6 +22,8 @@ public class nhanvienDao {
     public boolean addEmployee(NhanVienDTO nhanVien) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put("username", nhanVien.getId());
+        values.put("password", nhanVien.getPassword());
         values.put("ten", nhanVien.getName());
         values.put("ho_va_ten_dem", nhanVien.getMiddleName());
         values.put("gioi_tinh", nhanVien.getGender());
@@ -36,6 +38,8 @@ public class nhanvienDao {
     public boolean updateEmployee(NhanVienDTO nhanVien) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put("username", nhanVien.getId());
+        values.put("password", nhanVien.getPassword());
         values.put("ten", nhanVien.getName());
         values.put("ho_va_ten_dem", nhanVien.getMiddleName());
         values.put("gioi_tinh", nhanVien.getGender());
@@ -62,6 +66,8 @@ public class nhanvienDao {
             do {
                 NhanVienDTO employee = new NhanVienDTO(
                         cursor.getInt(cursor.getColumnIndexOrThrow("username")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("username")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("password")),
                         cursor.getString(cursor.getColumnIndexOrThrow("ten")),
                         cursor.getString(cursor.getColumnIndexOrThrow("ho_va_ten_dem")),
                         cursor.getString(cursor.getColumnIndexOrThrow("gioi_tinh")),
