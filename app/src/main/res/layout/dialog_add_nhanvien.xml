@@ -16,6 +16,22 @@
         android:gravity="center"
         android:paddingBottom="10dp" />
 
+
+    <EditText
+        android:id="@+id/edtUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        android:inputType="textPersonName"
+        android:padding="10dp" />
+
+    <EditText
+        android:id="@+id/edtPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPersonName"
+        android:padding="10dp" />
     <!-- Họ và tên -->
     <EditText
         android:id="@+id/edtName"

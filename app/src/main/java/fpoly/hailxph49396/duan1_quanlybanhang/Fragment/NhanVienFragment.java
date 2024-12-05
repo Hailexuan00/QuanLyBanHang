@@ -1,6 +1,5 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.Fragment;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,7 +33,7 @@ public class NhanVienFragment extends Fragment {
     private nhanvienDao nhanVienDAO;
     private ImageView btnAddEmployee;
 
-    private EditText edtName, edtMiddleName, edtGender, edtPhone, edtEmail, edtAddress;
+    private EditText edtName, edtMiddleName, edtGender, edtPhone, edtEmail, edtAddress, edtUsername, edtPassword;
     private Button btnAdd, btnCancel;
 
     @Nullable
@@ -56,6 +54,7 @@ public class NhanVienFragment extends Fragment {
             nhanVienList = new ArrayList<>();
         }
 
+
         // Cài đặt Adapter
         nhanVienAdapter = new NhanVienAdapter(nhanVienList, getContext(), nhanVienDAO, this::showEditEmployeeDialog);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -72,11 +71,14 @@ public class NhanVienFragment extends Fragment {
         return view;
     }
 
+
     private void showAddEmployeeDialog() {
         Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_add_nhanvien);
         dialog.setCancelable(true);
 
+         edtUsername = dialog.findViewById(R.id.edtUserName);
+         edtPassword = dialog.findViewById(R.id.edtPassword);
          edtName = dialog.findViewById(R.id.edtName);
          edtMiddleName = dialog.findViewById(R.id.edtMiddleName);
          edtGender = dialog.findViewById(R.id.edtGender);
@@ -94,6 +96,8 @@ public class NhanVienFragment extends Fragment {
         dialog.setContentView(R.layout.dialog_add_nhanvien);
         dialog.setCancelable(true);
 
+        edtUsername = dialog.findViewById(R.id.edtUserName);
+        edtPassword = dialog.findViewById(R.id.edtPassword);
          edtName = dialog.findViewById(R.id.edtName);
          edtMiddleName = dialog.findViewById(R.id.edtMiddleName);
          edtGender = dialog.findViewById(R.id.edtGender);
@@ -105,6 +109,8 @@ public class NhanVienFragment extends Fragment {
 
         // If editing an existing employee, pre-fill the fields
         if (nhanVien != null) {
+            edtUsername.setText(nhanVien.getUsername());
+            edtPassword.setText(nhanVien.getPassword());
             edtName.setText(nhanVien.getName());
             edtMiddleName.setText(nhanVien.getMiddleName());
             edtGender.setText(nhanVien.getGender());
