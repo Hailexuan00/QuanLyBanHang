@@ -60,7 +60,7 @@ public class MenuActivity extends AppCompatActivity {
             ab.setDisplayHomeAsUpEnabled(true);
         }
         FragmentManager manager = getSupportFragmentManager();
-        setTitle("Quản lý Sản Phẩm");
+        setTitle("Quản lý Bán Hàng");
         BanHangFragment banHangFragment = new BanHangFragment();
         manager.beginTransaction()
                 .replace(R.id.flContent, banHangFragment)
@@ -72,7 +72,7 @@ public class MenuActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 FragmentManager manager = getSupportFragmentManager();
                 if (item.getItemId() == R.id.nav_banHang) {
-                    setTitle("Quản lý Bán Hàng");
+                    setTitle("Quản Lý Bán Hàng");
                     BanHangFragment banHangFragment = new BanHangFragment();
                     manager.beginTransaction()
                             .replace(R.id.flContent, banHangFragment)
