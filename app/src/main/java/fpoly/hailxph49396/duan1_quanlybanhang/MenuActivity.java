@@ -77,23 +77,11 @@ public class MenuActivity extends AppCompatActivity {
                     manager.beginTransaction()
                             .replace(R.id.flContent, banHangFragment)
                             .commit();
-                } else if (item.getItemId() == R.id.nav_nhapHang) {
-                    setTitle("Quản lý Nhập Hàng");
-                    NhapHangFragment nhapHangFragment = new NhapHangFragment();
-                    manager.beginTransaction()
-                            .replace(R.id.flContent, nhapHangFragment)
-                            .commit();
                 } else if (item.getItemId() == R.id.nav_sanPham) {
                     setTitle("Quản lý Sản Phẩm");
                     SanPhamFragment sanPhamFragment = new SanPhamFragment();
                     manager.beginTransaction()
                             .replace(R.id.flContent, sanPhamFragment)
-                            .commit();
-                } else if (item.getItemId() == R.id.nav_donHang) {
-                    setTitle("Quản lý Dơn Hàng");
-                    DonHangFragment donHangFragment = new DonHangFragment();
-                    manager.beginTransaction()
-                            .replace(R.id.flContent, donHangFragment)
                             .commit();
                 } else if (item.getItemId() == R.id.nav_nhanVien) {
                     setTitle("Quản lý Nhân Viên");
@@ -106,13 +94,6 @@ public class MenuActivity extends AppCompatActivity {
                     ThongKeFragment thongKeFragment = new ThongKeFragment();
                     manager.beginTransaction()
                             .replace(R.id.flContent, thongKeFragment)
-                            .commit();
-                }
-                else if (item.getItemId() == R.id.sub_Pass) {
-                    setTitle("Đổi mật khẩu");
-                    MatKhauFragment matKhauFragment = new MatKhauFragment();
-                    manager.beginTransaction()
-                            .replace(R.id.flContent, matKhauFragment)
                             .commit();
                 } else if (item.getItemId() == R.id.sub_ThongTin) {
                     setTitle("Thông Tin Cá Nhân");

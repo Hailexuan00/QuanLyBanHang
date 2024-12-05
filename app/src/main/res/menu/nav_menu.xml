@@ -10,17 +10,9 @@
             android:title="Bán Hàng"
             android:icon="@drawable/ic_store_24"/>
         <item
-            android:id="@+id/nav_nhapHang"
-            android:title="Nhập Hàng"
-            android:icon="@drawable/ic_local_shipping_24"/>
-        <item
             android:id="@+id/nav_sanPham"
             android:title="Sản Phẩm"
             android:icon="@drawable/ic_shopping_cart_24"/>
-        <item
-            android:id="@+id/nav_donHang"
-            android:title="Đơn Hàng"
-            android:icon="@drawable/ic_content_paste_24"/>
         <item
             android:id="@+id/nav_nhanVien"
             android:title="Nhân Viên"
@@ -29,11 +21,6 @@
             android:id="@+id/nav_thongKe"
             android:title="Thống Kê"
             android:icon="@drawable/ic_cellular_alt_24"/>
-        <item
-            android:id="@+id/sub_Pass"
-            android:icon="@drawable/ic_create_24"
-            android:title="Đổi mật khẩu"
-            />
         <item
             android:id="@+id/sub_ThongTin"
             android:icon="@drawable/ic_account_circle_24"
