@@ -102,7 +102,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         db.execSQL("INSERT INTO " + TABLE_SAN_PHAM + " (id_san_pham, id_danh_muc, ten_san_pham, don_gia, ton_kho, ma_vach, mo_ta) VALUES " +
                 "(1, 1, 'Điện thoại iPhone 14', 25000000, 10, '9780486996844', 'Điện thoại cao cấp Apple'), " +
-                "(2, 2, 'Tea+', 500000, 50, '8934588870118', 'Nước uống'), " +
+                "(2, 2, 'Tea+', 500000, 50, '8935339200024', 'Nước uống'), " +
                 "(3, 3, 'Áo thun nam', 200000, 100, '8936050360974', 'Chất liệu cotton'), " +
                 "(4, 1, 'Samsung Galaxy S22', 22000000, 15, '9780486996871', 'Điện thoại Samsung cao cấp'), " +
                 "(5, 2, 'Nồi cơm điện', 700000, 25, '8934588870125', 'Nồi cơm điện thông minh'), " +
