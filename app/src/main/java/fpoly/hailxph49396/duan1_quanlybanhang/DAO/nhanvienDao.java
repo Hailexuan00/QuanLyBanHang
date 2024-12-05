@@ -38,7 +38,7 @@ public class nhanvienDao {
     public boolean updateEmployee(NhanVienDTO nhanVien) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("username", nhanVien.getId());
+        values.put("username", nhanVien.getUsername());
         values.put("password", nhanVien.getPassword());
         values.put("ten", nhanVien.getName());
         values.put("ho_va_ten_dem", nhanVien.getMiddleName());

@@ -63,7 +63,8 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
                             nhanVienList.remove(position);
                             notifyItemRemoved(position);
                             Toast.makeText(context, "Xóa nhân viên thành công!", Toast.LENGTH_SHORT).show();
-                        } else {
+                        }
+                        else {
                             Toast.makeText(context, "Không thể xóa nhân viên!", Toast.LENGTH_SHORT).show();
                         }
                     })

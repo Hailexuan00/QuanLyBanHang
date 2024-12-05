@@ -1,6 +1,8 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.Fragment;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -8,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,13 +18,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.NhanVienAdapter;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.nhanvienDao;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.NhanVienDTO;
-import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
 
 public class NhanVienFragment extends Fragment {
@@ -31,128 +33,185 @@ public class NhanVienFragment extends Fragment {
     private NhanVienAdapter nhanVienAdapter;
     private List<NhanVienDTO> nhanVienList;
     private nhanvienDao nhanVienDAO;
-    private ImageView btnAddEmployee;
-
-    private EditText edtName, edtMiddleName, edtGender, edtPhone, edtEmail, edtAddress, edtUsername, edtPassword;
-    private Button btnAdd, btnCancel;
+    private FloatingActionButton fabAddEmployee;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nhan_vien, container, false);
 
-        // Khởi tạo view
+        // Initialize views
         recyclerView = view.findViewById(R.id.recyclerViewNhanVien);
-        btnAddEmployee = view.findViewById(R.id.fabAddEmployee);
+        fabAddEmployee = view.findViewById(R.id.fabAddEmployee);
 
-        // Khởi tạo DAO và danh sách nhân viên
-        DbHelper dbHelper = new DbHelper(getContext()); // Correctly initialize DbHelper with context
-        nhanVienDAO = new nhanvienDao(getContext()); // Pass context to DAO
-        nhanVienList = nhanVienDAO.getAllEmployees(); // Fetch employees from DAO
+        // Initialize DAO and fetch employee list
+        nhanVienDAO = new nhanvienDao(getContext());
+        nhanVienList = nhanVienDAO.getAllEmployees();
 
         if (nhanVienList == null) {
             nhanVienList = new ArrayList<>();
         }
 
-
-        // Cài đặt Adapter
+        // Set up RecyclerView and Adapter
         nhanVienAdapter = new NhanVienAdapter(nhanVienList, getContext(), nhanVienDAO, this::showEditEmployeeDialog);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(nhanVienAdapter);
 
-        // Thêm nhân viên
-        btnAddEmployee.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddEmployeeDialog();
-            }
-        });
+        // Set up FAB click listener for adding employees
+        fabAddEmployee.setOnClickListener(v -> showAddEmployeeDialog());
 
         return view;
     }
 
-
     private void showAddEmployeeDialog() {
-        Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.dialog_add_nhanvien);
-        dialog.setCancelable(true);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Thêm nhân viên");
 
-         edtUsername = dialog.findViewById(R.id.edtUserName);
-         edtPassword = dialog.findViewById(R.id.edtPassword);
-         edtName = dialog.findViewById(R.id.edtName);
-         edtMiddleName = dialog.findViewById(R.id.edtMiddleName);
-         edtGender = dialog.findViewById(R.id.edtGender);
-         edtPhone = dialog.findViewById(R.id.edtPhone);
-         edtEmail = dialog.findViewById(R.id.edtEmail);
-         edtAddress = dialog.findViewById(R.id.edtAddress);
-         btnAdd = dialog.findViewById(R.id.btnAdd);
-         btnCancel = dialog.findViewById(R.id.btnCancel);
+        // Tạo Layout cho Dialog
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_add_nhanvien, null);
+        builder.setView(customLayout);
 
+        final EditText etUsername = customLayout.findViewById(R.id.edtUserName);
+        final EditText etPassword = customLayout.findViewById(R.id.edtPassword);
+        final EditText etName = customLayout.findViewById(R.id.edtName);
+        final EditText etMiddleName = customLayout.findViewById(R.id.edtMiddleName);
+        final EditText etGender = customLayout.findViewById(R.id.edtGender);
+        final EditText etPhone = customLayout.findViewById(R.id.edtPhone);
+        final EditText etEmail = customLayout.findViewById(R.id.edtEmail);
+        final EditText etAddress = customLayout.findViewById(R.id.edtAddress);
+        final Button btnAdd = customLayout.findViewById(R.id.btnAdd);
+        final Button btnCancel = customLayout.findViewById(R.id.btnCancel);
 
-    }
+        final AlertDialog dialog = builder.create();
+        dialog.show();
 
-    private void showEditEmployeeDialog(@Nullable NhanVienDTO nhanVien) {
-        Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.dialog_add_nhanvien);
-        dialog.setCancelable(true);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lấy dữ liệu từ các EditText
+                String username = etUsername.getText().toString();
+                String password = etPassword.getText().toString();
+                String name = etName.getText().toString();
+                String middleName = etMiddleName.getText().toString();
+                String gender = etGender.getText().toString();
+                String phone = etPhone.getText().toString();
+                String email = etEmail.getText().toString();
+                String address = etAddress.getText().toString();
 
-        edtUsername = dialog.findViewById(R.id.edtUserName);
-        edtPassword = dialog.findViewById(R.id.edtPassword);
-         edtName = dialog.findViewById(R.id.edtName);
-         edtMiddleName = dialog.findViewById(R.id.edtMiddleName);
-         edtGender = dialog.findViewById(R.id.edtGender);
-         edtPhone = dialog.findViewById(R.id.edtPhone);
-         edtEmail = dialog.findViewById(R.id.edtEmail);
-         edtAddress = dialog.findViewById(R.id.edtAddress);
-         btnAdd = dialog.findViewById(R.id.btnAdd);
-         btnCancel = dialog.findViewById(R.id.btnCancel);
+                // Kiểm tra các trường bắt buộc không được để trống
+                if (username.isEmpty() || password.isEmpty() || name.isEmpty() || gender.isEmpty()) {
+                    Toast.makeText(getActivity(), "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-        // If editing an existing employee, pre-fill the fields
-        if (nhanVien != null) {
-            edtUsername.setText(nhanVien.getUsername());
-            edtPassword.setText(nhanVien.getPassword());
-            edtName.setText(nhanVien.getName());
-            edtMiddleName.setText(nhanVien.getMiddleName());
-            edtGender.setText(nhanVien.getGender());
-            edtPhone.setText(nhanVien.getPhone());
-            edtEmail.setText(nhanVien.getEmail());
-            edtAddress.setText(nhanVien.getAddress());
-            btnAdd.setText("Sửa");
-        }
-
-        // Handle the 'Add' or 'Edit' button
-        btnAdd.setOnClickListener(v -> {
-            String name = edtName.getText().toString().trim();
-            String phone = edtPhone.getText().toString().trim();
-
-            // Validate input
-            if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(phone)) {
+                // Tạo đối tượng nhân viên mới
                 NhanVienDTO newNhanVien = new NhanVienDTO(
-                        nhanVien == null ? 0 : nhanVien.getId(),
+                        0, // ID sẽ tự động tăng trong cơ sở dữ liệu
+                        username,
+                        password,
                         name,
-                        edtMiddleName.getText().toString().trim(),
-                        edtGender.getText().toString().trim(),
+                        middleName,
+                        gender,
                         phone,
-                        edtEmail.getText().toString().trim(),
-                        edtAddress.getText().toString().trim()
+                        email,
+                        address
                 );
 
-                // Add or update the employee
-                if (nhanVien == null) {
-                    nhanVienDAO.addEmployee(newNhanVien);
-                    nhanVienList.add(newNhanVien);
-                    nhanVienAdapter.notifyItemInserted(nhanVienList.size() - 1);
-                    Toast.makeText(getContext(), "Thêm thành công!", Toast.LENGTH_SHORT).show();
+                // Thêm nhân viên vào cơ sở dữ liệu
+                boolean isAdded = nhanVienDAO.addEmployee(newNhanVien);
+                if (isAdded) {
+                    // Cập nhật lại danh sách nhân viên trong Adapter
+                    nhanVienList.clear();
+                    nhanVienList.addAll(nhanVienDAO.getAllEmployees());
+                    nhanVienAdapter.notifyDataSetChanged();
+                    Toast.makeText(getActivity(), "Thêm nhân viên thành công!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Có lỗi xảy ra, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
                 }
+
+                // Đóng dialog
                 dialog.dismiss();
-            } else {
-                Toast.makeText(getContext(), "Vui lòng nhập tên và số điện thoại!", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Cancel button closes the dialog
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Đóng dialog mà không thực hiện thay đổi
+                dialog.dismiss();
+            }
+        });
+    }
 
+
+    private void showEditEmployeeDialog(@Nullable NhanVienDTO nhanVien) {
+        if (nhanVien == null) {
+            return; // Nếu nhanVien là null, không thực hiện bất kỳ hành động nào
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Cập nhật thông tin nhân viên");
+
+        // Tạo Layout cho Dialog
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_add_nhanvien, null);
+        builder.setView(customLayout);
+
+        final EditText etUsername = customLayout.findViewById(R.id.edtUserName);
+        final EditText etPassword = customLayout.findViewById(R.id.edtPassword);
+        final EditText etName = customLayout.findViewById(R.id.edtName);
+        final EditText etMiddleName = customLayout.findViewById(R.id.edtMiddleName);
+        final EditText etGender = customLayout.findViewById(R.id.edtGender);
+        final EditText etPhone = customLayout.findViewById(R.id.edtPhone);
+        final EditText etEmail = customLayout.findViewById(R.id.edtEmail);
+        final EditText etAddress = customLayout.findViewById(R.id.edtAddress);
+        final Button btnAdd = customLayout.findViewById(R.id.btnAdd);
+        final Button btnCancel = customLayout.findViewById(R.id.btnCancel);
+
+        // Điền dữ liệu hiện tại vào các EditText
+        etUsername.setText(nhanVien.getUsername());
+        etPassword.setText(nhanVien.getPassword());
+        etName.setText(nhanVien.getName());
+        etMiddleName.setText(nhanVien.getMiddleName());
+        etGender.setText(nhanVien.getGender());
+        etPhone.setText(nhanVien.getPhone());
+        etEmail.setText(nhanVien.getEmail());
+        etAddress.setText(nhanVien.getAddress());
+
+        final AlertDialog dialog = builder.create(); // Khai báo biến dialog ở đây
         dialog.show();
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Cập nhật thông tin nhân viên
+                nhanVien.setUsername(etUsername.getText().toString());
+                nhanVien.setPassword(etPassword.getText().toString());
+                nhanVien.setName(etName.getText().toString());
+                nhanVien.setMiddleName(etMiddleName.getText().toString());
+                nhanVien.setGender(etGender.getText().toString());
+                nhanVien.setPhone(etPhone.getText().toString());
+                nhanVien.setEmail(etEmail.getText().toString());
+                nhanVien.setAddress(etAddress.getText().toString());
+
+                // Cập nhật vào cơ sở dữ liệu
+                boolean isUpdated = nhanVienDAO.updateEmployee(nhanVien);
+                if (isUpdated) {
+                    int position = nhanVienList.indexOf(nhanVien);
+                    nhanVienList.set(position, nhanVien);
+                    nhanVienAdapter.notifyItemChanged(position);
+                }
+
+                // Đóng dialog
+                dialog.dismiss();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Đóng dialog mà không thực hiện thay đổi
+                dialog.dismiss();
+            }
+        });
     }
 }
