@@ -106,7 +106,6 @@ public class NhanVienFragment extends Fragment {
 
                 // Tạo đối tượng nhân viên mới
                 NhanVienDTO newNhanVien = new NhanVienDTO(
-                        0, // ID sẽ tự động tăng trong cơ sở dữ liệu
                         username,
                         password,
                         name,
