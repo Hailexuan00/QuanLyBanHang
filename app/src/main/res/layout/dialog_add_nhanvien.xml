@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="16dp"
+    android:background="@android:color/white">
 
     <!-- Tiêu đề -->
     <TextView
@@ -11,62 +12,75 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Nhân Viên"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="16dp"
+        android:textColor="@android:color/black" />
 
-
+    <!-- Username -->
     <EditText
         android:id="@+id/edtUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Username"
-        android:inputType="textPersonName"
-        android:padding="10dp" />
+        android:padding="12dp"
+        android:background="@drawable/edit_text_border"
+        android:layout_marginBottom="12dp" />
 
+    <!-- Password -->
     <EditText
         android:id="@+id/edtPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
-        android:inputType="textPersonName"
-        android:padding="10dp" />
-    <!-- Họ và tên -->
+        android:padding="12dp"
+        android:background="@drawable/edit_text_border"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Name -->
     <EditText
         android:id="@+id/edtName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Tên nhân viên"
         android:inputType="textPersonName"
-        android:padding="10dp" />
+        android:padding="12dp"
+        android:background="@drawable/edit_text_border"
+        android:layout_marginBottom="12dp" />
 
-    <!-- Họ và tên đệm -->
+    <!-- Middle Name -->
     <EditText
         android:id="@+id/edtMiddleName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Họ và tên đệm"
         android:inputType="textPersonName"
-        android:padding="10dp" />
+        android:padding="12dp"
+        android:background="@drawable/edit_text_border"
+        android:layout_marginBottom="12dp" />
 
-    <!-- Giới tính -->
+    <!-- Gender -->
     <EditText
         android:id="@+id/edtGender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Giới tính"
         android:inputType="text"
-        android:padding="10dp" />
+        android:padding="12dp"
+        android:background="@drawable/edit_text_border"
+        android:layout_marginBottom="12dp" />
 
-    <!-- Số điện thoại -->
+    <!-- Phone -->
     <EditText
         android:id="@+id/edtPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Số điện thoại"
         android:inputType="phone"
-        android:padding="10dp" />
+        android:padding="12dp"
+        android:background="@drawable/edit_text_border"
+        android:layout_marginBottom="12dp" />
 
     <!-- Email -->
     <EditText
@@ -75,16 +89,20 @@
         android:layout_height="wrap_content"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:padding="10dp" />
+        android:padding="12dp"
+        android:background="@drawable/edit_text_border"
+        android:layout_marginBottom="12dp" />
 
-    <!-- Địa chỉ -->
+    <!-- Address -->
     <EditText
         android:id="@+id/edtAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Địa chỉ"
         android:inputType="textPostalAddress"
-        android:padding="10dp" />
+        android:padding="12dp"
+        android:background="@drawable/edit_text_border"
+        android:layout_marginBottom="16dp" />
 
     <!-- Button Group -->
     <LinearLayout
@@ -92,19 +110,28 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="end"
-        android:paddingTop="10dp">
+        android:paddingTop="16dp">
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hủy" />
+            android:text="Hủy"
+            android:background="@color/colorAccent"
+            android:textColor="@android:color/white"
+            android:paddingHorizontal="24dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"/>
 
         <Button
             android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Thêm/Sửa"
-            android:layout_marginStart="10dp" />
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:paddingHorizontal="24dp"
+            android:layout_marginBottom="10dp"/>
     </LinearLayout>
+
 </LinearLayout>

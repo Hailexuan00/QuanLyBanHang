@@ -195,9 +195,13 @@ public class NhanVienFragment extends Fragment {
                 // Cập nhật vào cơ sở dữ liệu
                 boolean isUpdated = nhanVienDAO.updateEmployee(nhanVien);
                 if (isUpdated) {
-                    int position = nhanVienList.indexOf(nhanVien);
-                    nhanVienList.set(position, nhanVien);
-                    nhanVienAdapter.notifyItemChanged(position);
+                    // Cập nhật lại danh sách nhân viên trong Adapter
+                    nhanVienList.clear();
+                    nhanVienList.addAll(nhanVienDAO.getAllEmployees());
+                    nhanVienAdapter.notifyDataSetChanged();
+                    Toast.makeText(getActivity(), "Cập nhật thông tin nhân viên thành công!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Có lỗi xảy ra, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
                 }
 
                 // Đóng dialog

@@ -24,4 +24,6 @@
     <color name="light_gray">#F5F5F5</color> <!-- Màu xám nhạt -->
     <color name="red_light">#FF5722</color> <!-- Màu đỏ sáng -->
     <color name="primaryColor">#2196F3</color> <!-- Xanh dương -->
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#6200EE</color>
 </resources>
