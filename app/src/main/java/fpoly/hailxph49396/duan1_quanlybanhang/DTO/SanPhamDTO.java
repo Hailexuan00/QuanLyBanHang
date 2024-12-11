@@ -1,6 +1,8 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.DTO;
 
-public class SanPhamDTO {
+import java.io.Serializable;
+
+public class SanPhamDTO implements Serializable {
     private int maSanPham;
     private int maDanhMuc;
     private String tenSanPham;

@@ -204,6 +204,78 @@ public class SanPhamDAo {
 
         return null; // Nếu không tìm thấy
     }
+    @SuppressLint("Range")
+    public ArrayList<SanPhamDTO> filterProductsByCategory(int categoryId) {
+        ArrayList<SanPhamDTO> list = new ArrayList<>();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = dbHelper.getReadableDatabase();
+            String sql = "SELECT * FROM SanPham WHERE id_danh_muc = ?";
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(categoryId)});
+
+            if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                do {
+                    SanPhamDTO product = new SanPhamDTO(
+                            cursor.getInt(cursor.getColumnIndex("id_san_pham")),
+                            cursor.getInt(cursor.getColumnIndex("id_danh_muc")),
+                            cursor.getString(cursor.getColumnIndex("ten_san_pham")),
+                            cursor.getInt(cursor.getColumnIndex("don_gia")),
+                            cursor.getInt(cursor.getColumnIndex("ton_kho")),
+                            cursor.getString(cursor.getColumnIndex("ma_vach")),
+                            cursor.getString(cursor.getColumnIndex("mo_ta"))
+                    );
+                    list.add(product);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("ProductDAO", "Error: " + e);
+        } finally {
+            if (cursor != null) cursor.close();
+            if (db != null && db.isOpen()) db.close();
+        }
+
+        return list;
+    }
+
+    // Tìm sản phẩm theo một phần mã vạch
+    @SuppressLint("Range")
+    public ArrayList<SanPhamDTO> searchProductsByPartialBarcode(String partialBarcode) {
+        ArrayList<SanPhamDTO> list = new ArrayList<>();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = dbHelper.getReadableDatabase();
+            String sql = "SELECT * FROM SanPham WHERE ma_vach LIKE ?";
+            cursor = db.rawQuery(sql, new String[]{"%" + partialBarcode + "%"});
+
+            if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                do {
+                    SanPhamDTO product = new SanPhamDTO(
+                            cursor.getInt(cursor.getColumnIndex("id_san_pham")),
+                            cursor.getInt(cursor.getColumnIndex("id_danh_muc")),
+                            cursor.getString(cursor.getColumnIndex("ten_san_pham")),
+                            cursor.getInt(cursor.getColumnIndex("don_gia")),
+                            cursor.getInt(cursor.getColumnIndex("ton_kho")),
+                            cursor.getString(cursor.getColumnIndex("ma_vach")),
+                            cursor.getString(cursor.getColumnIndex("mo_ta"))
+                    );
+                    list.add(product);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("ProductDAO", "Error: " + e);
+        } finally {
+            if (cursor != null) cursor.close();
+            if (db != null && db.isOpen()) db.close();
+        }
+
+        return list;
+    }
 
 
 }

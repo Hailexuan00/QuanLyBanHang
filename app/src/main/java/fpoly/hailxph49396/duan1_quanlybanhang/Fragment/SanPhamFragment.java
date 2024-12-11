@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +30,9 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.ArrayList;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.SanPhamAdapter;
+import fpoly.hailxph49396.duan1_quanlybanhang.DAO.DanhMucDAO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DAO.SanPhamDAo;
+import fpoly.hailxph49396.duan1_quanlybanhang.DTO.DanhMucDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.SanPhamDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.R;
 import fpoly.hailxph49396.duan1_quanlybanhang.ShowMoney.ShowMoney;
@@ -37,8 +42,11 @@ public class SanPhamFragment extends Fragment {
     private RecyclerView rvSanPham;
     private Button btnThem, btnSua, btnXoa, btnQuetMaVach;
     private SanPhamDAo sanPhamDao;
-    private ArrayList<SanPhamDTO> sanPhamList;
+    DanhMucDAO danhMucDAO;
+    public static ArrayList<SanPhamDTO> sanPhamList;
+    ArrayList<DanhMucDTO> danhMucList;
     private SanPhamAdapter sanPhamAdapter;
+    Spinner spDanhMuc;
     ShowMoney showMoney;
     View dialogScanView;
     private AlertDialog.Builder barcodeDialog;
@@ -56,57 +64,64 @@ public class SanPhamFragment extends Fragment {
 
         rvSanPham = view.findViewById(R.id.rvSanPham);
         btnThem = view.findViewById(R.id.btnThemSanPham);
-        btnQuetMaVach = view.findViewById(R.id.btnQuetMaVach);
-
+        spDanhMuc = view.findViewById(R.id.spDanhMuc);
         sanPhamDao = new SanPhamDAo(getContext());
+        danhMucDAO = new DanhMucDAO(getContext());
         sanPhamList = sanPhamDao.getAllProducts();
         btnThem = view.findViewById(R.id.btnThemSanPham);
+        danhMucList = new ArrayList<>();
+        showMoney = new ShowMoney();
+        danhMucList.add(new DanhMucDTO(-1, "Tất cả"));
+        danhMucList.addAll(danhMucDAO.getListDanhMuc());
+        ArrayAdapter<DanhMucDTO> adapterDanhMuc = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, danhMucList);
+        adapterDanhMuc.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spDanhMuc.setAdapter(adapterDanhMuc);
+
+
 
         btnThem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = LayoutInflater.from(getContext());
-                View dialogView = inflater.inflate(R.layout.dialog_them_sp, null);
-
-                EditText etTenSanPham = dialogView.findViewById(R.id.etTenSanPham);
-                EditText etGiaBan = dialogView.findViewById(R.id.etGiaBan);
-                EditText etTonKho = dialogView.findViewById(R.id.etTonKho);
-                EditText etMaVach = dialogView.findViewById(R.id.etMaVach);
-                EditText etMoTa = dialogView.findViewById(R.id.etMoTa);
-
-                Button btnSaveProduct = dialogView.findViewById(R.id.btnSaveProduct);
-
-                // Build dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setView(dialogView);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-                // Handle save button click
-                btnSaveProduct.setOnClickListener(view -> {
-                    // Get data from EditText
-                    String tenSanPham = etTenSanPham.getText().toString();
-                    int giaBan = Integer.parseInt(etGiaBan.getText().toString());
-                    int tonKho = Integer.parseInt(etTonKho.getText().toString());
-                    String maVach = etMaVach.getText().toString();
-                    String moTa = etMoTa.getText().toString();
-
-                    // Create product object
-                    SanPhamDTO sanPham = new SanPhamDTO();
-                    sanPham.setTenSanPham(tenSanPham);
-                    sanPham.setGiaBan(giaBan);
-                    sanPham.setTonKho(tonKho);
-                    sanPham.setMaVach(maVach);
-                    sanPham.setMoTa(moTa);
-                    long them = sanPhamDao.addProduct(sanPham);
-
-
-                    // Dismiss dialog
-                    dialog.dismiss();
-
-                    // Optional: Notify user
-                    Toast.makeText(getContext(), "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                ScanDialogFragment dialogFragment = new ScanDialogFragment();
+                dialogFragment.setOnScanResultListener(result -> {
+                    EditText etMaVach = dialogFragment.getDialog().findViewById(R.id.etMaVach);
+                    EditText etTenSanPham = dialogFragment.getDialog().findViewById(R.id.etTenSanPham);
+                    EditText etGiaBan = dialogFragment.getDialog().findViewById(R.id.etGiaBan);
+                    EditText etTonKho = dialogFragment.getDialog().findViewById(R.id.etTonKho);
+                    EditText etMoTa = dialogFragment.getDialog().findViewById(R.id.etMoTa);
+                    Spinner spDM = dialogFragment.getDialog().findViewById(R.id.spDanhMuc);
+                    Button btnSaveProduct = dialogFragment.getDialog().findViewById(R.id.btnSaveProduct);
+                    etMaVach.setText(result);
+                    ArrayAdapter<DanhMucDTO> adapterDM = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, danhMucList);
+                    adapterDanhMuc.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spDM.setAdapter(adapterDM);
+                    btnSaveProduct.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String tenSanPham = etTenSanPham.getText().toString();
+                            DanhMucDTO danhMucDTO = (DanhMucDTO) spDM.getSelectedItem();
+                            int maDanhMuc = danhMucDTO.getMaDanhMuc();
+                            int giaBan = Integer.parseInt(etGiaBan.getText().toString());
+                            int tonKho = Integer.parseInt(etTonKho.getText().toString());
+                            String maVach = etMaVach.getText().toString();
+                            String moTa = etMoTa.getText().toString();
+                            SanPhamDTO sanPham = new SanPhamDTO();
+                            sanPham.setTenSanPham(tenSanPham);
+                            sanPham.setMaDanhMuc(maDanhMuc);
+                            sanPham.setGiaBan(giaBan);
+                            sanPham.setTonKho(tonKho);
+                            sanPham.setMaVach(maVach);
+                            sanPham.setMoTa(moTa);
+                            long them = sanPhamDao.addProduct(sanPham);
+                            dialogFragment.dismiss();
+                            Toast.makeText(getContext(), them != -1 ? "Thêm thành công" : "Thêm thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 });
+                dialogFragment.show(getChildFragmentManager(), "scan_dialog");
+                getChildFragmentManager().executePendingTransactions(); // Đảm bảo DialogFragment được thêm vào trước khi thiết lập tiêu đề
+                dialogFragment.setDialogTitle("Thêm sản phẩm");
+
             }
         });
 
@@ -192,7 +207,7 @@ public class SanPhamFragment extends Fragment {
                                 sanPhamAdapter.notifyDataSetChanged();
                                 if (delete > 0) {
                                     Toast.makeText(getContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
-                                }else {
+                                } else {
                                     Toast.makeText(getContext(), "Xóa thất bại", Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -214,57 +229,39 @@ public class SanPhamFragment extends Fragment {
                 btnSua.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        LayoutInflater inflater = LayoutInflater.from(getContext());
-                        dialogScanView = inflater.inflate(R.layout.dialog_sua, null);
+//                        SuaSanPhamDialogFragment dialogSua = new SuaSanPhamDialogFragment();
+                        SuaSanPhamDialogFragment dialogSua = SuaSanPhamDialogFragment.newInstance(sanPhamList.get(position));
+                        dialogSua.setOnScanResultListener(result -> {
+                            EditText etMaVach = dialogSua.getDialog().findViewById(R.id.etMaVach);
+                            EditText etTenSanPham = dialogSua.getDialog().findViewById(R.id.etTenSanPham);
+                            EditText etGiaBan = dialogSua.getDialog().findViewById(R.id.etGiaBan);
+                            EditText etMoTa = dialogSua.getDialog().findViewById(R.id.etMoTa);
+                            Button btnSave = dialogSua.getDialog().findViewById(R.id.btnSave);
+                            Button btnCancel = dialogSua.getDialog().findViewById(R.id.btnCancel);
+                            etMaVach.setText(result);
 
-                        barcodeDialog = new AlertDialog.Builder(getContext());
-                        barcodeDialog.setView(dialogScanView);
-
-                        EditText etTenSanPham = dialogScanView.findViewById(R.id.etTenSanPham);
-                        EditText etGiaBan = dialogScanView.findViewById(R.id.etGiaBan);
-                        EditText etMaVach = dialogScanView.findViewById(R.id.etMaVach);
-                        EditText etMoTa = dialogScanView.findViewById(R.id.etMoTa);
-
-                        etTenSanPham.setText(sanPhamList.get(position).getTenSanPham());
-                        etGiaBan.setText(sanPhamList.get(position).getGiaBan() + "");
-                        etMaVach.setText(sanPhamList.get(position).getMaVach());
-                        etMoTa.setText(sanPhamList.get(position).getMoTa());
-
-                        ImageButton btnScan = dialogScanView.findViewById(R.id.btnScan);
-                        Button btnSave = dialogScanView.findViewById(R.id.btnSave);
-                        Button btnCancel = dialogScanView.findViewById(R.id.btnCancel);
-
-                        AlertDialog dialog = barcodeDialog.create();
-                        dialog.setCancelable(false);
-                        btnScan.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                IntentIntegrator integrator = new IntentIntegrator(getActivity());
-                                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-                                integrator.setPrompt("Đang quét mã vạch...");
-                                integrator.setCameraId(0); // Dùng camera sau
-                                integrator.setBeepEnabled(true);
-                                integrator.setBarcodeImageEnabled(false);
-                                integrator.initiateScan();
-                                dialog.dismiss();
-                            }
+                            btnSave.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String tenSanPham = etTenSanPham.getText().toString();
+                                    int giaBan = Integer.parseInt(etGiaBan.getText().toString());
+                                    String moTa = etMoTa.getText().toString();
+                                    String maVach = etMaVach.getText().toString();
+                                    sanPhamList.get(position).setTenSanPham(tenSanPham);
+                                    sanPhamList.get(position).setGiaBan(giaBan);
+                                    sanPhamList.get(position).setMoTa(moTa);
+                                    sanPhamList.get(position).setMaVach(maVach);
+                                    int update = sanPhamDao.updateProduct(sanPhamList.get(position));
+                                    sanPhamAdapter.notifyDataSetChanged();
+                                    Toast.makeText(getContext(), update > 0 ? "Sửa thành công" : "Sửa thất bại", Toast.LENGTH_SHORT).show();
+                                    dialogSua.dismiss();
+                                }
+                            });
+                            btnCancel.setOnClickListener(cancelView -> {
+                                dialogSua.dismiss();
+                            });
                         });
-
-                        btnSave.setOnClickListener(saveView -> {
-                            sanPhamList.get(position).setTenSanPham(etTenSanPham.getText().toString());
-                            sanPhamList.get(position).setGiaBan(Integer.parseInt(etGiaBan.getText().toString()));
-                            sanPhamList.get(position).setMaVach(etMaVach.getText().toString());
-                            sanPhamList.get(position).setMoTa(etMoTa.getText().toString());
-                            int update = sanPhamDao.updateProduct(sanPhamList.get(position));
-                            sanPhamAdapter.notifyDataSetChanged();
-                            dialog.dismiss();
-                        });
-
-                        btnCancel.setOnClickListener(cancelView -> {
-                            dialog.dismiss();
-                        });
-
-                        dialog.show();
+                        dialogSua.show(getChildFragmentManager(), "sua_dialog");
                     }
                 });
 
@@ -277,26 +274,28 @@ public class SanPhamFragment extends Fragment {
         });
         rvSanPham.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvSanPham.setAdapter(sanPhamAdapter);
-    }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        spDanhMuc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                DanhMucDTO selectedDanhMuc = (DanhMucDTO) parent.getItemAtPosition(position);
+                if (selectedDanhMuc.getMaDanhMuc() == -1) {
+                    sanPhamList.clear();
+                    sanPhamList.addAll(sanPhamDao.getAllProducts());
+                    Toast.makeText(getContext(), "if", Toast.LENGTH_SHORT).show();
+                    sanPhamAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "else", Toast.LENGTH_SHORT).show();
+                    sanPhamList.clear();
+                    sanPhamList.addAll(sanPhamDao.filterProductsByCategory(selectedDanhMuc.getMaDanhMuc()));
+                    sanPhamAdapter.notifyDataSetChanged();
 
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() != null) {
-                String barcode = result.getContents();
-                if (barcodeDialog != null) {
-                    barcodeDialog.show(); // Hiển thị lại Dialog nếu cần
-                    EditText etBarcode = dialogScanView.findViewById(R.id.etMaVach);
-                    if (etBarcode != null) {
-                        etBarcode.setText(barcode);
-                        Toast.makeText(getContext(), " "+ barcode, Toast.LENGTH_SHORT).show();
-                    }
                 }
-            } else {
-                Toast.makeText(getContext(), "Không quét được mã", Toast.LENGTH_SHORT).show();
             }
-        }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
+
 }
