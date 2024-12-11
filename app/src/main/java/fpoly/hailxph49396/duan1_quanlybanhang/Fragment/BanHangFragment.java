@@ -27,6 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.Adapter.DonHangAdapter;
@@ -104,6 +105,7 @@ public class BanHangFragment extends Fragment {
         sanPhamDAo = new SanPhamDAo(getContext());
         listDH = donHangDAO.getListDonHang();
 
+
         chiTietDonHangDAO = new ChiTietDonHangDAO(getContext());
         donHangAdapter = new DonHangAdapter(getContext(), listDH, new DonHangAdapter.OnItemClickListener() {
             @Override
@@ -126,7 +128,7 @@ public class BanHangFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                filterDonHangById(newText); // Lọc danh sách theo ID
+                filterDonHangById(newText);
                 return true;
             }
         });
@@ -164,6 +166,7 @@ public class BanHangFragment extends Fragment {
         RecyclerView rcvSP = dialogView.findViewById(R.id.rcvSP);
         Button btnTraHang = dialogView.findViewById(R.id.btnTraHang);
         Button btnHuy = dialogView.findViewById(R.id.btn_huy);
+        Calendar calendar = Calendar.getInstance();
         listCTDH = chiTietDonHangDAO.getCTDHByIdDonHang(donHangDTO.getMaDonHang());
         spofDHAdapter = new SPofDHAdapter(getContext(), listCTDH, new SPofDHAdapter.OnItemActionListener() {
             @Override
@@ -194,7 +197,11 @@ public class BanHangFragment extends Fragment {
             btnTraHang.setVisibility(View.GONE);
         }else if (donHangDTO.getTrangThai() == 1){
             trangThai = "Hoàn thành";
+            if (!sdf.format(donHangDTO.getNgay()).toString().equals(calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" +  calendar.get(Calendar.YEAR))){
+                btnTraHang.setVisibility(View.GONE);
+            }
         }
+
         txtTrangThai.setText("Trạng thái: " + trangThai);
         txtTongTien.setText("Tổng tiền: " + showMoney.formatCurrency(donHangDTO.getThanhTien()) + "VNĐ");
 

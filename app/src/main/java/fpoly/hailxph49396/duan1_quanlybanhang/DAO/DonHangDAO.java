@@ -13,6 +13,7 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.DonHangDTO;
 import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
@@ -284,6 +285,35 @@ public class DonHangDAO {
 
         return tongThanhTien;
     }
+    @SuppressLint("Range")
+    public int getTotalThanhTienByDateRange(String startDate, String endDate) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        int totalThanhTien = 0;
 
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat sqlFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        try {
+            // Chuyển đổi startDate và endDate sang định dạng yyyy-MM-dd
+            String sqlStartDate = sqlFormat.format(inputFormat.parse(startDate));
+            String sqlEndDate = sqlFormat.format(inputFormat.parse(endDate));
+
+            db = dbHelper.getReadableDatabase();
+            String sql = "SELECT SUM(thanh_tien) AS total FROM DonHang WHERE ngay BETWEEN ? AND ?";
+            cursor = db.rawQuery(sql, new String[]{sqlStartDate, sqlEndDate});
+
+            if (cursor != null && cursor.moveToFirst()) {
+                totalThanhTien = cursor.getInt(cursor.getColumnIndex("total"));
+            }
+        } catch (Exception e) {
+            Log.e("DonHangDAO", "Error calculating total: " + e.getMessage());
+        } finally {
+            if (cursor != null) cursor.close();
+            if (db != null && db.isOpen()) db.close();
+        }
+
+        return totalThanhTien;
+    }
 
 }

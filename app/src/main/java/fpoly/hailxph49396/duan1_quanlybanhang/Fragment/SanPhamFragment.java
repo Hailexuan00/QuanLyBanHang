@@ -281,14 +281,11 @@ public class SanPhamFragment extends Fragment {
                 if (selectedDanhMuc.getMaDanhMuc() == -1) {
                     sanPhamList.clear();
                     sanPhamList.addAll(sanPhamDao.getAllProducts());
-                    Toast.makeText(getContext(), "if", Toast.LENGTH_SHORT).show();
                     sanPhamAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getContext(), "else", Toast.LENGTH_SHORT).show();
                     sanPhamList.clear();
                     sanPhamList.addAll(sanPhamDao.filterProductsByCategory(selectedDanhMuc.getMaDanhMuc()));
                     sanPhamAdapter.notifyDataSetChanged();
-
                 }
             }
             @Override

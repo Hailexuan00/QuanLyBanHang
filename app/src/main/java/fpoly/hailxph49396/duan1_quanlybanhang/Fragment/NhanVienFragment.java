@@ -67,7 +67,6 @@ public class NhanVienFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Thêm nhân viên");
 
-        // Tạo Layout cho Dialog
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_add_nhanvien, null);
         builder.setView(customLayout);
 
@@ -80,6 +79,7 @@ public class NhanVienFragment extends Fragment {
         final EditText etEmail = customLayout.findViewById(R.id.edtEmail);
         final EditText etAddress = customLayout.findViewById(R.id.edtAddress);
         final Button btnAdd = customLayout.findViewById(R.id.btnAdd);
+        btnAdd.setText("Thêm");
         final Button btnCancel = customLayout.findViewById(R.id.btnCancel);
 
         final AlertDialog dialog = builder.create();
@@ -104,7 +104,6 @@ public class NhanVienFragment extends Fragment {
                     return;
                 }
 
-                // Tạo đối tượng nhân viên mới
                 NhanVienDTO newNhanVien = new NhanVienDTO(
                         username,
                         password,
@@ -116,10 +115,9 @@ public class NhanVienFragment extends Fragment {
                         address
                 );
 
-                // Thêm nhân viên vào cơ sở dữ liệu
                 boolean isAdded = nhanVienDAO.addEmployee(newNhanVien);
                 if (isAdded) {
-                    // Cập nhật lại danh sách nhân viên trong Adapter
+
                     nhanVienList.clear();
                     nhanVienList.addAll(nhanVienDAO.getAllEmployees());
                     nhanVienAdapter.notifyDataSetChanged();
@@ -128,7 +126,6 @@ public class NhanVienFragment extends Fragment {
                     Toast.makeText(getActivity(), "Có lỗi xảy ra, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
                 }
 
-                // Đóng dialog
                 dialog.dismiss();
             }
         });
@@ -164,6 +161,7 @@ public class NhanVienFragment extends Fragment {
         final EditText etEmail = customLayout.findViewById(R.id.edtEmail);
         final EditText etAddress = customLayout.findViewById(R.id.edtAddress);
         final Button btnAdd = customLayout.findViewById(R.id.btnAdd);
+        btnAdd.setText("Sửa");
         final Button btnCancel = customLayout.findViewById(R.id.btnCancel);
 
         // Điền dữ liệu hiện tại vào các EditText
