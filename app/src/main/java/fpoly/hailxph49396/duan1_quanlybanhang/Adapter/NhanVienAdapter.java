@@ -51,24 +51,25 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
 
         // Xử lý sự kiện nút sửa
         holder.btnEdit.setOnClickListener(v -> actionListener.onEditNhanVien(nhanVien));
-
         // Xử lý sự kiện nút xóa
         holder.btnDelete.setOnClickListener(v -> {
             new AlertDialog.Builder(context)
                     .setTitle("Xác nhận")
                     .setMessage("Bạn có chắc chắn muốn xóa nhân viên này?")
                     .setPositiveButton("Xóa", (dialog, which) -> {
-                        boolean isDeleted = nhanVienDAO.deleteEmployee(nhanVien.getId());
+                        boolean isDeleted = nhanVienDAO.deleteEmployee(nhanVien.getUsername());
                         if (isDeleted) {
                             nhanVienList.remove(position);
                             notifyItemRemoved(position);
                             Toast.makeText(context, "Xóa nhân viên thành công!", Toast.LENGTH_SHORT).show();
-                        } else {
+                        }
+                        else {
                             Toast.makeText(context, "Không thể xóa nhân viên!", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .setNegativeButton("Hủy", null)
                     .show();
+
         });
 
     }

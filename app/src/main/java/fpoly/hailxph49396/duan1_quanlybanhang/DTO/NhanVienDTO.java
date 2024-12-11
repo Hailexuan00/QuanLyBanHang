@@ -1,7 +1,6 @@
 package fpoly.hailxph49396.duan1_quanlybanhang.DTO;
 
 public class NhanVienDTO {
-    private int id;
     private String username;
     private String password;
     private String name;
@@ -11,11 +10,10 @@ public class NhanVienDTO {
     private String email;
     private String address;
 
-    public NhanVienDTO(int username, String ten, String hoVaTenDem, String gioiTinh, String soDienThoai, String email, String diaChi) {
+    public NhanVienDTO() {
     }
 
-    public NhanVienDTO(int id, String username, String password, String name, String middleName, String gender, String phone, String email, String address) {
-        this.id = id;
+    public NhanVienDTO(String username, String password, String name, String middleName, String gender, String phone, String email, String address) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -24,14 +22,6 @@ public class NhanVienDTO {
         this.phone = phone;
         this.email = email;
         this.address = address;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getUsername() {

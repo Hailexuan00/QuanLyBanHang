@@ -12,7 +12,7 @@ import fpoly.hailxph49396.duan1_quanlybanhang.Database.DbHelper;
 import fpoly.hailxph49396.duan1_quanlybanhang.DTO.NhanVienDTO;
 
 public class nhanvienDao {
-    private DbHelper dbHelper;
+    private final DbHelper dbHelper;
 
     public nhanvienDao(Context context) {
         // Thay thế dòng này bằng cách sử dụng context đúng
@@ -22,7 +22,7 @@ public class nhanvienDao {
     public boolean addEmployee(NhanVienDTO nhanVien) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("username", nhanVien.getId());
+        values.put("username", nhanVien.getUsername());
         values.put("password", nhanVien.getPassword());
         values.put("ten", nhanVien.getName());
         values.put("ho_va_ten_dem", nhanVien.getMiddleName());
@@ -38,7 +38,7 @@ public class nhanvienDao {
     public boolean updateEmployee(NhanVienDTO nhanVien) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("username", nhanVien.getId());
+        values.put("username", nhanVien.getUsername());
         values.put("password", nhanVien.getPassword());
         values.put("ten", nhanVien.getName());
         values.put("ho_va_ten_dem", nhanVien.getMiddleName());
@@ -46,14 +46,14 @@ public class nhanvienDao {
         values.put("so_dien_thoai", nhanVien.getPhone());
         values.put("email", nhanVien.getEmail());
         values.put("dia_chi", nhanVien.getAddress());
-        int rowsUpdated = db.update(DbHelper.TABLE_TAI_KHOAN, values, "username = ?", new String[]{String.valueOf(nhanVien.getId())});
+        int rowsUpdated = db.update(DbHelper.TABLE_TAI_KHOAN, values, "username = ?", new String[]{nhanVien.getUsername()});
         db.close();
         return rowsUpdated > 0;
     }
 
-    public boolean deleteEmployee(int id) {
+    public boolean deleteEmployee(String username) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int rowsDeleted = db.delete(DbHelper.TABLE_TAI_KHOAN, "username = ?", new String[]{String.valueOf(id)});
+        int rowsDeleted = db.delete(DbHelper.TABLE_TAI_KHOAN, "username = ?", new String[]{username});
         db.close();
         return rowsDeleted > 0;
     }
@@ -65,7 +65,6 @@ public class nhanvienDao {
         if (cursor.moveToFirst()) {
             do {
                 NhanVienDTO employee = new NhanVienDTO(
-                        cursor.getInt(cursor.getColumnIndexOrThrow("username")),
                         cursor.getString(cursor.getColumnIndexOrThrow("username")),
                         cursor.getString(cursor.getColumnIndexOrThrow("password")),
                         cursor.getString(cursor.getColumnIndexOrThrow("ten")),
