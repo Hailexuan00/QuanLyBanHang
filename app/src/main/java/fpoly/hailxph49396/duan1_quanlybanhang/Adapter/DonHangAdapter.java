@@ -28,6 +28,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
     OnItemClickListener onItemClickListner;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     ShowMoney showMoney;
+
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
@@ -48,31 +49,34 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
         this.onItemClickListner = onItemClickListner;
         donHangDAO = new DonHangDAO(context);
     }
+
     @NonNull
     @Override
     public DonHangViewHolders onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_don_hang, parent, false);
         return new DonHangViewHolders(view, onItemClickListner);
     }
+
     @Override
     public void onBindViewHolder(@NonNull DonHangViewHolders holder, int position) {
         donHangDTO = list.get(position);
         showMoney = new ShowMoney();
-        if (donHangDTO.getNgay() != null){
+        if (donHangDTO.getNgay() != null) {
             holder.txtNgay.setText(sdf.format(donHangDTO.getNgay()));
-        }else {
+        } else {
             holder.txtNgay.setText("Lỗi ngày");
         }
         holder.txtGio.setText(donHangDTO.getGio());
         holder.txtMaDH.setText("MĐH: " + donHangDTO.getMaDonHang());
         holder.txtUser.setText("User: " + donHangDTO.getUsername());
         holder.txtTongTien.setText(showMoney.formatCurrency(donHangDTO.getThanhTien()) + "VNĐ");
-        if (donHangDTO.getTrangThai() == 0){
+        if (donHangDTO.getTrangThai() == 0) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.doNhat));
-        }else if (donHangDTO.getTrangThai() == 1){
+        } else if (donHangDTO.getTrangThai() == 1) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
         }
     }
+
     @Override
     public int getItemCount() {
         return list.size();

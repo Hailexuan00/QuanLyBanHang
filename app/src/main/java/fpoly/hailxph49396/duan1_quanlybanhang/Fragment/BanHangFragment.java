@@ -50,6 +50,7 @@ public class BanHangFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView rcvDonHang;
     DonHangDAO donHangDAO;
+    DonHangDTO donHangDTO;
     SanPhamDAo sanPhamDAo;
     ArrayList<DonHangDTO> listDH = new ArrayList<>();
     DonHangAdapter donHangAdapter;
@@ -102,6 +103,7 @@ public class BanHangFragment extends Fragment {
         donHangDAO = new DonHangDAO(getContext());
         sanPhamDAo = new SanPhamDAo(getContext());
         listDH = donHangDAO.getListDonHang();
+
         chiTietDonHangDAO = new ChiTietDonHangDAO(getContext());
         donHangAdapter = new DonHangAdapter(getContext(), listDH, new DonHangAdapter.OnItemClickListener() {
             @Override
@@ -154,7 +156,6 @@ public class BanHangFragment extends Fragment {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_don_hang, null);
 
-        // Tìm các thành phần trong dialog
         TextView txtMaDH = dialogView.findViewById(R.id.txt_maDH);
         TextView txtNgayGio = dialogView.findViewById(R.id.txt_ngay_gio);
         TextView txtUser = dialogView.findViewById(R.id.txt_user);
@@ -228,6 +229,12 @@ public class BanHangFragment extends Fragment {
         super.onResume();
         listDH.clear();
         listDH.addAll(donHangDAO.getListDonHang());
+        for (DonHangDTO item : listDH){
+            if (item.getUsername() == null){
+                listDH.remove(item);
+                int delete = donHangDAO.deleteDonHang(item.getMaDonHang());
+            }
+        }
         donHangAdapter.notifyDataSetChanged();
     }
     private void filterDonHangById(String query) {

@@ -4,11 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.List;
-
-import fpoly.hailxph49396.duan1_quanlybanhang.DTO.NhanVienDTO;
-
-
 public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "SalesManagement";
     private static final int DATABASE_VERSION = 1;
@@ -125,26 +120,26 @@ public class DbHelper extends SQLiteOpenHelper {
                 "(10, 'user10', '0987654330', 160000, '10/11/2024', '12:00:00', 1);");
 
         db.execSQL("INSERT INTO " + TABLE_CHI_TIET_DON_HANG + " (id_ctdh, id_don_hang, id_san_pham, so_luong) VALUES " +
-                "(1, 1, 1, 1), " +   // Đơn hàng 1: Điện thoại iPhone 14
-                "(2, 1, 2, 1), " +   // Đơn hàng 1: Tea+
-                "(3, 2, 3, 1), " +   // Đơn hàng 2: Áo thun nam
-                "(4, 2, 5, 1), " +   // Đơn hàng 2: Nồi cơm điện
-                "(5, 3, 4, 2), " +   // Đơn hàng 3: Samsung Galaxy S22
-                "(6, 3, 6, 1), " +   // Đơn hàng 3: Áo sơ mi nữ
-                "(7, 4, 8, 1), " +   // Đơn hàng 4: Bút bi
-                "(8, 4, 9, 1), " +   // Đơn hàng 4: Thuốc giảm đau
-                "(9, 5, 7, 1), " +   // Đơn hàng 5: Sách lập trình Java
-                "(10, 5, 10, 1), " +  // Đơn hàng 5: Apple Watch
-                "(11, 6, 3, 2), " +  // Đơn hàng 6: Áo thun nam
-                "(12, 6, 10, 1), " +  // Đơn hàng 6: Apple Watch
-                "(13, 7, 4, 1), " +  // Đơn hàng 7: Samsung Galaxy S22
-                "(14, 7, 5, 1), " +  // Đơn hàng 7: Nồi cơm điện
-                "(15, 8, 2, 3), " +  // Đơn hàng 8: Tea+
-                "(16, 8, 8, 1), " +  // Đơn hàng 8: Bút bi
-                "(17, 9, 6, 1), " +  // Đơn hàng 9: Áo sơ mi nữ
-                "(18, 9, 9, 2), " +  // Đơn hàng 9: Thuốc giảm đau
-                "(19, 10, 7, 1), " +  // Đơn hàng 10: Sách lập trình Java
-                "(20, 10, 8, 2);");   // Đơn hàng 10: Bút bi
+                "(1, 1, 1, 1), " +
+                "(2, 1, 2, 1), " +
+                "(3, 2, 3, 1), " +
+                "(4, 2, 5, 1), " +
+                "(5, 3, 4, 2), " +
+                "(6, 3, 6, 1), " +
+                "(7, 4, 8, 1), " +
+                "(8, 4, 9, 1), " +
+                "(9, 5, 7, 1), " +
+                "(10, 5, 10, 1), " +
+                "(11, 6, 3, 2), " +
+                "(12, 6, 10, 1), " +
+                "(13, 7, 4, 1), " +
+                "(14, 7, 5, 1), " +
+                "(15, 8, 2, 3), " +
+                "(16, 8, 8, 1), " +
+                "(17, 9, 6, 1), " +
+                "(18, 9, 9, 2), " +
+                "(19, 10, 7, 1), " +
+                "(20, 10, 8, 2);");
 
         db.execSQL("INSERT INTO " + TABLE_HOA_DON + " (id_hoa_don, id_don_hang, ma_so_thue) VALUES " +
                 "(1, 1, '123456789')," +
@@ -157,35 +152,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 "(8, 8, '101010101')," +
                 "(9, 9, '202020202')," +
                 "(10, 10, '303030303');");
-
-
-
-//        db.execSQL("INSERT INTO " + TABLE_TAI_KHOAN + " (username, password, ten, ho_va_ten_dem, gioi_tinh, so_dien_thoai, email, dia_chi) VALUES " +
-//                "('admin', 'admin', 'Admin', 'Hai','Nam', '0987654321', 'admin@example.com', 'Hà Nội'), " +
-//                "('user1', 'password123', 'Nguyen', 'Van A', 'Nam', '0987654321', 'user1@example.com', 'Hà Nội'), " +
-//                "('user2', 'password456', 'Tran', 'Thi B', 'Nữ', '0987654322', 'user2@example.com', 'TP. Hồ Chí Minh'), " +
-//                "('user3', 'password789', 'Le', 'Minh C', 'Nam', '0987654323', 'user3@example.com', 'Đà Nẵng'), " +
-//                "('user4', 'passwordabc', 'Pham', 'Thi D', 'Nữ', '0987654324', 'user4@example.com', 'Hải Phòng'), " +
-//                "('user5', 'passwordxyz', 'Hoang', 'Van E', 'Nam', '0987654325', 'user5@example.com', 'Thanh Hóa');");
-//
-//        db.execSQL("INSERT INTO " + TABLE_DANH_MUC + "(id_danh_muc, ten_danh_muc) VALUES " +
-//                "(1, 'Điện tử'), " +
-//                "(2, 'Gia dụng'), " +
-//                "(3, 'Thời trang')");
-//        db.execSQL("INSERT INTO " + TABLE_SAN_PHAM + " (id_san_pham, id_danh_muc, ten_san_pham, don_gia, ton_kho, ma_vach, mo_ta) VALUES " +
-//                "(1, 1, 'Điện thoại iPhone 14', 25000000, 10, '9780486996844', 'Điện thoại cao cấp Apple'), " +
-//                "(2, 2, 'Tea+', 500000, 50, '8934588870118', 'Nuoc uong'), " +
-//                "(3, 3, 'Áo thun nam', 200000, 100, '8936050360974', 'Chất liệu cotton')");
-//        db.execSQL("INSERT INTO " + TABLE_DON_HANG + " (id_don_hang, username, so_dien_thoai_kh, thanh_tien, ngay, gio, trang_thai) VALUES\n" +
-//                "(1, 'user1', '0987654321', 25500000, '01/11/2024', '10:00:00', 1)," +
-//                "(2, 'user2', '0987654322', 200000, '02/11/2024', '15:00:00', 1)");
-//        db.execSQL("INSERT INTO " + TABLE_CHI_TIET_DON_HANG + " (id_ctdh, id_don_hang, id_san_pham, so_luong) VALUES " +
-//                "(1, 1, 1, 1), " +
-//                "(2, 1, 2, 1), " +
-//                "(3, 2, 3, 1);");
-//        db.execSQL("INSERT INTO " + TABLE_HOA_DON + " (id_hoa_don, id_don_hang, ma_so_thue) VALUES\n" +
-//                "(1, 1, '123456789')," +
-//                "(2, 2, '987654321');");
     }
 
     @Override

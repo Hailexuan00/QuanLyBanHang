@@ -57,31 +57,53 @@ public class SPofDHAdapter extends RecyclerView.Adapter<SPofDHAdapter.SanPhamVie
     @Override
     public void onBindViewHolder(@NonNull SanPhamViewHolder holder, int position) {
         ChiTietDonHangDTO chiTietDonHangDTO = list.get(position);
-        SanPhamDTO sanPhamDTO = sanPhamDAo.findProductById(chiTietDonHangDTO.getIdSanPham());
         showMoney = new ShowMoney();
-        holder.txtTenSP.setText(sanPhamDTO.getTenSanPham() + "");
-        holder.txtDonGiaSP.setText(showMoney.formatCurrency(sanPhamDTO.getGiaBan()) + "VNĐ");
+        SanPhamDTO sanPhamDTO = sanPhamDAo.findProductById(chiTietDonHangDTO.getIdSanPham());
+        if (sanPhamDTO == null) {
+            holder.txtTenSP.setText("Sản phẩm đã bị xóa");
+            holder.txtDonGiaSP.setText("0");
 
-        holder.txtSoLuong.setText("x" + chiTietDonHangDTO.getSoLuong());
-        holder.txtGiaSP.setText( showMoney.formatCurrency(sanPhamDTO.getGiaBan() * chiTietDonHangDTO.getSoLuong())  + "VNĐ");
-        holder.btnCong.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onAction(position, "cong");
+            holder.txtSoLuong.setText("x" + chiTietDonHangDTO.getSoLuong());
+            holder.txtGiaSP.setText("0");
+            holder.btnCong.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onAction(position, "cong");
+                    }
                 }
-            }
-        });
-        holder.btnTru.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onAction(position, "tru");
+            });
+            holder.btnTru.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onAction(position, "tru");
+                    }
                 }
-            }
-        });
+            });
+        }else {
+            holder.txtTenSP.setText(sanPhamDTO.getTenSanPham() + "");
+            holder.txtDonGiaSP.setText(showMoney.formatCurrency(sanPhamDTO.getGiaBan()) + "VNĐ");
 
-
+            holder.txtSoLuong.setText("x" + chiTietDonHangDTO.getSoLuong());
+            holder.txtGiaSP.setText( showMoney.formatCurrency(sanPhamDTO.getGiaBan() * chiTietDonHangDTO.getSoLuong())  + "VNĐ");
+            holder.btnCong.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onAction(position, "cong");
+                    }
+                }
+            });
+            holder.btnTru.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onAction(position, "tru");
+                    }
+                }
+            });
+        }
     }
     @Override
     public int getItemCount() {
