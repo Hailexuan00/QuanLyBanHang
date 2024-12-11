@@ -68,7 +68,6 @@ public class SanPhamFragment extends Fragment {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 View dialogView = inflater.inflate(R.layout.dialog_them_sp, null);
 
-                // Initialize views
                 EditText etTenSanPham = dialogView.findViewById(R.id.etTenSanPham);
                 EditText etGiaBan = dialogView.findViewById(R.id.etGiaBan);
                 EditText etTonKho = dialogView.findViewById(R.id.etTonKho);
@@ -218,30 +217,25 @@ public class SanPhamFragment extends Fragment {
                         LayoutInflater inflater = LayoutInflater.from(getContext());
                         dialogScanView = inflater.inflate(R.layout.dialog_sua, null);
 
-                        // Tạo dialogSP
                         barcodeDialog = new AlertDialog.Builder(getContext());
                         barcodeDialog.setView(dialogScanView);
 
-                        // Tham chiếu các EditText trong dialogSP
                         EditText etTenSanPham = dialogScanView.findViewById(R.id.etTenSanPham);
                         EditText etGiaBan = dialogScanView.findViewById(R.id.etGiaBan);
                         EditText etMaVach = dialogScanView.findViewById(R.id.etMaVach);
                         EditText etMoTa = dialogScanView.findViewById(R.id.etMoTa);
 
-                        // Set giá trị hiện tại (nếu có)
                         etTenSanPham.setText(sanPhamList.get(position).getTenSanPham());
                         etGiaBan.setText(sanPhamList.get(position).getGiaBan() + "");
                         etMaVach.setText(sanPhamList.get(position).getMaVach());
                         etMoTa.setText(sanPhamList.get(position).getMoTa());
 
-                        // Nút Lưu và Huỷ
                         ImageButton btnScan = dialogScanView.findViewById(R.id.btnScan);
                         Button btnSave = dialogScanView.findViewById(R.id.btnSave);
                         Button btnCancel = dialogScanView.findViewById(R.id.btnCancel);
 
                         AlertDialog dialog = barcodeDialog.create();
                         dialog.setCancelable(false);
-
                         btnScan.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -262,7 +256,6 @@ public class SanPhamFragment extends Fragment {
                             sanPhamList.get(position).setMaVach(etMaVach.getText().toString());
                             sanPhamList.get(position).setMoTa(etMoTa.getText().toString());
                             int update = sanPhamDao.updateProduct(sanPhamList.get(position));
-                            Toast.makeText(getContext(), "" + update, Toast.LENGTH_SHORT).show();
                             sanPhamAdapter.notifyDataSetChanged();
                             dialog.dismiss();
                         });
@@ -275,14 +268,11 @@ public class SanPhamFragment extends Fragment {
                     }
                 });
 
-                // Tạo AlertDialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setView(dialogView);
                 AlertDialog dialogSP = builder.create();
                 dialogSP.getWindow().setBackgroundDrawableResource(R.drawable.dialog_shape);
-                // Hiển thị dialogSP
                 dialogSP.show();
-                // Đóng dialogSP khi click vào nút đóng
             }
         });
         rvSanPham.setLayoutManager(new GridLayoutManager(getContext(), 2));

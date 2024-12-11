@@ -233,10 +233,10 @@ public class BanHang extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
-    @Override
-    public void onBackPressed() {
-        long delete = donHangDAO.deleteDonHang(donHangDTO.getMaDonHang());
-        Toast.makeText(this, delete > 0 ? "Xóa thành công" : "Xóa thất bại", Toast.LENGTH_SHORT).show();
-        super.onBackPressed();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        long delete = donHangDAO.deleteDonHang(donHangDTO.getMaDonHang());
+//        Toast.makeText(this, delete > 0 ? "Xóa thành công" : "Xóa thất bại", Toast.LENGTH_SHORT).show();
+//        super.onBackPressed();
+//    }
 }

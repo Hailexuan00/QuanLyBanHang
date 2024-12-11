@@ -9,5 +9,4 @@ public class ShowMoney {
         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
         return formatter.format(amount);
     }
-
 }
