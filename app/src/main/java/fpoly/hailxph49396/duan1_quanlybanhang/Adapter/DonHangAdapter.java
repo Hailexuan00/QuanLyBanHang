@@ -37,6 +37,11 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangV
         this.list = newList;
         notifyDataSetChanged();
     }
+    public void updateData(ArrayList<DonHangDTO> newList) {
+        this.list = newList;
+        notifyDataSetChanged();
+    }
+
 
     public DonHangAdapter(Context context, ArrayList<DonHangDTO> list, OnItemClickListener onItemClickListner) {
         this.context = context;

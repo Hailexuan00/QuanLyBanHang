@@ -117,6 +117,20 @@ public class BanHangFragment extends Fragment {
         rcvDonHang.setAdapter(donHangAdapter);
         donHangAdapter.notifyDataSetChanged();
 
+        // Xử lý sự kiện tìm kiếm
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterDonHangById(newText); // Lọc danh sách theo ID
+                return true;
+            }
+        });
+
         fabAddDonHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,4 +237,14 @@ public class BanHangFragment extends Fragment {
         }
         donHangAdapter.notifyDataSetChanged();
     }
+    private void filterDonHangById(String query) {
+        ArrayList<DonHangDTO> filteredList = new ArrayList<>();
+        for (DonHangDTO donHang : listDH) {
+            if (String.valueOf(donHang.getMaDonHang()).toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(donHang);
+            }
+        }
+        donHangAdapter.updateData(filteredList); // Cập nhật lại danh sách hiển thị
+    }
+
 }
